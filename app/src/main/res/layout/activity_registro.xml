@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".registro">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtHuerta"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Huerta"
+                    android:inputType="textCapSentences" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtProductor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Productor"
+                    android:inputType="textCapCharacters" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtTelefono"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Teléfono"
+                    android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/txtToneladas"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Toneladas aprox."
+                    android:inputType="numberDecimal" />
+            </android.support.design.widget.TextInputLayout>
+
+            <Spinner
+                android:id="@+id/spnMunicipio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/municipios" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="CALIBRES"
+                android:textColor="#000"
+                android:textIsSelectable="false" />
+
+            <android.support.v7.widget.GridLayout
+                android:id="@+id/gridCalibre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                app:columnCount="3">
+
+                <EditText
+                    android:id="@+id/txtCal32"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="32"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal36"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="36"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal40"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="40"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal48"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="48"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal60"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="60"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal70"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="70"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal84"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="84"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCal96"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="96"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCalCAN"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="CAN"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtCalLAC"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="LAC"
+                    android:inputType="number" />
+
+            </android.support.v7.widget.GridLayout>
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="DAÑOS DE LA FRUTA"
+                android:textColor="#000" />
+
+            <android.support.v7.widget.GridLayout
+                android:id="@+id/gridDano"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="10dp"
+                android:visibility="invisible"
+                app:columnCount="3">
+
+                <EditText
+                    android:id="@+id/txtDanoRona"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="ROÑA"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoRosado"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="ROSADO"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoBano"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="BAÑO"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoTrips"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="TRIPS"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoQuemado"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="QUEMADO"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoComedor"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="COMEDOR"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoViruela"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="VIRUELA"
+                    android:inputType="textPersonName" />
+
+                <EditText
+                    android:id="@+id/txtDanoVaricela"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:hint="VARICELA"
+                    android:inputType="textPersonName" />
+
+            </android.support.v7.widget.GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</android.support.constraint.ConstraintLayout>

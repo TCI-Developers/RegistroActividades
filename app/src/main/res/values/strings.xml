@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Registro Actividades</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="municipios">
+        <item>SELEC. MUNICIPIO</item>
+        <item>ACUITZIO</item>
+        <item>APATZINGAN</item>
+        <item>ARIO</item>
+        <item>CHARAPAN</item>
+        <item>COTIJA DE LA PAZ</item>
+        <item>ERONGARICUARO</item>
+        <item>HIDALGO</item>
+        <item>HUIRAMBA</item>
+        <item>IRIMBO</item>
+        <item>JIMENEZ</item>
+        <item>LOS REYES</item>
+        <item>MADERO</item>
+        <item>NUEVO PARANGARICUTIRO</item>
+        <item>PARACUARO</item>
+        <item>PATZCUARO</item>
+        <item>PERIBAN DE RAMOS</item>
+        <item>PUREPERO</item>
+        <item>QUIROGA</item>
+        <item>SALVADOR ESCALANTE</item>
+        <item>TACAMBARO</item>
+        <item>TANCITARO</item>
+        <item>TANGAMANDAPIO</item>
+        <item>TANGANCICUARO</item>
+        <item>TARETAN</item>
+        <item>TINGAMBATO</item>
+        <item>TINGUINDIN</item>
+        <item>TLAZAZALCA</item>
+        <item>TOCUMBO</item>
+        <item>TURICATO</item>
+        <item>TUXPAN</item>
+        <item>URUAPAN</item>
+        <item>ZACAPU</item>
+        <item>ZIRACUARETIRO</item>
+    </string-array>
+</resources>
