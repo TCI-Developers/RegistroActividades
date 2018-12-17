@@ -13,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -82,8 +83,8 @@
                 android:id="@+id/gridCalibre"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                app:columnCount="3">
+                app:columnCount="3"
+                tools:columnCount="3">
 
                 <EditText
                     android:id="@+id/txtCal32"
@@ -179,8 +180,7 @@
                 android:id="@+id/gridDano"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:columnCount="3">
 
                 <EditText
@@ -248,6 +248,12 @@
                     android:inputType="textPersonName" />
 
             </android.support.v7.widget.GridLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar" />
 
         </LinearLayout>
     </ScrollView>

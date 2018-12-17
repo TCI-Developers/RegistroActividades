@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".registro">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -10,7 +13,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -63,7 +67,8 @@
             <Spinner
                 android:id="@+id/spnMunicipio"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:entries="@array/municipios" />
 
             <TextView
                 android:id="@+id/textView"
@@ -76,14 +81,14 @@
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/gridCalibre"
-                app:columnCount="3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp">
+                app:columnCount="3"
+                tools:columnCount="3">
 
                 <EditText
                     android:id="@+id/txtCal32"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="32"
@@ -91,7 +96,7 @@
 
                 <EditText
                     android:id="@+id/txtCal36"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="36"
@@ -99,7 +104,7 @@
 
                 <EditText
                     android:id="@+id/txtCal40"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="40"
@@ -107,7 +112,7 @@
 
                 <EditText
                     android:id="@+id/txtCal48"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="48"
@@ -115,7 +120,7 @@
 
                 <EditText
                     android:id="@+id/txtCal60"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="60"
@@ -123,7 +128,7 @@
 
                 <EditText
                     android:id="@+id/txtCal70"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="70"
@@ -131,7 +136,7 @@
 
                 <EditText
                     android:id="@+id/txtCal84"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="84"
@@ -139,7 +144,7 @@
 
                 <EditText
                     android:id="@+id/txtCal96"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="96"
@@ -147,7 +152,7 @@
 
                 <EditText
                     android:id="@+id/txtCalCAN"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="CAN"
@@ -155,7 +160,7 @@
 
                 <EditText
                     android:id="@+id/txtCalLAC"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="LAC"
@@ -173,15 +178,14 @@
 
             <android.support.v7.widget.GridLayout
                 android:id="@+id/gridDano"
-                app:columnCount="3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="10dp"
-                android:visibility="invisible">
+                android:visibility="visible"
+                app:columnCount="3">
 
                 <EditText
                     android:id="@+id/txtDanoRona"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="ROÑA"
@@ -189,7 +193,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoRosado"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="ROSADO"
@@ -197,7 +201,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoBano"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="BAÑO"
@@ -205,7 +209,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoTrips"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="TRIPS"
@@ -213,7 +217,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoQuemado"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="QUEMADO"
@@ -221,7 +225,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoComedor"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="COMEDOR"
@@ -229,7 +233,7 @@
 
                 <EditText
                     android:id="@+id/txtDanoViruela"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="VIRUELA"
@@ -237,13 +241,19 @@
 
                 <EditText
                     android:id="@+id/txtDanoVaricela"
-                    android:layout_width="120dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:ems="10"
                     android:hint="VARICELA"
                     android:inputType="textPersonName" />
 
             </android.support.v7.widget.GridLayout>
+
+            <Button
+                android:id="@+id/btnGuardar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Guardar" />
 
         </LinearLayout>
     </ScrollView>
