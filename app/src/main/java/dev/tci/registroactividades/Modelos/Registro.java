@@ -2,13 +2,22 @@ package dev.tci.registroactividades.Modelos;
 
 public class Registro {
     private String Origenactividad;
-    private String latitud;
-    private String longitud;
+    private Double latitud;
+    private Double longitud;
     private String ultimaactividad;
     private String ultimafecha;
     private String ultimahora;
+    private String productor;
 
     public Registro() {
+    }
+
+    public String getProductor() {
+        return productor;
+    }
+
+    public void setProductor(String productor) {
+        this.productor = productor;
     }
 
     public String getOrigenactividad() {
@@ -19,19 +28,19 @@ public class Registro {
         Origenactividad = origenactividad;
     }
 
-    public String getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(String latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public String getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(String longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 

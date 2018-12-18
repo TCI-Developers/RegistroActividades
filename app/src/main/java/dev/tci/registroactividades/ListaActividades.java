@@ -30,6 +30,7 @@ public class ListaActividades extends AppCompatActivity {
         Init();
 
         ArrayList<String> valor = getIntent().getExtras().getStringArrayList("Huertas");
+        
         for(int i=0; i < valor.size(); i++ ){
             h = new Huertas();
             h.setNombreHuerta(valor.get(i));

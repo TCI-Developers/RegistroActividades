@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
     private ArrayList<String> listHuertas;
-    private ArrayList<Registro> listProductores;
+    private ArrayList<String> listProductores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,17 +35,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void ListarHuertas() {
-        databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child("32345535466364653").child("agendavisitas").addValueEventListener(new ValueEventListener() {
+        databaseReference
+                .child("Acopio")
+                .child("RV")
+                .child("UsuariosAcopio")
+                .child("32345535466364653")
+                .child("agendavisitas")
+                .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listHuertas.clear();
+                listProductores.clear();
                 for(DataSnapshot obj : dataSnapshot.getChildren() ){
-                        String r = obj.getKey();
-                        Registro reg = obj.getValue(Registro.class);
+                    String r = obj.getKey();
                     listHuertas.add(r);
-                    listProductores.add(reg);
+                    listProductores.add(obj.getValue(Registro.class).getProductor());
                 }
-                Toast.makeText(getApplicationContext(),listProductores.get(0).getLatitud(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -61,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase.setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
         listHuertas = new ArrayList<String>();
+        listProductores= new ArrayList<String>();
         //Toast.makeText(MainActivity.this, databaseReference.toString(), Toast.LENGTH_LONG).show();
     }
 
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity {
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );
+            intent.putStringArrayListExtra("Productores", listProductores );
             startActivity(intent);
             finish();
         }
