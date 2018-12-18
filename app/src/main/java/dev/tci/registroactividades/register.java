@@ -1,25 +1,32 @@
 package dev.tci.registroactividades;
 
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.Toast;
 
-public class registro extends AppCompatActivity {
+public class register extends AppCompatActivity {
 
     private GridLayout danoLaytou;
     private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
             danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registro);
+        setContentView(R.layout.activity_register);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("Muestreo");
+        setSupportActionBar(toolbar);
 
         Init();
 
@@ -47,6 +54,24 @@ public class registro extends AppCompatActivity {
         });
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        switch (id){
+            case R.id.check:
+                Toast.makeText(getApplicationContext(), "Guardado", Toast.LENGTH_LONG).show();
+            break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     public void Init(){
         huerta = findViewById(R.id.txtHuerta);
         productor = findViewById(R.id.txtProductor);
@@ -71,10 +96,6 @@ public class registro extends AppCompatActivity {
         danoVIRUELA = findViewById(R.id.txtDanoViruela);
         danoVARICELA = findViewById(R.id.txtDanoVaricela);
         danoLaytou = findViewById(R.id.gridDano);
-
-    }
-
-    public void CheckRegister(View v){
 
     }
 }

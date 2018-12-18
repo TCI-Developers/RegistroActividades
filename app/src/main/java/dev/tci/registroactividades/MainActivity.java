@@ -1,8 +1,10 @@
 package dev.tci.registroactividades;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
@@ -10,15 +12,18 @@ import android.widget.Toast;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.*;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
+import dev.tci.registroactividades.Adapter.Recycler;
+import dev.tci.registroactividades.Modelos.Huertas;
 import dev.tci.registroactividades.Modelos.Registro;
 
 public class MainActivity extends AppCompatActivity {
     FirebaseDatabase firebaseDatabase;
     DatabaseReference databaseReference;
-    String fecha;
-    private ArrayList<Object> listRegistro;
+    private ArrayList<String> listHuertas;
+    private ArrayList<Registro> listProductores;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +31,21 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        listRegistro = new ArrayList<Object>();
         inicializarFirebase();
     }
 
-    private void ListarDatos() {
-        databaseReference.child("Acopio").child("Bonanza").addValueEventListener(new ValueEventListener() {
+    private void ListarHuertas() {
+        databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child("32345535466364653").child("agendavisitas").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listRegistro.clear();
+                listHuertas.clear();
                 for(DataSnapshot obj : dataSnapshot.getChildren() ){
-                    Object r = obj.getValue(Registro.class);
-                    listRegistro.add(r);
+                        String r = obj.getKey();
+                        Registro reg = obj.getValue(Registro.class);
+                    listHuertas.add(r);
+                    listProductores.add(reg);
                 }
-                Toast.makeText(MainActivity.this, listRegistro.size()+"", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),listProductores.get(0).getLatitud(), Toast.LENGTH_LONG).show();
             }
 
             @Override
@@ -54,10 +60,17 @@ public class MainActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseDatabase.setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
-        Toast.makeText(MainActivity.this, databaseReference.toString(), Toast.LENGTH_LONG).show();
+        listHuertas = new ArrayList<String>();
+        //Toast.makeText(MainActivity.this, databaseReference.toString(), Toast.LENGTH_LONG).show();
     }
 
     public void CheckData(View v){
-        ListarDatos();
+        ListarHuertas();
+        if(listHuertas.size() > 0){
+            Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
+            intent.putStringArrayListExtra("Huertas", listHuertas );
+            startActivity(intent);
+            finish();
+        }
     }
 }

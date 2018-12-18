@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ECECEC"
-    tools:context=".registro">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".register"
+    tools:showIn="@layout/activity_register">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#fff"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardUseCompatPadding="true">
 
                 <LinearLayout
@@ -118,7 +120,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#fff"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardUseCompatPadding="true">
 
                 <android.support.v7.widget.GridLayout
@@ -277,7 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#fff"
-                app:cardElevation="8dp"
+                app:cardCornerRadius="4dp"
                 app:cardUseCompatPadding="true">
 
                 <android.support.v7.widget.GridLayout
