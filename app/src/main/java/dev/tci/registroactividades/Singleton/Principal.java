@@ -11,13 +11,13 @@ import dev.tci.registroactividades.Modelos.Registro;
 
 public class Principal extends AppCompatActivity {
 
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
     private Principal principal;
     public ArrayList<Registro> listRegistro;
 
     public Principal() {
-        databaseReference.child("RV").child("Actividades").addValueEventListener(new ValueEventListener() {
+        /*databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listRegistro.clear();
@@ -31,7 +31,7 @@ public class Principal extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        });*/
     }
 
     public Principal getInstance(){

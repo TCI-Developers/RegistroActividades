@@ -13,7 +13,8 @@ import java.util.List;
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class MainActivity extends AppCompatActivity {
-    Principal p = new Principal().getInstance();
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,14 +23,14 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        inicializarFirebase();
     }
 
-    public void ChekcData(View v){
-        if (p.listRegistro.size() > 0) {
-            Intent intent = new Intent();
-            intent.putExtra("Record", p.listRegistro.get(0).getRecord_id());
-            startActivity(intent);
-        }
+    private void inicializarFirebase() {
+        FirebaseApp.initializeApp(this);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseDatabase.setPersistenceEnabled(true);
+        databaseReference = firebaseDatabase.getReference();
     }
 
 }

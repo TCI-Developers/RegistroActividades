@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="10dp">
 
@@ -24,7 +24,7 @@
                     android:id="@+id/txtHuerta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Huerta"
+                    android:hint="@string/huerta"
                     android:inputType="textCapSentences" />
             </android.support.design.widget.TextInputLayout>
 
@@ -36,7 +36,7 @@
                     android:id="@+id/txtProductor"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Productor"
+                    android:hint="@string/productor"
                     android:inputType="textCapCharacters" />
             </android.support.design.widget.TextInputLayout>
 
@@ -48,7 +48,7 @@
                     android:id="@+id/txtTelefono"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Teléfono"
+                    android:hint="@string/tel_fono"
                     android:inputType="phone" />
             </android.support.design.widget.TextInputLayout>
 
@@ -60,7 +60,7 @@
                     android:id="@+id/txtToneladas"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Toneladas aprox."
+                    android:hint="@string/toneladas_aprox"
                     android:inputType="numberDecimal" />
             </android.support.design.widget.TextInputLayout>
 
@@ -75,7 +75,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="CALIBRES"
+                android:text="@string/calibres"
                 android:textColor="#000"
                 android:textIsSelectable="false" />
 
@@ -91,15 +91,16 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="32"
-                    android:inputType="textPersonName" />
+                    android:hint="@string/_32"
+                    android:inputType="textPersonName"
+                    android:autofillHints="" />
 
                 <EditText
                     android:id="@+id/txtCal36"
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="36"
+                    android:hint="@string/_36"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -107,7 +108,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="40"
+                    android:hint="@string/_40"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -115,7 +116,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="48"
+                    android:hint="@string/_48"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -123,7 +124,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="60"
+                    android:hint="@string/_60"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -131,7 +132,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="70"
+                    android:hint="@string/_70"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -139,7 +140,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="84"
+                    android:hint="@string/_84"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -147,7 +148,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="96"
+                    android:hint="@string/_96"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -155,7 +156,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="CAN"
+                    android:hint="@string/can"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -163,7 +164,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="LAC"
+                    android:hint="@string/lac"
                     android:inputType="number" />
 
             </android.support.v7.widget.GridLayout>
@@ -173,7 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="DAÑOS DE LA FRUTA"
+                android:text="@string/da_os_de_la_fruta"
                 android:textColor="#000" />
 
             <android.support.v7.widget.GridLayout
@@ -188,7 +189,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="ROÑA"
+                    android:hint="@string/ro_a"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -196,7 +197,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="ROSADO"
+                    android:hint="@string/rosado"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -204,7 +205,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="BAÑO"
+                    android:hint="@string/ba_o"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -212,7 +213,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="TRIPS"
+                    android:hint="@string/trips"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -220,7 +221,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="QUEMADO"
+                    android:hint="@string/quemado"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -228,7 +229,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="COMEDOR"
+                    android:hint="@string/comedor"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -236,7 +237,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="VIRUELA"
+                    android:hint="@string/viruela"
                     android:inputType="textPersonName" />
 
                 <EditText
@@ -244,7 +245,7 @@
                     android:layout_width="120dp"
                     android:layout_height="match_parent"
                     android:ems="10"
-                    android:hint="VARICELA"
+                    android:hint="@string/varicela"
                     android:inputType="textPersonName" />
 
             </android.support.v7.widget.GridLayout>
@@ -253,7 +254,7 @@
                 android:id="@+id/btnGuardar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Guardar" />
+                android:text="@string/guardar" />
 
         </LinearLayout>
     </ScrollView>
