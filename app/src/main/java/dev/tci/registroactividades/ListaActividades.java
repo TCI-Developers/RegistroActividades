@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -29,18 +30,23 @@ public class ListaActividades extends AppCompatActivity {
 
         Init();
 
-        ArrayList<String> valor = getIntent().getExtras().getStringArrayList("Huertas");
-        
-        for(int i=0; i < valor.size(); i++ ){
+        ArrayList<String> huertas = getIntent().getExtras().getStringArrayList("Huertas");
+        ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
+        final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
+
+        for(int i=0; i < huertas.size(); i++ ){
             h = new Huertas();
-            h.setNombreHuerta(valor.get(i));
+            h.setNombreHuerta(huertas.get(i));
+            h.setNombreProductor(productores.get(i));
             listadoHuertas.add(h);
         }
 
         adapter = new Recycler(listadoHuertas, new RecyclerViewClick() {
             @Override
             public void onClick(View v, int position) {
-
+                Intent intent = new Intent(getApplicationContext(), register.class);
+                intent.putExtra("record", recordID.get(position));
+                startActivity(intent);
             }
         });
 

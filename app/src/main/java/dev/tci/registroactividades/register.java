@@ -12,11 +12,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class register extends AppCompatActivity {
 
-    private GridLayout danoLaytou;
+    private LinearLayout danoLaytou;
     private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
             danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA;
 
@@ -29,6 +30,9 @@ public class register extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Init();
+
+        int record = getIntent().getExtras().getInt("record");
+        Toast.makeText(getApplicationContext(), record+"", Toast.LENGTH_LONG).show();
 
         calLAC.addTextChangedListener(new TextWatcher() {
             @Override
@@ -95,7 +99,7 @@ public class register extends AppCompatActivity {
         danoCOMEDOR = findViewById(R.id.txtDanoComedor);
         danoVIRUELA = findViewById(R.id.txtDanoViruela);
         danoVARICELA = findViewById(R.id.txtDanoVaricela);
-        danoLaytou = findViewById(R.id.gridDano);
+        danoLaytou = findViewById(R.id.layout_danos);
 
     }
 }

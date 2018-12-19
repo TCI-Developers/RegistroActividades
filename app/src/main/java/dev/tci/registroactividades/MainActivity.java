@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference databaseReference;
     private ArrayList<String> listHuertas;
     private ArrayList<String> listProductores;
+    private ArrayList<Integer> record;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         inicializarFirebase();
+        ListarHuertas();
     }
 
     private void ListarHuertas() {
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
                     String r = obj.getKey();
                     listHuertas.add(r);
                     listProductores.add(obj.getValue(Registro.class).getProductor());
+                    record.add(obj.getValue(Registro.class).getRecord());
                 }
             }
 
@@ -63,21 +67,20 @@ public class MainActivity extends AppCompatActivity {
     private void inicializarFirebase() {
         FirebaseApp.initializeApp(this);
         firebaseDatabase = FirebaseDatabase.getInstance();
-        firebaseDatabase.setPersistenceEnabled(true);
         databaseReference = firebaseDatabase.getReference();
         listHuertas = new ArrayList<String>();
         listProductores= new ArrayList<String>();
-        //Toast.makeText(MainActivity.this, databaseReference.toString(), Toast.LENGTH_LONG).show();
+        record = new ArrayList<Integer>();
     }
 
     public void CheckData(View v){
-        ListarHuertas();
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );
             intent.putStringArrayListExtra("Productores", listProductores );
+            intent.putIntegerArrayListExtra("record", record );
             startActivity(intent);
-            finish();
+            //finish();
         }
     }
 }

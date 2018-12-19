@@ -8,6 +8,7 @@ public class Registro {
     private String ultimafecha;
     private String ultimahora;
     private String productor;
+    private int record;
 
     public Registro() {
     }
@@ -18,6 +19,14 @@ public class Registro {
 
     public void setProductor(String productor) {
         this.productor = productor;
+    }
+
+    public int getRecord() {
+        return record;
+    }
+
+    public void setRecord(int recordID) {
+        this.record = recordID;
     }
 
     public String getOrigenactividad() {
