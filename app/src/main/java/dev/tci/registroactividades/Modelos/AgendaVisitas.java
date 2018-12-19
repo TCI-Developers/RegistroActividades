@@ -1,23 +1,23 @@
 package dev.tci.registroactividades.Modelos;
 
-public class Registro {
-    private String fecha;
+public class AgendaVisitas {
+    private String Fecha;
     private String huerta;
     private String latitud;
     private String longitud;
     private String productor;
-    private int record;
+    private Integer record;
     private long telefono;
 
-    public Registro() {
+    public AgendaVisitas() {
     }
 
     public String getFecha() {
-        return fecha;
+        return Fecha;
     }
 
     public void setFecha(String fecha) {
-        this.fecha = fecha;
+        this.Fecha = fecha;
     }
 
     public String getHuerta() {
@@ -52,11 +52,11 @@ public class Registro {
         this.productor = productor;
     }
 
-    public int getRecord() {
+    public Integer getRecord() {
         return record;
     }
 
-    public void setRecord(int record) {
+    public void setRecord(Integer record) {
         this.record = record;
     }
 
@@ -67,4 +67,5 @@ public class Registro {
     public void setTelefono(long telefono) {
         this.telefono = telefono;
     }
+
 }

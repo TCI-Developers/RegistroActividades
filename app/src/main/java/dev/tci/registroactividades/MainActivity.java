@@ -16,15 +16,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import dev.tci.registroactividades.Adapter.Recycler;
+import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.Huertas;
 import dev.tci.registroactividades.Modelos.Registro;
+import dev.tci.registroactividades.Singleton.Principal;
 
 public class MainActivity extends AppCompatActivity {
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
     private ArrayList<String> listHuertas;
     private ArrayList<String> listProductores;
     private ArrayList<Integer> record;
+    String UID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +34,33 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        inicializarFirebase();
+        Init();
         ListarHuertas();
     }
 
     private void ListarHuertas() {
-        databaseReference
+        Principal p = Principal.getInstance();
+        p.InicializarFirebase();
+                p.databaseReference
                 .child("Acopio")
                 .child("RV")
                 .child("UsuariosAcopio")
-                .child("32345535466364653")
+                .child("666")
                 .child("agendavisitas")
                 .addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listHuertas.clear();
                 listProductores.clear();
-                for(DataSnapshot obj : dataSnapshot.getChildren() ){
-                    String r = obj.getKey();
-                    listHuertas.add(r);
-                    listProductores.add(obj.getValue(Registro.class).getProductor());
-                    record.add(obj.getValue(Registro.class).getRecord());
+                record.clear();
+
+                for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                    AgendaVisitas ag = objSnaptshot.getValue(AgendaVisitas.class);
+
+                    UID = objSnaptshot.getKey();
+                    listHuertas.add( ag.getHuerta() );
+                    listProductores.add(ag.getProductor());
+                    record.add(ag.getRecord());
                 }
             }
 
@@ -64,10 +71,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void inicializarFirebase() {
-        FirebaseApp.initializeApp(this);
-        firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+    private void Init() {
         listHuertas = new ArrayList<String>();
         listProductores= new ArrayList<String>();
         record = new ArrayList<Integer>();
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("Huertas", listHuertas );
             intent.putStringArrayListExtra("Productores", listProductores );
             intent.putIntegerArrayListExtra("record", record );
+            intent.putExtra("UID", UID );
             startActivity(intent);
             //finish();
         }

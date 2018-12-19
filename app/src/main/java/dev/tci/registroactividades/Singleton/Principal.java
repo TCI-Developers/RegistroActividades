@@ -11,38 +11,26 @@ import dev.tci.registroactividades.Modelos.Registro;
 
 public class Principal extends AppCompatActivity {
 
-    FirebaseDatabase firebaseDatabase;
-    DatabaseReference databaseReference;
-    private Principal principal;
-    public ArrayList<Registro> listRegistro;
+    public FirebaseDatabase firebaseDatabase;
+    public DatabaseReference databaseReference;
+    private static Principal principal;
 
-    public Principal() {
-        /*databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                listRegistro.clear();
-                for(DataSnapshot obj : dataSnapshot.getChildren() ){
-                    Registro r = obj.getValue(Registro.class);
-                    listRegistro.add(r);
-                }
-            }
+    private Principal() {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
     }
 
-    public Principal getInstance(){
+    public static Principal getInstance(){
         if (principal == null ) {
-            FirebaseApp.initializeApp(getInstance());
-            firebaseDatabase = FirebaseDatabase.getInstance();
-            firebaseDatabase.setPersistenceEnabled(true);
-            databaseReference = firebaseDatabase.getReference();
+            principal = new Principal();
         }
         return principal;
     }
 
+    public void InicializarFirebase(){
+            FirebaseApp.initializeApp(getInstance());
+            firebaseDatabase = FirebaseDatabase.getInstance();
+            firebaseDatabase.setPersistenceEnabled(true);
+            databaseReference = firebaseDatabase.getReference();
+    }
 
 }
