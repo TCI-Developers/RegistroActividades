@@ -1,20 +1,17 @@
 package dev.tci.registroactividades;
 
-import android.Manifest;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.location.LocationListener;
-import android.location.LocationManager;
+
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
@@ -24,6 +21,8 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,11 +39,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.Muestro;
 import dev.tci.registroactividades.Singleton.Persistencia;
 import dev.tci.registroactividades.Singleton.Principal;
 
-public class register extends AppCompatActivity {
+public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener{
 
     private LinearLayout danoLaytou,lyPhoto;
     private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
@@ -213,8 +213,7 @@ public class register extends AppCompatActivity {
         }
         return false;
     }
-
-    String mCurrentPhotoPath;
+    public static String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -258,13 +257,25 @@ public class register extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90.0f);
             lyPhoto.setVisibility(View.VISIBLE);
             imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            imgPhoto.setImageBitmap(imageBitmap);
+            Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+            imgPhoto.setImageBitmap(rotatedBitmap);
         }
     }
 
 
+    @Override
+    public void onImageListener() {
 
+    }
+
+    public void viewImagen(View view){
+        imageFragment obj = new imageFragment();
+        obj.show(getSupportFragmentManager(),"register");
+    }
 
 }
+
