@@ -1,5 +1,8 @@
 package dev.tci.registroactividades;
 
+import android.content.Context;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -36,7 +39,6 @@ public class register extends AppCompatActivity {
     private int sumaCalibres = 0;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     Date date = new Date();
-
     String fecha = dateFormat.format(date);
     String UID;
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
@@ -50,7 +52,6 @@ public class register extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Init();
-
         int record = getIntent().getExtras().getInt("record");
 
         calLAC.addTextChangedListener(new TextWatcher() {
@@ -183,4 +184,6 @@ public class register extends AppCompatActivity {
         if(toneladas_aprox.getText().toString().isEmpty()){toneladas_aprox.setError("Es requerido");}
 
     }
+
+
 }
