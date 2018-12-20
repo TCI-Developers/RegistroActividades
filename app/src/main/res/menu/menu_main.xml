@@ -2,9 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="dev.tci.registroactividades.MainActivity">
+
+
+    <item
+        android:id="@+id/camera"
+        app:showAsAction="always"
+        android:title="check"
+        android:icon="@drawable/camera"/>
     <item
         android:id="@+id/check"
         app:showAsAction="always"
         android:title="check"
         android:icon="@drawable/check"/>
+
 </menu>
