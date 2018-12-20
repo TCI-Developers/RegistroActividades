@@ -67,7 +67,7 @@ public class register extends AppCompatActivity {
                         danoLaytou.setVisibility(View.VISIBLE);
                     }
                 }else{
-                    danoLaytou.setVisibility(View.INVISIBLE);
+                    danoLaytou.setVisibility(View.GONE);
                 }
             }
 
@@ -90,23 +90,29 @@ public class register extends AppCompatActivity {
 
         switch (id){
             case R.id.check:
+                //datos de muestro vivitas
                 if(!isValidateCalibres()){
                     Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres + "\nFecha: " + hora, Toast.LENGTH_LONG).show();
                 }else{
                     Muestro m = new Muestro();
-                    m.setCal32(Integer.valueOf(cal32.getText().toString()));
-                    m.setCal36(Integer.valueOf(cal36.getText().toString()));
-                    m.setCal40(Integer.valueOf(cal40.getText().toString()));
-                    m.setCal48(Integer.valueOf(cal48.getText().toString()));
-                    m.setCal60(Integer.valueOf(cal60.getText().toString()));
-                    m.setCal70(Integer.valueOf(cal70.getText().toString()));
-                    m.setCal84(Integer.valueOf(cal84.getText().toString()));
-                    m.setCal96(Integer.valueOf(cal96.getText().toString()));
-                    m.setCanica(Integer.valueOf(calCAN.getText().toString()));
-                    m.setLacrado(Integer.valueOf(calLAC.getText().toString()));
+                    if(!cal32.getText().toString().isEmpty()) {m.setCal32(Integer.valueOf(cal32.getText().toString()));}
+                    if(!cal36.getText().toString().isEmpty()) {m.setCal36(Integer.valueOf(cal36.getText().toString()));}
+                    if(!cal40.getText().toString().isEmpty()) {m.setCal40(Integer.valueOf(cal40.getText().toString()));}
+                    if(!cal48.getText().toString().isEmpty()) {m.setCal48(Integer.valueOf(cal48.getText().toString()));}
+                    if(!cal60.getText().toString().isEmpty()) {m.setCal60(Integer.valueOf(cal60.getText().toString()));}
+                    if(!cal70.getText().toString().isEmpty()) {m.setCal70(Integer.valueOf(cal70.getText().toString()));}
+                    if(!cal84.getText().toString().isEmpty()) {m.setCal84(Integer.valueOf(cal84.getText().toString()));}
+                    if(!cal96.getText().toString().isEmpty()) {m.setCal96(Integer.valueOf(cal96.getText().toString()));}
+                    if(!calCAN.getText().toString().isEmpty()) {m.setCanica(Integer.valueOf(calCAN.getText().toString()));}
+                    if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
 
                     Principal p = Principal.getInstance();
+
                     p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child("666").child("agendavisitas").child("H000264161203112031").child("muestreovisita").setValue(m);
+
+                }
+                //datos de cabecera (huerta, productor, tel, etc...)
+                if(isValidateCabecera()){
 
                 }
             break;
@@ -170,19 +176,21 @@ public class register extends AppCompatActivity {
         if(sumaCalibres != 100){
             return false;
         }
-        isValidateCabecera();
         return true;
     }
 
-    public void isValidateCabecera(){
-        if(huerta.getText().toString().isEmpty()){huerta.setError("Es requerido");}
-
-        if(productor.getText().toString().isEmpty()){productor.setError("Es requerido");}
-
-        if(telefono.getText().toString().isEmpty()){telefono.setError("Es requerido");}
-
-        if(toneladas_aprox.getText().toString().isEmpty()){toneladas_aprox.setError("Es requerido");}
-
+    public boolean isValidateCabecera(){
+        if(huerta.getText().toString().isEmpty()){
+            if(productor.getText().toString().isEmpty()){
+                if(telefono.getText().toString().isEmpty()){
+                    if(toneladas_aprox.getText().toString().isEmpty()){toneladas_aprox.setError("Es requerido");}
+                    telefono.setError("Es requerido");}
+                productor.setError("Es requerido");}
+            huerta.setError("Es requerido");
+        }else{
+            return true;
+        }
+        return false;
     }
 
 
