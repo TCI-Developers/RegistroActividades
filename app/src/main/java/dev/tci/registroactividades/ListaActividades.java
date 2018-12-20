@@ -19,7 +19,7 @@ public class ListaActividades extends AppCompatActivity {
     private Recycler adapter;
     private RecyclerView recyclerView;
     private Huertas h;
-    String UID;
+    private ArrayList<String> UID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +34,7 @@ public class ListaActividades extends AppCompatActivity {
         ArrayList<String> huertas = getIntent().getExtras().getStringArrayList("Huertas");
         ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
         final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
-        UID = getIntent().getExtras().getString("UID");
+        UID = getIntent().getExtras().getStringArrayList("UID");
 
         for(int i=0; i < huertas.size(); i++ ){
             h = new Huertas();
@@ -48,7 +48,7 @@ public class ListaActividades extends AppCompatActivity {
             public void onClick(View v, int position) {
                 Intent intent = new Intent(getApplicationContext(), register.class);
                 intent.putExtra("record", recordID.get(position));
-                intent.putExtra("UID", UID);
+                intent.putExtra("UID", UID.get(position));
                 startActivity(intent);
             }
         });
@@ -60,6 +60,7 @@ public class ListaActividades extends AppCompatActivity {
 
     public void Init(){
         listadoHuertas = new ArrayList<>();
+        UID = new ArrayList<String>();
         recyclerView = findViewById(R.id.recylcer_actividades);
     }
 
