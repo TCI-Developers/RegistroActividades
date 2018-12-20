@@ -1,6 +1,8 @@
 package dev.tci.registroactividades;
 
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
@@ -129,8 +132,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
                     Principal p = Principal.getInstance();
                     String imei = getIMEI();
-                    p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
-
+                    p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita"+"1").setValue(m);
+                    limpiar();
                 }
                 //datos de cabecera (huerta, productor, tel, etc...)
                 if(isValidateCabecera()){
@@ -219,6 +222,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
         return false;
     }
+
     public static String mCurrentPhotoPath;
 
     private File createImageFile() throws IOException {
@@ -293,6 +297,31 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     public void viewImagen(View view){
         imageFragment obj = new imageFragment();
         obj.show(getSupportFragmentManager(),"register");
+    }
+
+    public void limpiar(){
+        huerta.setText("");
+        productor.setText("");
+        telefono.setText("");
+        toneladas_aprox.setText("");
+        cal32.setText("");
+        cal36.setText("");
+        cal40.setText("");
+        cal48.setText("");
+        cal60.setText("");
+        cal70.setText("");
+        cal84.setText("");
+        cal96.setText("");
+        calCAN.setText("");
+        calLAC.setText("");
+        danoRONA.setText("");
+        danoROSADO.setText("");
+        danoBANO.setText("");
+        danoTRIPS.setText("");
+        danoQUEMADO.setText("");
+        danoCOMEDOR.setText("");
+        danoVIRUELA.setText("");
+        danoVARICELA.setText("");
     }
 
 }
