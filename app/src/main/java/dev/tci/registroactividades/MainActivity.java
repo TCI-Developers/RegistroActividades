@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     };
     private static final int REQUEST_CODE = 1;
     TelephonyManager mTelephony;
+    Principal p = Principal.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,17 +46,14 @@ public class MainActivity extends AppCompatActivity {
 
         Init();
         ListarHuertas();
-        //Toast.makeText(getApplicationContext(), getIMEI(), Toast.LENGTH_LONG).show();
     }
 
     private void ListarHuertas() {
-        Principal p = Principal.getInstance();
-        p.InicializarFirebase();
                 p.databaseReference
                 .child("Acopio")
                 .child("RV")
                 .child("UsuariosAcopio")
-                .child("666")
+                .child(getIMEI())
                 .child("agendavisitas")
                 .addValueEventListener(new ValueEventListener() {
             @Override
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -86,9 +85,11 @@ public class MainActivity extends AppCompatActivity {
         listProductores= new ArrayList<String>();
         record = new ArrayList<Integer>();
         UID = new ArrayList<String>();
+        p.InicializarFirebase();
     }
 
     public void CheckData(View v){
+        ListarHuertas();
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );
@@ -97,40 +98,20 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("UID", UID );
             startActivity(intent);
             //finish();
+        }else{
+            Snackbar.make(v, "No tienes actividades.", Snackbar.LENGTH_LONG).show();
         }
     }
 
-    public void Location(View v){
-        LocationManager locationManager = (LocationManager) MainActivity.this.getSystemService(Context.LOCATION_SERVICE);
-
-        LocationListener locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(android.location.Location location) {
-                Toast.makeText(getApplicationContext(), "Longitud: "+location.getLongitude() + "\nLatitud: "+location.getLatitude(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-
-            }
-        };
-    }
-
-    @SuppressLint("MissingPermission")
     public String getIMEI(){
-        mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephony.getDeviceId() != null){
-            myIMEI = mTelephony.getDeviceId();
+        int leer = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        if (leer == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
+        }else{
+            mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (mTelephony.getDeviceId() != null){
+                myIMEI = mTelephony.getDeviceId();
+            }
         }
         return myIMEI;
     }

@@ -11,11 +11,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Menu;
@@ -56,6 +56,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String fecha = dateFormat.format(date);
     String UID;
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
+    TelephonyManager mTelephony;
+    String myIMEI = "";
+    private static final String[] PERMISOS = {
+            Manifest.permission.READ_PHONE_STATE
+    };
+    private static final int REQUEST_CODE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +74,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         Init();
         lyPhoto.setVisibility(View.GONE);
         int record = getIntent().getExtras().getInt("record");
-
+        Toast.makeText(getApplicationContext(), UID, Toast.LENGTH_LONG).show();
         calLAC.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -122,8 +128,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                     if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
 
                     Principal p = Principal.getInstance();
-
-                    p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child("666").child("agendavisitas").child("H000264161203112031").child("muestreovisita").setValue(m);
+                    String imei = getIMEI();
+                    p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
 
                 }
                 //datos de cabecera (huerta, productor, tel, etc...)
@@ -266,6 +272,18 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
     }
 
+    public String getIMEI(){
+        int leer = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        if (leer == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
+        }else{
+            mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            if (mTelephony.getDeviceId() != null){
+                myIMEI = mTelephony.getDeviceId();
+            }
+        }
+        return myIMEI;
+    }
 
     @Override
     public void onImageListener() {
