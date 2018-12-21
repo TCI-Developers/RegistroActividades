@@ -137,7 +137,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
                     }else{
                         guardarDatos();
-                        Toast.makeText(getApplicationContext(), "Todo bien hasta aqui", Toast.LENGTH_LONG).show();
                     }
                 }
             break;
@@ -151,36 +150,36 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     private void guardarDatos() {
         //Muestro de visitas
-        Muestro m = new Muestro();
-        if(!cal32.getText().toString().isEmpty()) {m.setCal32(Integer.valueOf(cal32.getText().toString()));}
-        if(!cal36.getText().toString().isEmpty()) {m.setCal36(Integer.valueOf(cal36.getText().toString()));}
-        if(!cal40.getText().toString().isEmpty()) {m.setCal40(Integer.valueOf(cal40.getText().toString()));}
-        if(!cal48.getText().toString().isEmpty()) {m.setCal48(Integer.valueOf(cal48.getText().toString()));}
-        if(!cal60.getText().toString().isEmpty()) {m.setCal60(Integer.valueOf(cal60.getText().toString()));}
-        if(!cal70.getText().toString().isEmpty()) {m.setCal70(Integer.valueOf(cal70.getText().toString()));}
-        if(!cal84.getText().toString().isEmpty()) {m.setCal84(Integer.valueOf(cal84.getText().toString()));}
-        if(!cal96.getText().toString().isEmpty()) {m.setCal96(Integer.valueOf(cal96.getText().toString()));}
-        if(!calCAN.getText().toString().isEmpty()) {m.setCanica(Integer.valueOf(calCAN.getText().toString()));}
-        if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
-
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
-//*********************************************************************************************************************************************************************************************************************************************************
-        //Formato calidad
-        FormatoCalidad f = new FormatoCalidad();
-        if(!danoBANO.getText().toString().isEmpty()) {f.setBano(Integer.valueOf(danoBANO.getText().toString()));}
-        if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
-        if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
-
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
-//*******************************************************************************************************************************************************************************************************************************************************
-
-        if(!danoRONA.getText().toString().isEmpty()) {f.setRona(Integer.valueOf(danoRONA.getText().toString()));}
-        if(!danoROSADO.getText().toString().isEmpty()) {f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));}
-        if(!danoTRIPS.getText().toString().isEmpty()) {f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));}
-        if(!danoQUEMADO.getText().toString().isEmpty()) {f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));}
-        if(!danoVIRUELA.getText().toString().isEmpty()) {f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));}
-        if(!danoVARICELA.getText().toString().isEmpty()) {f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));}
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").child("damage").setValue(f);
+//        Muestro m = new Muestro();
+//        if(!cal32.getText().toString().isEmpty()) {m.setCal32(Integer.valueOf(cal32.getText().toString()));}
+//        if(!cal36.getText().toString().isEmpty()) {m.setCal36(Integer.valueOf(cal36.getText().toString()));}
+//        if(!cal40.getText().toString().isEmpty()) {m.setCal40(Integer.valueOf(cal40.getText().toString()));}
+//        if(!cal48.getText().toString().isEmpty()) {m.setCal48(Integer.valueOf(cal48.getText().toString()));}
+//        if(!cal60.getText().toString().isEmpty()) {m.setCal60(Integer.valueOf(cal60.getText().toString()));}
+//        if(!cal70.getText().toString().isEmpty()) {m.setCal70(Integer.valueOf(cal70.getText().toString()));}
+//        if(!cal84.getText().toString().isEmpty()) {m.setCal84(Integer.valueOf(cal84.getText().toString()));}
+//        if(!cal96.getText().toString().isEmpty()) {m.setCal96(Integer.valueOf(cal96.getText().toString()));}
+//        if(!calCAN.getText().toString().isEmpty()) {m.setCanica(Integer.valueOf(calCAN.getText().toString()));}
+//        if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
+//
+//        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
+////*********************************************************************************************************************************************************************************************************************************************************
+//        //Formato calidad
+//        FormatoCalidad f = new FormatoCalidad();
+//        if(!danoBANO.getText().toString().isEmpty()) {f.setBano(Integer.valueOf(danoBANO.getText().toString()));}
+//        if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
+//        if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
+//
+//        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
+////*******************************************************************************************************************************************************************************************************************************************************
+//
+//        if(!danoRONA.getText().toString().isEmpty()) {f.setRona(Integer.valueOf(danoRONA.getText().toString()));}
+//        if(!danoROSADO.getText().toString().isEmpty()) {f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));}
+//        if(!danoTRIPS.getText().toString().isEmpty()) {f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));}
+//        if(!danoQUEMADO.getText().toString().isEmpty()) {f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));}
+//        if(!danoVIRUELA.getText().toString().isEmpty()) {f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));}
+//        if(!danoVARICELA.getText().toString().isEmpty()) {f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));}
+//        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").child("damage").setValue(f);
 //*******************************************************************************************************************************************************************************************************************************************************
 
         //Bitacora
@@ -188,10 +187,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
         if(!productor.getText().toString().isEmpty()) {b.setProductor(productor.getText().toString());}
         if(!telefono.getText().toString().isEmpty()) {b.setTelefono(Long.valueOf(telefono.getText().toString()));}
-        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
-        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
+        if(!toneladas_aprox.getText().toString().isEmpty()) {b.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));}
+        if(spnMun.getSelectedItemPosition() > 0) {b.setMunicipio(spnMun.getSelectedItem().toString() );}
+        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("bitacora").setValue(b);
 
-        subirFotoFirebase();
+        //subirFotoFirebase();
         limpiar();
     }
 
@@ -225,7 +225,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         spnMun = findViewById(R.id.spnMunicipio);
         NoCuadrillas = findViewById(R.id.txtNoCuadrillas);
         p = Principal.getInstance();
-        //imei = getIMEI();
+        imei = getIMEI();
     }
 
     public boolean isValidateCalibres(){
