@@ -1,6 +1,8 @@
 package dev.tci.registroactividades;
 
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -11,6 +13,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayout;
@@ -28,10 +32,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -62,6 +71,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             Manifest.permission.READ_PHONE_STATE
     };
     private static final int REQUEST_CODE = 1;
+    StorageReference storageRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +146,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                 if(isValidateCabecera()){
 
                 }
+                subirFotoFirebase();
             break;
 
             case R.id.camera:
@@ -293,6 +304,26 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     public void viewImagen(View view){
         imageFragment obj = new imageFragment();
         obj.show(getSupportFragmentManager(),"register");
+    }
+
+    public void subirFotoFirebase(){
+        StorageReference path = storageRef.child("Imagenes/Fotos/img.jpg");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitmapFactory.decodeFile(mCurrentPhotoPath).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = path.putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(register.this,"Error IMG: "+exception,Toast.LENGTH_SHORT).show();
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }
