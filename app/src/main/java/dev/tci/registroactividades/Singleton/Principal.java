@@ -10,8 +10,9 @@ public class Principal extends AppCompatActivity {
 
     public FirebaseDatabase firebaseDatabase;
     public DatabaseReference databaseReference;
+    public StorageReference storageRef;
+
     private static Principal principal;
-    StorageReference storageRef;
     private Principal() {
 
     }

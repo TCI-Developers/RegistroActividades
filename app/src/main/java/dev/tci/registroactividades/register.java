@@ -50,6 +50,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
+import dev.tci.registroactividades.Modelos.Bitacora;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Modelos.Muestro;
 import dev.tci.registroactividades.Singleton.Persistencia;
@@ -73,7 +74,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             Manifest.permission.READ_PHONE_STATE
     };
     private static final int REQUEST_CODE = 1;
-    StorageReference storageRef;
+    Bitmap imageBitmap;
+    private Spinner spnMun;
+    Principal p;
+    String imei;
+    static final int REQUEST_TAKE_PHOTO = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         setSupportActionBar(toolbar);
 
         Init();
+
         lyPhoto.setVisibility(View.GONE);
         int record = getIntent().getExtras().getInt("record");
 
@@ -130,11 +136,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                     if(!isValidateCalibres()){
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
                     }else{
-                        //guardarDatos();
+                        guardarDatos();
                         Toast.makeText(getApplicationContext(), "Todo bien hasta aqui", Toast.LENGTH_LONG).show();
                     }
                 }
-                subirFotoFirebase();
             break;
 
             case R.id.camera:
@@ -158,6 +163,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!calCAN.getText().toString().isEmpty()) {m.setCanica(Integer.valueOf(calCAN.getText().toString()));}
         if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
 
+        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
+//*********************************************************************************************************************************************************************************************************************************************************
         //Formato calidad
         FormatoCalidad f = new FormatoCalidad();
         if(!danoBANO.getText().toString().isEmpty()) {f.setBano(Integer.valueOf(danoBANO.getText().toString()));}
@@ -165,7 +172,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
 
         p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
-        //*****************************************************************************************************************************************************************************************
+//*******************************************************************************************************************************************************************************************************************************************************
 
         if(!danoRONA.getText().toString().isEmpty()) {f.setRona(Integer.valueOf(danoRONA.getText().toString()));}
         if(!danoROSADO.getText().toString().isEmpty()) {f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));}
@@ -174,9 +181,17 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!danoVIRUELA.getText().toString().isEmpty()) {f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));}
         if(!danoVARICELA.getText().toString().isEmpty()) {f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));}
         p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").child("damage").setValue(f);
+//*******************************************************************************************************************************************************************************************************************************************************
 
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita"+"1").setValue(m);
+        //Bitacora
+        Bitacora b = new Bitacora();
+        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
+        if(!productor.getText().toString().isEmpty()) {b.setProductor(productor.getText().toString());}
+        if(!telefono.getText().toString().isEmpty()) {b.setTelefono(Long.valueOf(telefono.getText().toString()));}
+        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
+        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
 
+        subirFotoFirebase();
         limpiar();
     }
 
@@ -209,6 +224,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         lyPhoto = findViewById(R.id.lyPhoto);
         spnMun = findViewById(R.id.spnMunicipio);
         NoCuadrillas = findViewById(R.id.txtNoCuadrillas);
+        p = Principal.getInstance();
+        //imei = getIMEI();
     }
 
     public boolean isValidateCalibres(){
@@ -282,8 +299,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         return image;
     }
 
-    static final int REQUEST_TAKE_PHOTO = 1;
-
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -342,7 +357,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     public void subirFotoFirebase(){
-        StorageReference path = storageRef.child("Imagenes/Fotos/img.jpg");
+        StorageReference path = p.storageRef.child("Imagenes/RV/"+fecha+"-"+hora+"-RV.jpg");
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         BitmapFactory.decodeFile(mCurrentPhotoPath).compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -361,5 +376,29 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         });
     }
 
+    public void limpiar(){
+        huerta.setText("");
+        productor.setText("");
+        telefono.setText("");
+        toneladas_aprox.setText("");
+        cal32.setText("");
+        cal36.setText("");
+        cal40.setText("");
+        cal48.setText("");
+        cal60.setText("");
+        cal70.setText("");
+        cal84.setText("");
+        cal96.setText("");
+        calCAN.setText("");
+        calLAC.setText("");
+        danoRONA.setText("");
+        danoROSADO.setText("");
+        danoBANO.setText("");
+        danoTRIPS.setText("");
+        danoQUEMADO.setText("");
+        danoCOMEDOR.setText("");
+        danoVIRUELA.setText("");
+        danoVARICELA.setText("");
+    }
 }
 
