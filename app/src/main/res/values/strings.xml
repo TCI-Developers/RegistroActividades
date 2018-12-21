@@ -68,6 +68,7 @@
     <string name="title_activity_lista_actividades">ListaActividades</string>
 
     <string-array name="bitacora">
+        <item>SELEC. OPCIOÓN</item>
         <item>BITACIRA PLAGUICIDAS</item>
         <item>ANÁLISIS PLAGUICIDAS</item>
         <item>CERTIFICACIONES</item>

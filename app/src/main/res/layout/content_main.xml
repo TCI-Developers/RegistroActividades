@@ -19,7 +19,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:onClick="CheckData"
+        android:onClick="ListarActividades"
         android:text="Cargar registros"
         android:textColor="#000"
         app:layout_constraintBottom_toBottomOf="parent"

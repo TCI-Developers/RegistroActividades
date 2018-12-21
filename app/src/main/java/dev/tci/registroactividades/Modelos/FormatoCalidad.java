@@ -31,8 +31,17 @@ public class FormatoCalidad {
     private int viruela;
     private int varicela;
     private String url;
+    private String concepto;
 
     public FormatoCalidad() {
+    }
+
+    public String getConcepto() {
+        return concepto;
+    }
+
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
     }
 
     public String getUrl() {

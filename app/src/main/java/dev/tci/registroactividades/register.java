@@ -51,7 +51,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     private LinearLayout danoLaytou,lyPhoto;
     private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
-            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas;
+            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto;
     private ImageView imgPhoto;
     private int sumaCalibres = 0;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -68,7 +68,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     };
     private static final int REQUEST_CODE = 1;
     Bitmap imageBitmap;
-    private Spinner spnMun;
+    private Spinner spnMun, spnCONCEPT;
     Principal p;
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -192,6 +192,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setLongitud(longi);
         f.setUrl("");
 
+        f.setConcepto(spnCONCEPT.getSelectedItem().toString());
+
         p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
 ////*******************************************************************************************************************************************************************************************************************************************************
         //subirFotoFirebase();
@@ -227,6 +229,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         lyPhoto = findViewById(R.id.lyPhoto);
         spnMun = findViewById(R.id.spnMunicipio);
         NoCuadrillas = findViewById(R.id.txtNoCuadrillas);
+        concepto = findViewById(R.id.txtConcepto);
+        spnCONCEPT = findViewById(R.id.spnPLAG);
         p = Principal.getInstance();
         imei = getIMEI();
     }
@@ -460,6 +464,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         danoVARICELA.setText("");
         spnMun.setSelection(0);
         NoCuadrillas.setText("");
+        concepto.setText("");
+        spnCONCEPT.setSelection(0);
     }
 }
 
