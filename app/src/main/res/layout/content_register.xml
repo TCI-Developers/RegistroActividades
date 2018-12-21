@@ -59,7 +59,7 @@
                             android:layout_marginTop="5dp"
                             android:background="@drawable/boxtext1"
                             android:hint="@string/productor"
-                            android:inputType="textCapCharacters"
+                            android:inputType="textCapSentences"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </android.support.design.widget.TextInputLayout>
@@ -510,7 +510,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:inputType="textPersonName"
+                                android:inputType="number"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -522,7 +522,7 @@
                             android:orientation="horizontal">
 
                             <Spinner
-                                android:id="@+id/spinner"
+                                android:id="@+id/spnPLAG"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="8dp"
@@ -532,7 +532,6 @@
                                 android:layout_marginRight="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
-                                android:alpha="0.5"
                                 android:entries="@array/bitacora"
                                 android:popupBackground="@color/colorPrimary" />
 
@@ -549,7 +548,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:inputType="textPersonName"
+                                android:inputType="number"
                                 android:paddingLeft="8dp" />
                         </LinearLayout>
 

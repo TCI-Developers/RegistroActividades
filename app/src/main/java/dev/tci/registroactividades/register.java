@@ -1,15 +1,17 @@
 package dev.tci.registroactividades;
 
-
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -30,12 +32,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -43,10 +43,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
-import dev.tci.registroactividades.Modelos.Muestro;
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener{
@@ -64,7 +62,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     TelephonyManager mTelephony;
     String myIMEI = "";
     private static final String[] PERMISOS = {
-            Manifest.permission.READ_PHONE_STATE
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
     };
     private static final int REQUEST_CODE = 1;
     Bitmap imageBitmap;
@@ -73,9 +73,18 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
     String namePhoto = fecha+"-"+hora+"-RV.jpg";
+    LocationManager manager;
+    private double lati;
+    private double longi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        int leer = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+        int leer2 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+        int leer3 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED ) {
+            ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -124,18 +133,17 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         switch (id){
             case R.id.check:
-                //datos de cabecera (huerta, productor, tel, etc...)
-                subirFotoFirebase();
-                obtenerURLImg();
-//                if( isValidateCabecera()){
-//                    //datos de muestro vicitas
-//                    if(!isValidateCalibres()){
-//                        Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
-//                    }else{
-//                        guardarDatos();
-//                        Toast.makeText(getApplicationContext(), "Todo bien hasta aqui", Toast.LENGTH_LONG).show();
-//                    }
-//                }
+                Mi_hubicacion();
+                //subirFotoFirebase();
+                //obtenerURLImg();
+                if( isValidateCabecera()){
+                    //datos de muestro vicitas
+                    if(!isValidateCalibres()){
+                        Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
+                    }else{
+                        guardarDatos();
+                    }
+                }
             break;
 
             case R.id.camera:
@@ -153,10 +161,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
         if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
 
-        f.setHora(huerta.getText().toString());
+        f.setHuerta(huerta.getText().toString());
         f.setProductor(productor.getText().toString());
-        f.setTelefono(Integer.valueOf(telefono.getText().toString()));
-        f.setTon_prox(Integer.valueOf(toneladas_aprox.getText().toString()));
+        f.setTelefono(Long.valueOf(telefono.getText().toString()));
+        f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
         f.setMunicipio(spnMun.getSelectedItem().toString());
 
         if(!cal32.getText().toString().isEmpty()) {f.setCal32(Integer.valueOf(cal32.getText().toString()));}
@@ -179,6 +187,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         f.setHora(hora);
         f.setFecha(fecha);
+
+        f.setLatitud(lati);
+        f.setLongitud(longi);
         f.setUrl("");
 
         p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
@@ -347,6 +358,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         imageFragment obj = new imageFragment();
         obj.show(getSupportFragmentManager(),"register");
     }
+
     public void subirFotoFirebase(){
         StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
         imgPhoto.setDrawingCacheEnabled(true);
@@ -386,6 +398,43 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         });
     }
 
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            actualizar(location);
+        }
+
+        @Override
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String provider) {
+
+        }
+
+        @Override
+        public void onProviderDisabled(String provider) {
+
+        }
+    };
+
+    private void Mi_hubicacion() {
+        manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+        Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        actualizar(local);
+        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+    }
+
+    private void actualizar(Location local) {
+        if (local != null) {
+            lati = local.getLatitude();
+            longi = local.getLongitude();
+            //Toast.makeText(getApplicationContext(), "Latitud: " + lati + "Longitud: " + longi, Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void limpiar(){
         huerta.setText("");
         productor.setText("");
@@ -410,6 +459,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         danoVIRUELA.setText("");
         danoVARICELA.setText("");
         spnMun.setSelection(0);
+        NoCuadrillas.setText("");
     }
 }
 
