@@ -45,7 +45,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
-import dev.tci.registroactividades.Modelos.Bitacora;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Modelos.Muestro;
 import dev.tci.registroactividades.Singleton.Principal;
@@ -147,20 +146,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     private void guardarDatos() {
-        //Muestro de visitas
-        Muestro m = new Muestro();
-        if(!cal32.getText().toString().isEmpty()) {m.setCal32(Integer.valueOf(cal32.getText().toString()));}
-        if(!cal36.getText().toString().isEmpty()) {m.setCal36(Integer.valueOf(cal36.getText().toString()));}
-        if(!cal40.getText().toString().isEmpty()) {m.setCal40(Integer.valueOf(cal40.getText().toString()));}
-        if(!cal48.getText().toString().isEmpty()) {m.setCal48(Integer.valueOf(cal48.getText().toString()));}
-        if(!cal60.getText().toString().isEmpty()) {m.setCal60(Integer.valueOf(cal60.getText().toString()));}
-        if(!cal70.getText().toString().isEmpty()) {m.setCal70(Integer.valueOf(cal70.getText().toString()));}
-        if(!cal84.getText().toString().isEmpty()) {m.setCal84(Integer.valueOf(cal84.getText().toString()));}
-        if(!cal96.getText().toString().isEmpty()) {m.setCal96(Integer.valueOf(cal96.getText().toString()));}
-        if(!calCAN.getText().toString().isEmpty()) {m.setCanica(Integer.valueOf(calCAN.getText().toString()));}
-        if(!calLAC.getText().toString().isEmpty()) {m.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
-
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("muestreovisita").setValue(m);
 //*********************************************************************************************************************************************************************************************************************************************************
         //Formato calidad
         FormatoCalidad f = new FormatoCalidad();
@@ -168,8 +153,22 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
         if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
 
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
-//*******************************************************************************************************************************************************************************************************************************************************
+        f.setHora(huerta.getText().toString());
+        f.setProductor(productor.getText().toString());
+        f.setTelefono(Integer.valueOf(telefono.getText().toString()));
+        f.setTon_prox(Integer.valueOf(toneladas_aprox.getText().toString()));
+        f.setMunicipio(spnMun.getSelectedItem().toString());
+
+        if(!cal32.getText().toString().isEmpty()) {f.setCal32(Integer.valueOf(cal32.getText().toString()));}
+        if(!cal36.getText().toString().isEmpty()) {f.setCal36(Integer.valueOf(cal36.getText().toString()));}
+        if(!cal40.getText().toString().isEmpty()) {f.setCal40(Integer.valueOf(cal40.getText().toString()));}
+        if(!cal48.getText().toString().isEmpty()) {f.setCal48(Integer.valueOf(cal48.getText().toString()));}
+        if(!cal60.getText().toString().isEmpty()) {f.setCal60(Integer.valueOf(cal60.getText().toString()));}
+        if(!cal70.getText().toString().isEmpty()) {f.setCal70(Integer.valueOf(cal70.getText().toString()));}
+        if(!cal84.getText().toString().isEmpty()) {f.setCal84(Integer.valueOf(cal84.getText().toString()));}
+        if(!cal96.getText().toString().isEmpty()) {f.setCal96(Integer.valueOf(cal96.getText().toString()));}
+        if(!calCAN.getText().toString().isEmpty()) {f.setCanica(Integer.valueOf(calCAN.getText().toString()));}
+        if(!calLAC.getText().toString().isEmpty()) {f.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
 
         if(!danoRONA.getText().toString().isEmpty()) {f.setRona(Integer.valueOf(danoRONA.getText().toString()));}
         if(!danoROSADO.getText().toString().isEmpty()) {f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));}
@@ -177,18 +176,14 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if(!danoQUEMADO.getText().toString().isEmpty()) {f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));}
         if(!danoVIRUELA.getText().toString().isEmpty()) {f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));}
         if(!danoVARICELA.getText().toString().isEmpty()) {f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));}
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").child("damage").setValue(f);
-//*******************************************************************************************************************************************************************************************************************************************************
 
-        //Bitacora
-        Bitacora b = new Bitacora();
-        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
-        if(!productor.getText().toString().isEmpty()) {b.setProductor(productor.getText().toString());}
-        if(!telefono.getText().toString().isEmpty()) {b.setTelefono(Long.valueOf(telefono.getText().toString()));}
-        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
-        if(!huerta.getText().toString().isEmpty()) {b.setHuerta(huerta.getText().toString());}
+        f.setHora(hora);
+        f.setFecha(fecha);
+        f.setUrl("");
 
-        subirFotoFirebase();
+        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
+////*******************************************************************************************************************************************************************************************************************************************************
+        //subirFotoFirebase();
         limpiar();
     }
 
@@ -414,6 +409,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         danoCOMEDOR.setText("");
         danoVIRUELA.setText("");
         danoVARICELA.setText("");
+        spnMun.setSelection(0);
     }
 }
 
