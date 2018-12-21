@@ -11,68 +11,36 @@ public class FormatoCalidad {
     private int cal70;
     private int cal84;
     private int cal96;
+    private int canica;
+    private int lacrado;
     private String comedor;
     private String fecha;
     private String hora;
     private String latitud;
     private String longitud;
     private int ncuadrillas;
+    private String huerta;
+    private String productor;
+    private long telefono;
+    private long ton_prox;
+    private String municipio;
     private int rona;
     private int rosado;
     private int trips;
     private int quemado;
     private int viruela;
     private int varicela;
+    private String url;
 
     public FormatoCalidad() {
     }
 
-    public int getRona() {
-        return rona;
+    public String getUrl() {
+        return url;
     }
 
-    public void setRona(int rona) {
-        this.rona = rona;
-    }
-
-    public int getRosado() {
-        return rosado;
-    }
-
-    public void setRosado(int rosado) {
-        this.rosado = rosado;
-    }
-
-    public int getTrips() {
-        return trips;
-    }
-
-    public void setTrips(int trips) {
-        this.trips = trips;
-    }
-
-    public int getQuemado() {
-        return quemado;
-    }
-
-    public void setQuemado(int quemado) {
-        this.quemado = quemado;
-    }
-
-    public int getViruela() {
-        return viruela;
-    }
-
-    public void setViruela(int viruela) {
-        this.viruela = viruela;
-    }
-
-    public int getVaricela() {
-        return varicela;
-    }
-
-    public void setVaricela(int varicela) {
-        this.varicela = varicela;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public int getBano() {
@@ -147,6 +115,22 @@ public class FormatoCalidad {
         this.cal96 = cal96;
     }
 
+    public int getCanica() {
+        return canica;
+    }
+
+    public void setCanica(int canica) {
+        this.canica = canica;
+    }
+
+    public int getLacrado() {
+        return lacrado;
+    }
+
+    public void setLacrado(int lacrado) {
+        this.lacrado = lacrado;
+    }
+
     public String getComedor() {
         return comedor;
     }
@@ -193,5 +177,93 @@ public class FormatoCalidad {
 
     public void setNcuadrillas(int ncuadrillas) {
         this.ncuadrillas = ncuadrillas;
+    }
+
+    public String getHuerta() {
+        return huerta;
+    }
+
+    public void setHuerta(String huerta) {
+        this.huerta = huerta;
+    }
+
+    public String getProductor() {
+        return productor;
+    }
+
+    public void setProductor(String productor) {
+        this.productor = productor;
+    }
+
+    public long getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(long telefono) {
+        this.telefono = telefono;
+    }
+
+    public long getTon_prox() {
+        return ton_prox;
+    }
+
+    public void setTon_prox(long ton_prox) {
+        this.ton_prox = ton_prox;
+    }
+
+    public String getMunicipio() {
+        return municipio;
+    }
+
+    public void setMunicipio(String municipio) {
+        this.municipio = municipio;
+    }
+
+    public int getRona() {
+        return rona;
+    }
+
+    public void setRona(int rona) {
+        this.rona = rona;
+    }
+
+    public int getRosado() {
+        return rosado;
+    }
+
+    public void setRosado(int rosado) {
+        this.rosado = rosado;
+    }
+
+    public int getTrips() {
+        return trips;
+    }
+
+    public void setTrips(int trips) {
+        this.trips = trips;
+    }
+
+    public int getQuemado() {
+        return quemado;
+    }
+
+    public void setQuemado(int quemado) {
+        this.quemado = quemado;
+    }
+
+    public int getViruela() {
+        return viruela;
+    }
+
+    public void setViruela(int viruela) {
+        this.viruela = viruela;
+    }
+
+    public int getVaricela() {
+        return varicela;
+    }
+
+    public void setVaricela(int varicela) {
+        this.varicela = varicela;
     }
 }
