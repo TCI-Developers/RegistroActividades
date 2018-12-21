@@ -334,14 +334,14 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/txtDanoRona"
+                                android:id="@+id/txtDanoBano"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:hint="@string/ro_a"
+                                android:hint="@string/ba_o"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
                                 android:paddingLeft="8dp"
@@ -362,19 +362,18 @@
                                 android:textSize="12sp" />
 
                             <EditText
-                                android:id="@+id/txtDanoBano"
+                                android:id="@+id/txtDanoRona"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:hint="@string/ba_o"
+                                android:hint="@string/ro_a"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
-
                         </LinearLayout>
 
                         <LinearLayout
