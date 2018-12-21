@@ -76,6 +76,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     LocationManager manager;
     private double lati;
     private double longi;
+    FormatoCalidad f = new FormatoCalidad();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +135,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         switch (id){
             case R.id.check:
                 Mi_hubicacion();
-                //subirFotoFirebase();
-                //obtenerURLImg();
+                subirFotoFirebase();
+                obtenerURLImg();
                 if( isValidateCabecera()){
                     //datos de muestro vicitas
                     if(!isValidateCalibres()){
@@ -156,7 +157,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private void guardarDatos() {
 //*********************************************************************************************************************************************************************************************************************************************************
         //Formato calidad
-        FormatoCalidad f = new FormatoCalidad();
         if(!danoBANO.getText().toString().isEmpty()) {f.setBano(Integer.valueOf(danoBANO.getText().toString()));}
         if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
         if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
@@ -371,6 +371,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
+
         UploadTask uploadTask = path.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -391,8 +392,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             @Override
             public void onSuccess(Uri uri) {
                 Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
-                p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas")
-                        .child(UID).setValue(uri);
+                f.setUrl(uri.toString());
+                p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

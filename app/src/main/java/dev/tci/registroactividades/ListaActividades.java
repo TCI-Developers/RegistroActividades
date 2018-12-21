@@ -20,6 +20,7 @@ public class ListaActividades extends AppCompatActivity {
     private RecyclerView recyclerView;
     private Huertas h;
     private ArrayList<String> UID;
+    private String IMEI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class ListaActividades extends AppCompatActivity {
         ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
         final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
         UID = getIntent().getExtras().getStringArrayList("UID");
+        IMEI = getIntent().getExtras().getString("IMEI");
 
         for(int i=0; i < huertas.size(); i++ ){
             h = new Huertas();
@@ -49,6 +51,7 @@ public class ListaActividades extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), register.class);
                 intent.putExtra("record", recordID.get(position));
                 intent.putExtra("UID", UID.get(position));
+                Toast.makeText(getApplicationContext(),"UID: "+UID.get(position) + "\nIMEI: " + IMEI, Toast.LENGTH_LONG).show();
                 startActivity(intent);
             }
         });
@@ -62,6 +65,10 @@ public class ListaActividades extends AppCompatActivity {
         listadoHuertas = new ArrayList<>();
         UID = new ArrayList<String>();
         recyclerView = findViewById(R.id.recylcer_actividades);
+    }
+
+    public void subirInformacion(){
+
     }
 
 }

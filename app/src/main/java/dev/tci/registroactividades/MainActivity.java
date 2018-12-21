@@ -72,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
                     listProductores.add(ag.getProductor());
                     record.add(ag.getRecord());
                 }
-
             }
 
             @Override
@@ -98,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("Productores", listProductores );
             intent.putIntegerArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
+            intent.putExtra("IMEI", myIMEI );
             startActivity(intent);
             //finish();
         }else{
@@ -116,33 +116,5 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return myIMEI;
-    }
-
-    private void ListarActividades(View v) {
-                p.databaseReference
-                .child("Acopio")
-                .child("RV")
-                .child("UsuariosAcopio")
-                .child(getIMEI())
-                .child("agendavisitas")
-                .child(UID.toString())
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        int i = 0;
-                        for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                            AgendaVisitas ag = objSnaptshot.getValue(AgendaVisitas.class);
-                            FormatoCalidad f = objSnaptshot.getValue(FormatoCalidad.class);
-
-                           Toast.makeText(getApplicationContext(), i++, Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
-                    }
-                });
     }
 }
