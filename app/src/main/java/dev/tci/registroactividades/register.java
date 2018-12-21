@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayout;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
@@ -25,8 +25,6 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,9 +33,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -53,7 +48,6 @@ import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.Bitacora;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Modelos.Muestro;
-import dev.tci.registroactividades.Singleton.Persistencia;
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener{
@@ -79,6 +73,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     Principal p;
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
+    String namePhoto = fecha+"-"+hora+"-RV.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,15 +126,17 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         switch (id){
             case R.id.check:
                 //datos de cabecera (huerta, productor, tel, etc...)
-                if( isValidateCabecera()){
-                    //datos de muestro vicitas
-                    if(!isValidateCalibres()){
-                        Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
-                    }else{
-                        guardarDatos();
-                        Toast.makeText(getApplicationContext(), "Todo bien hasta aqui", Toast.LENGTH_LONG).show();
-                    }
-                }
+                subirFotoFirebase();
+                obtenerURLImg();
+//                if( isValidateCabecera()){
+//                    //datos de muestro vicitas
+//                    if(!isValidateCalibres()){
+//                        Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
+//                    }else{
+//                        guardarDatos();
+//                        Toast.makeText(getApplicationContext(), "Todo bien hasta aqui", Toast.LENGTH_LONG).show();
+//                    }
+//                }
             break;
 
             case R.id.camera:
@@ -225,7 +222,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         spnMun = findViewById(R.id.spnMunicipio);
         NoCuadrillas = findViewById(R.id.txtNoCuadrillas);
         p = Principal.getInstance();
-        //imei = getIMEI();
+        imei = getIMEI();
     }
 
     public boolean isValidateCalibres(){
@@ -355,13 +352,14 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         imageFragment obj = new imageFragment();
         obj.show(getSupportFragmentManager(),"register");
     }
-
     public void subirFotoFirebase(){
-        StorageReference path = p.storageRef.child("Imagenes/RV/"+fecha+"-"+hora+"-RV.jpg");
+        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
+        imgPhoto.setDrawingCacheEnabled(true);
+        imgPhoto.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imgPhoto.getDrawable()).getBitmap();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitmapFactory.decodeFile(mCurrentPhotoPath).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
         UploadTask uploadTask = path.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
@@ -372,6 +370,23 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+                obtenerURLImg();
+            }
+        });
+    }
+
+    public void obtenerURLImg(){
+        p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
+                p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas")
+                        .child(UID).setValue(uri);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(register.this,"No se encontro IMG",Toast.LENGTH_SHORT).show();
             }
         });
     }
