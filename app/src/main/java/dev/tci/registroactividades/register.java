@@ -2,6 +2,7 @@ package dev.tci.registroactividades;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -77,6 +78,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private double lati;
     private double longi;
     FormatoCalidad f = new FormatoCalidad();
+    ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,15 +136,22 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         switch (id){
             case R.id.check:
+                dialog = new ProgressDialog(register.this);
+                dialog.setTitle("Espere!");
+                dialog.setMessage("Subiendo información...");
+
+                dialog.setCancelable(false);
                 Mi_hubicacion();
-                subirFotoFirebase();
-                obtenerURLImg();
                 if( isValidateCabecera()){
                     //datos de muestro vicitas
                     if(!isValidateCalibres()){
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
+                    }else if(lyPhoto.getVisibility() == View.GONE){
+                       Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                     }else{
+                        dialog.show();
                         guardarDatos();
+                        subirFotoFirebase();
                     }
                 }
             break;
@@ -196,7 +205,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
 ////*******************************************************************************************************************************************************************************************************************************************************
-        //subirFotoFirebase();
         limpiar();
     }
 
@@ -382,6 +390,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+                lyPhoto.setVisibility(View.GONE);
+                dialog.hide();
                 obtenerURLImg();
             }
         });
