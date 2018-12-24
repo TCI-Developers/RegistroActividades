@@ -39,7 +39,7 @@ public class Recycler extends RecyclerView.Adapter<Recycler.HuertasViewHolder> {
         return listRegistro.size();
     }
 
-    public class HuertasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class HuertasViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
         TextView nombreHuerta, nombreProductor;
 
         public HuertasViewHolder(@NonNull View itemView) {
@@ -47,11 +47,18 @@ public class Recycler extends RecyclerView.Adapter<Recycler.HuertasViewHolder> {
             nombreHuerta = itemView.findViewById(R.id.txtNombreHuerta);
             nombreProductor = itemView.findViewById(R.id.txtNombreProductor);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             click.onClick(v, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            click.onLongClick(v, getAdapterPosition());
+            return true;
         }
     }
 }

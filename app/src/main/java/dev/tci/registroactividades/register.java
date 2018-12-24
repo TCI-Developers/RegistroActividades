@@ -562,6 +562,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         NoCuadrillas.setText("");
         concepto.setText("");
         spnCONCEPT.setSelection(0);
+        finish();
     }
 }
 

@@ -1,6 +1,8 @@
 package dev.tci.registroactividades.Modelos;
 
-public class FormatoCalidad {
+import java.io.Serializable;
+
+public class FormatoCalidad implements Serializable {
 
     private int bano;
     private int cal32;
