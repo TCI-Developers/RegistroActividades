@@ -25,6 +25,7 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -150,9 +151,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                         if(lyPhoto.getVisibility() == View.GONE){
                                             Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            dialog.show();
+                                            //dialog.show();
                                             guardarDatos();
-                                            subirFotoFirebase();
+                                            //subirFotoFirebase();
                                         }
                                     }
                                 }
@@ -161,9 +162,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                     if(lyPhoto.getVisibility() == View.GONE){
                                         Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                                     }else{
-                                        dialog.show();
+                                        //dialog.show();
                                         guardarDatos();
-                                        subirFotoFirebase();
+                                        //subirFotoFirebase();
                                     }
                                 }
                             }
@@ -215,7 +216,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         f.setLatitud(lati);
         f.setLongitud(longi);
-        f.setUrl("");
+        f.setUrl(getImageBase64());
 
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
 
@@ -412,6 +413,20 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             imgPhoto.setImageBitmap(rotatedBitmap);
         }
     }
+
+    public String getImageBase64(){
+        imgPhoto.setDrawingCacheEnabled(true);
+        imgPhoto.buildDrawingCache();
+        Bitmap bitmap = ((BitmapDrawable) imgPhoto.getDrawable()).getBitmap();
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] data = baos.toByteArray();
+
+        String imagenCode64 = Base64.encodeToString(data,Base64.DEFAULT);
+        lyPhoto.setVisibility(View.GONE);
+        return  imagenCode64;
+    }
+
 
     public String getIMEI(){
         mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
