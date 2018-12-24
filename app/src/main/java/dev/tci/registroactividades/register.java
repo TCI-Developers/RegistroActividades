@@ -76,6 +76,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     FormatoCalidad f = new FormatoCalidad();
     ProgressDialog dialog;
     private String identificador;
+    int sumaDano = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,12 +138,36 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                     //datos de muestro vicitas
                     if(!isValidateCalibres()){
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
-                    }else if(lyPhoto.getVisibility() == View.GONE){
-                       Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                     }else{
-                        dialog.show();
-                        guardarDatos();
-                        subirFotoFirebase();
+                        if(calLAC.getText().toString().isEmpty()){
+                            calLAC.setText("0");
+                        }else{
+                            if(Integer.valueOf(calLAC.getText().toString()) > 0){
+                                if(!isValidateDano()){
+                                    Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser 100 \nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
+                                }else {
+                                    if( !isValidateCuadrillas() ){
+                                        if(lyPhoto.getVisibility() == View.GONE){
+                                            Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
+                                        }else{
+                                            dialog.show();
+                                            guardarDatos();
+                                            subirFotoFirebase();
+                                        }
+                                    }
+                                }
+                            }else{
+                                if( !isValidateCuadrillas() ){
+                                    if(lyPhoto.getVisibility() == View.GONE){
+                                        Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
+                                    }else{
+                                        dialog.show();
+                                        guardarDatos();
+                                        subirFotoFirebase();
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             break;
@@ -272,6 +297,30 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         return true;
     }
 
+    public boolean isValidateDano(){
+        sumaDano = 0;
+        if(!danoRONA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoRONA.getText().toString());}
+
+        if(!danoROSADO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoROSADO.getText().toString());}
+
+        if(!danoBANO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoBANO.getText().toString());}
+
+        if(!danoTRIPS.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoTRIPS.getText().toString());}
+
+        if(!danoQUEMADO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoQUEMADO.getText().toString());}
+
+        if(!danoCOMEDOR.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoCOMEDOR.getText().toString());}
+
+        if(!danoVIRUELA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoVIRUELA.getText().toString());}
+
+        if(!danoVARICELA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoVARICELA.getText().toString());}
+
+        if(sumaDano != 100){
+            return false;
+        }
+        return true;
+    }
+
     public boolean isValidateCabecera(){
         if(huerta.getText().toString().isEmpty()){
             huerta.setError("Es requerido");
@@ -292,6 +341,21 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             return true;
                         }
                     }
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isValidateCuadrillas(){
+        if(NoCuadrillas.getText().toString().isEmpty()){
+            NoCuadrillas.setError("Es requerido");
+        }else{
+            if(concepto.getText().toString().isEmpty()){
+                concepto.setError("Es requerido");
+            }else{
+                if(spnCONCEPT.getSelectedItemPosition() < 1){
+                    Toast.makeText(getApplicationContext(), "Selecciona un concepto por favor.", Toast.LENGTH_LONG).show();
                 }
             }
         }

@@ -121,30 +121,4 @@ public class MainActivity extends AppCompatActivity {
     public void seundoPlano(View v){
         startService(new Intent(this, subirFoto.class));
     }
-
-    public void listarFormatocalida(View v) {
-                p.databaseReference
-                .child("Acopio")
-                .child("RV")
-                .child("UsuariosAcopio")
-                .child("869804030826353")
-                .child("agendavisitas")
-                .child("H000264161203112031")
-                .child("formatocalidad")
-                .addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                        for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-
-                            FormatoCalidad fc = objSnaptshot.getValue(FormatoCalidad.class);
-                            Toast.makeText(getApplicationContext(), fc.getConcepto()+"", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
-                    }
-                });
-    }
 }
