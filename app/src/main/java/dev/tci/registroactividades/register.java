@@ -44,6 +44,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
+
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Singleton.Principal;
@@ -79,6 +81,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private double longi;
     FormatoCalidad f = new FormatoCalidad();
     ProgressDialog dialog;
+    private String identificador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +206,16 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
 
-        p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
+        p.databaseReference
+        .child("Acopio")
+        .child("RV")
+        .child("UsuariosAcopio")
+        .child(imei)
+        .child("agendavisitas")
+        .child(UID)
+        .child("formatocalidad")
+        .child(identificador)
+        .setValue(f);
 ////*******************************************************************************************************************************************************************************************************************************************************
         limpiar();
     }
@@ -241,6 +253,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         spnCONCEPT = findViewById(R.id.spnPLAG);
         p = Principal.getInstance();
         imei = getIMEI();
+        identificador = UUID.randomUUID().toString();
     }
 
     public boolean isValidateCalibres(){
@@ -404,7 +417,16 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             public void onSuccess(Uri uri) {
                 Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
                 f.setUrl(uri.toString());
-                p.databaseReference.child("Acopio").child("RV").child("UsuariosAcopio").child(imei).child("agendavisitas").child(UID).child("formatocalidad").setValue(f);
+                p.databaseReference
+                .child("Acopio")
+                .child("RV")
+                .child("UsuariosAcopio")
+                .child(imei)
+                .child("agendavisitas")
+                .child(UID)
+                .child("formatocalidad")
+                .child(identificador)
+                .setValue(f);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

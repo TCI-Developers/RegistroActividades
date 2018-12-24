@@ -91,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CheckData(View v){
+        ListarHuertas();
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );

@@ -74,7 +74,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/boxtext1"
                             android:hint="@string/tel_fono"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </android.support.design.widget.TextInputLayout>
