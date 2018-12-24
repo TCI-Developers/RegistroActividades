@@ -385,6 +385,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             @Override
             public void onFailure(@NonNull Exception exception) {
                 Toast.makeText(register.this,"Error IMG: "+exception,Toast.LENGTH_SHORT).show();
+                dialog.hide();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -398,7 +399,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     public void obtenerURLImg(){
-        p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
                 Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
