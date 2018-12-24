@@ -64,12 +64,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     TelephonyManager mTelephony;
     String myIMEI = "";
-    private static final String[] PERMISOS = {
-            Manifest.permission.READ_PHONE_STATE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-    };
-    private static final int REQUEST_CODE = 1;
     Bitmap imageBitmap;
     private Spinner spnMun, spnCONCEPT;
     Principal p;
@@ -85,12 +79,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        int leer = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
-        int leer2 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-        int leer3 = ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
-        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED ) {
-            ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
-        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -362,14 +350,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     public String getIMEI(){
-        int leer = ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
-        if (leer == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
-        }else{
-            mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            if (mTelephony.getDeviceId() != null){
-                myIMEI = mTelephony.getDeviceId();
-            }
+        mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (mTelephony.getDeviceId() != null){
+            myIMEI = mTelephony.getDeviceId();
         }
         return myIMEI;
     }
@@ -403,7 +386,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
                 lyPhoto.setVisibility(View.GONE);
                 dialog.hide();
                 obtenerURLImg();
@@ -415,7 +398,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                 p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
-                Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
+                //Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
                 f.setUrl(uri.toString());
                 p.databaseReference
                 .child("Acopio")
