@@ -78,6 +78,7 @@ public class ListaActividades extends AppCompatActivity {
                 intent.putExtra("UID", UID.get(position));
                 intent.putExtra("IME", IMEI);
                 startActivity(intent);
+                finish();
             }
         });
 

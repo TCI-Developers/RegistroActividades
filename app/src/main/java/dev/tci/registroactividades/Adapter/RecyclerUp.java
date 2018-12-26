@@ -52,6 +52,7 @@ public class RecyclerUp extends RecyclerView.Adapter<RecyclerUp.HuertasUpdateVie
             nombreProductor = itemView.findViewById(R.id.txtUpProductor);
             fecha = itemView.findViewById(R.id.txtUpFecha);
             hora = itemView.findViewById(R.id.txtUpHora);
+            itemView.setOnClickListener(this);
         }
 
         @Override

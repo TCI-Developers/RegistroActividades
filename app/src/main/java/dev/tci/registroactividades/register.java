@@ -217,6 +217,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setLatitud(lati);
         f.setLongitud(longi);
         f.setUrl(getImageBase64());
+        f.setPositionMun(spnMun.getSelectedItemPosition());
 
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
 

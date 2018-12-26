@@ -34,8 +34,17 @@ public class FormatoCalidad implements Serializable {
     private int varicela;
     private String url;
     private String concepto;
+    private int positionMun;
 
     public FormatoCalidad() {
+    }
+
+    public int getPositionMun() {
+        return positionMun;
+    }
+
+    public void setPositionMun(int positionMun) {
+        this.positionMun = positionMun;
     }
 
     public String getConcepto() {
