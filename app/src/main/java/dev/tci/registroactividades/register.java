@@ -140,9 +140,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                     if(!isValidateCalibres()){
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
                     }else{
-                        if(calLAC.getText().toString().isEmpty()){
-                            calLAC.setText("0");
-                        }else{
+                        if(calLAC.getText().toString().isEmpty()) calLAC.setText("0");
                             if(Integer.valueOf(calLAC.getText().toString()) > 0){
                                 if(!isValidateDano()){
                                     Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser 100 \nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
@@ -151,9 +149,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                         if(lyPhoto.getVisibility() == View.GONE){
                                             Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                                         }else{
-                                            //dialog.show();
                                             guardarDatos();
-                                            //subirFotoFirebase();
                                         }
                                     }
                                 }
@@ -162,14 +158,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                     if(lyPhoto.getVisibility() == View.GONE){
                                         Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
                                     }else{
-                                        //dialog.show();
                                         guardarDatos();
-                                        //subirFotoFirebase();
                                     }
                                 }
                             }
                         }
-                    }
                 }
             break;
 
