@@ -33,14 +33,41 @@ public class FormatoCalidad implements Serializable {
     private int viruela;
     private int varicela;
     private String url;
-    private String concepto;
+    private String baseurl;
+    private String conceptoBitacora;
+    private String campoBitacora;
     private int positionMun;
+    private String record;
 
     public FormatoCalidad() {
     }
 
+    public String getBaseurl() {
+        return baseurl;
+    }
+
+    public void setBaseurl(String baseurl) {
+        this.baseurl = baseurl;
+    }
+
+    public String getRecord() {
+        return record;
+    }
+
+    public void setRecord(String record) {
+        this.record = record;
+    }
+
     public int getPositionMun() {
         return positionMun;
+    }
+
+    public String getCampoBitacora() {
+        return campoBitacora;
+    }
+
+    public void setCampoBitacora(String campoBitacora) {
+        this.campoBitacora = campoBitacora;
     }
 
     public void setPositionMun(int positionMun) {
@@ -48,11 +75,11 @@ public class FormatoCalidad implements Serializable {
     }
 
     public String getConcepto() {
-        return concepto;
+        return conceptoBitacora;
     }
 
     public void setConcepto(String concepto) {
-        this.concepto = concepto;
+        this.conceptoBitacora = concepto;
     }
 
     public String getUrl() {

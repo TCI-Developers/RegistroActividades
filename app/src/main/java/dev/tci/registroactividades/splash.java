@@ -12,23 +12,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import dev.tci.registroactividades.Singleton.Principal;
+
 public class splash extends AppCompatActivity {
+    Principal p = Principal.getInstance();
     private static final String[] PERMISOS = {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
-        if (leer == PackageManager.PERMISSION_DENIED) {
+        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        int leer4 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED || leer4 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(splash.this, PERMISOS, REQUEST_CODE);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_splash);
         start();
         fullscreen();
+        p.InicializarFirebase();
     }
     public void start(){
         new Handler().postDelayed(new Runnable() {

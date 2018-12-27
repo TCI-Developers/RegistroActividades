@@ -6,7 +6,7 @@ public class AgendaVisitas {
     private String latitud;
     private String longitud;
     private String productor;
-    private Integer record;
+    private String record;
     private long telefono;
 
     public AgendaVisitas() {
@@ -52,11 +52,11 @@ public class AgendaVisitas {
         this.productor = productor;
     }
 
-    public Integer getRecord() {
+    public String getRecord() {
         return record;
     }
 
-    public void setRecord(Integer record) {
+    public void setRecord(String record) {
         this.record = record;
     }
 

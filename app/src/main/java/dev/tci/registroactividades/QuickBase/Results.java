@@ -1,8 +1,10 @@
 package dev.tci.registroactividades.QuickBase;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -10,20 +12,24 @@ import java.net.URL;
 public class Results {
 
 
-    private String downloadUrl(String myurl) throws IOException {
+    public static String downloadUrl(String myurl) throws IOException {
         myurl = myurl.replace(" ", "%20");
         InputStream is = null;
         // Othnly display e first 500 characters of the retrieved
         // web page content.
-        int len = 15000;
+        int len = 1999999999;
         System.out.println(myurl);
         try {
             URL url = new URL(myurl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(10000 /* milliseconds */);
-            conn.setConnectTimeout(10000 /* milliseconds */);
+            conn.setReadTimeout(100000 /* milliseconds */);
+            conn.setConnectTimeout(100000 /* milliseconds */);
             conn.setRequestMethod("POST");
             conn.setDoInput(true);
+            conn.setDoOutput(true);
+            OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
+            writer.write(myurl); //Url encoded parameters
+            writer.flush();
             // Starts the query
             conn.connect();
             int response = conn.getResponseCode();
@@ -49,12 +55,15 @@ public class Results {
         }
     }
 
-    public String readIt(InputStream stream, int len) throws IOException {
-        Reader reader = null;
-        reader = new InputStreamReader(stream, "UTF-8");
-        char[] buffer = new char[len];
-        reader.read(buffer);
-        return new String(buffer);
+    public static String readIt(InputStream stream, int len) throws IOException {
+        InputStreamReader reader = new InputStreamReader(stream,"UTF-8");
+        BufferedReader br = new BufferedReader(reader);
+        StringBuilder sb = new StringBuilder();
+        String line;
+        while ((line = br.readLine()) != null){
+            sb.append(line+"\n");
+        }
+        return sb.toString();
     }
 
 }

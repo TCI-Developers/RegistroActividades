@@ -26,6 +26,7 @@ import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,16 +35,28 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -51,9 +64,11 @@ import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Singleton.Principal;
 
-public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener{
+import static dev.tci.registroactividades.MainActivity.imgRUTA;
 
-    private LinearLayout danoLaytou,lyPhoto;
+public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener {
+
+    private LinearLayout danoLaytou, lyPhoto;
     private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
             danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto;
     private ImageView imgPhoto;
@@ -70,7 +85,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     Principal p;
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
-    String namePhoto = fecha+"-"+hora+"-RV.jpg";
+    String namePhoto = fecha + "-" + hora + "-RV.jpg";
     LocationManager manager;
     private double lati;
     private double longi;
@@ -78,6 +93,18 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     ProgressDialog dialog;
     private String identificador;
     int sumaDano = 0;
+    String record;
+    private static final String[] PERMISOS = {
+            Manifest.permission.READ_PHONE_STATE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+    private static final int REQUEST_CODE = 1;
+    private boolean mSaved;
+    private String downloadImageUrl;
+    UploadTask uploadTask = null;
+    Uri sessionUri = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +117,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         Init();
 
         lyPhoto.setVisibility(View.GONE);
-        int record = getIntent().getExtras().getInt("record");
+        record = getIntent().getExtras().getString("record");
 
         //Toast.makeText(getApplicationContext(), UID, Toast.LENGTH_LONG).show();
         calLAC.addTextChangedListener(new TextWatcher() {
@@ -101,11 +128,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(count > 0){
-                    if( Integer.valueOf(s.toString()) > 0){
+                if (count > 0) {
+                    if (Integer.valueOf(s.toString()) > 0) {
                         danoLaytou.setVisibility(View.VISIBLE);
                     }
-                }else{
+                } else {
                     danoLaytou.setVisibility(View.GONE);
                 }
             }
@@ -127,44 +154,44 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        switch (id){
+        switch (id) {
             case R.id.check:
                 dialog = new ProgressDialog(register.this);
                 dialog.setTitle("Espere!");
                 dialog.setMessage("Subiendo información...");
 
-                dialog.setCancelable(false);
+                //dialog.setCancelable(false);
                 Mi_hubicacion();
-                if( isValidateCabecera()){
+                if (isValidateCabecera()) {
                     //datos de muestro vicitas
-                    if(!isValidateCalibres()){
+                    if (!isValidateCalibres()) {
                         Toast.makeText(getApplicationContext(), "La suma de los calibres debe de ser 100 \nTu total es de: " + sumaCalibres, Toast.LENGTH_LONG).show();
-                    }else{
-                        if(calLAC.getText().toString().isEmpty()) calLAC.setText("0");
-                            if(Integer.valueOf(calLAC.getText().toString()) > 0){
-                                if(!isValidateDano()){
-                                    Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser 100 \nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
-                                }else {
-                                    if( !isValidateCuadrillas() ){
-                                        if(lyPhoto.getVisibility() == View.GONE){
-                                            Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
-                                        }else{
-                                            guardarDatos();
-                                        }
-                                    }
-                                }
-                            }else{
-                                if( !isValidateCuadrillas() ){
-                                    if(lyPhoto.getVisibility() == View.GONE){
-                                        Toast.makeText(register.this,"Foto requerida!",Toast.LENGTH_SHORT).show();
-                                    }else{
+                    } else {
+                        if (calLAC.getText().toString().isEmpty()) calLAC.setText("0");
+                        if (Integer.valueOf(calLAC.getText().toString()) > 0) {
+                            if (!isValidateDano()) {
+                                Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser 100 \nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
+                            } else {
+                                if (!isValidateCuadrillas()) {
+                                    if (lyPhoto.getVisibility() == View.GONE) {
+                                        Toast.makeText(register.this, "Foto requerida!", Toast.LENGTH_SHORT).show();
+                                    } else {
                                         guardarDatos();
                                     }
                                 }
                             }
+                        } else {
+                            if (!isValidateCuadrillas()) {
+                                if (lyPhoto.getVisibility() == View.GONE) {
+                                    Toast.makeText(register.this, "Foto requerida!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    guardarDatos();
+                                }
+                            }
                         }
+                    }
                 }
-            break;
+                break;
 
             case R.id.camera:
                 dispatchTakePictureIntent();
@@ -176,9 +203,15 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private void guardarDatos() {
 //*********************************************************************************************************************************************************************************************************************************************************
         //Formato calidad
-        if(!danoBANO.getText().toString().isEmpty()) {f.setBano(Integer.valueOf(danoBANO.getText().toString()));}
-        if(!danoCOMEDOR.getText().toString().isEmpty()) {f.setComedor(danoCOMEDOR.getText().toString());}
-        if(!NoCuadrillas.getText().toString().isEmpty()) {f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));}
+        if (!danoBANO.getText().toString().isEmpty()) {
+            f.setBano(Integer.valueOf(danoBANO.getText().toString()));
+        }
+        if (!danoCOMEDOR.getText().toString().isEmpty()) {
+            f.setComedor(danoCOMEDOR.getText().toString());
+        }
+        if (!NoCuadrillas.getText().toString().isEmpty()) {
+            f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));
+        }
 
         f.setHuerta(huerta.getText().toString());
         f.setProductor(productor.getText().toString());
@@ -186,49 +219,84 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
         f.setMunicipio(spnMun.getSelectedItem().toString());
 
-        if(!cal32.getText().toString().isEmpty()) {f.setCal32(Integer.valueOf(cal32.getText().toString()));}
-        if(!cal36.getText().toString().isEmpty()) {f.setCal36(Integer.valueOf(cal36.getText().toString()));}
-        if(!cal40.getText().toString().isEmpty()) {f.setCal40(Integer.valueOf(cal40.getText().toString()));}
-        if(!cal48.getText().toString().isEmpty()) {f.setCal48(Integer.valueOf(cal48.getText().toString()));}
-        if(!cal60.getText().toString().isEmpty()) {f.setCal60(Integer.valueOf(cal60.getText().toString()));}
-        if(!cal70.getText().toString().isEmpty()) {f.setCal70(Integer.valueOf(cal70.getText().toString()));}
-        if(!cal84.getText().toString().isEmpty()) {f.setCal84(Integer.valueOf(cal84.getText().toString()));}
-        if(!cal96.getText().toString().isEmpty()) {f.setCal96(Integer.valueOf(cal96.getText().toString()));}
-        if(!calCAN.getText().toString().isEmpty()) {f.setCanica(Integer.valueOf(calCAN.getText().toString()));}
-        if(!calLAC.getText().toString().isEmpty()) {f.setLacrado(Integer.valueOf(calLAC.getText().toString()));}
+        if (!cal32.getText().toString().isEmpty()) {
+            f.setCal32(Integer.valueOf(cal32.getText().toString()));
+        }
+        if (!cal36.getText().toString().isEmpty()) {
+            f.setCal36(Integer.valueOf(cal36.getText().toString()));
+        }
+        if (!cal40.getText().toString().isEmpty()) {
+            f.setCal40(Integer.valueOf(cal40.getText().toString()));
+        }
+        if (!cal48.getText().toString().isEmpty()) {
+            f.setCal48(Integer.valueOf(cal48.getText().toString()));
+        }
+        if (!cal60.getText().toString().isEmpty()) {
+            f.setCal60(Integer.valueOf(cal60.getText().toString()));
+        }
+        if (!cal70.getText().toString().isEmpty()) {
+            f.setCal70(Integer.valueOf(cal70.getText().toString()));
+        }
+        if (!cal84.getText().toString().isEmpty()) {
+            f.setCal84(Integer.valueOf(cal84.getText().toString()));
+        }
+        if (!cal96.getText().toString().isEmpty()) {
+            f.setCal96(Integer.valueOf(cal96.getText().toString()));
+        }
+        if (!calCAN.getText().toString().isEmpty()) {
+            f.setCanica(Integer.valueOf(calCAN.getText().toString()));
+        }
+        if (!calLAC.getText().toString().isEmpty()) {
+            f.setLacrado(Integer.valueOf(calLAC.getText().toString()));
+        }
 
-        if(!danoRONA.getText().toString().isEmpty()) {f.setRona(Integer.valueOf(danoRONA.getText().toString()));}
-        if(!danoROSADO.getText().toString().isEmpty()) {f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));}
-        if(!danoTRIPS.getText().toString().isEmpty()) {f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));}
-        if(!danoQUEMADO.getText().toString().isEmpty()) {f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));}
-        if(!danoVIRUELA.getText().toString().isEmpty()) {f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));}
-        if(!danoVARICELA.getText().toString().isEmpty()) {f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));}
+        if (!danoRONA.getText().toString().isEmpty()) {
+            f.setRona(Integer.valueOf(danoRONA.getText().toString()));
+        }
+        if (!danoROSADO.getText().toString().isEmpty()) {
+            f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));
+        }
+        if (!danoTRIPS.getText().toString().isEmpty()) {
+            f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));
+        }
+        if (!danoQUEMADO.getText().toString().isEmpty()) {
+            f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));
+        }
+        if (!danoVIRUELA.getText().toString().isEmpty()) {
+            f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));
+        }
+        if (!danoVARICELA.getText().toString().isEmpty()) {
+            f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));
+        }
 
         f.setHora(hora);
         f.setFecha(fecha);
 
         f.setLatitud(lati);
         f.setLongitud(longi);
-        f.setUrl(getImageBase64());
+        f.setUrl("");
+        f.setBaseurl(mCurrentPhotoPath);
         f.setPositionMun(spnMun.getSelectedItemPosition());
 
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
+        f.setCampoBitacora(concepto.getText().toString());
+        f.setRecord(record);
 
         p.databaseReference
-        .child("Acopio")
-        .child("RV")
-        .child("UsuariosAcopio")
-        .child(imei)
-        .child("agendavisitas")
-        .child(UID)
-        .child("formatocalidad")
-        .child(identificador)
-        .setValue(f);
-////*******************************************************************************************************************************************************************************************************************************************************
-        limpiar();
+                .child("Acopio")
+                .child("RV")
+                .child("UsuariosAcopio")
+                .child(imei)
+                .child("agendavisitas")
+                .child(UID)
+                .child("formatocalidad")
+                .child(identificador)
+                .setValue(f);
+        Toast.makeText(register.this,"Datos subidos",Toast.LENGTH_SHORT).show();
+        subirFirebase();
     }
 
-    public void Init(){
+    public void Init() {
         huerta = findViewById(R.id.txtHuerta);
         productor = findViewById(R.id.txtProductor);
         telefono = findViewById(R.id.txtTelefono);
@@ -262,77 +330,113 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         p = Principal.getInstance();
         imei = getIMEI();
         identificador = UUID.randomUUID().toString();
+        imgRUTA = new ArrayList<>();
     }
 
-    public boolean isValidateCalibres(){
+    public boolean isValidateCalibres() {
         sumaCalibres = 0;
-        if(!cal32.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal32.getText().toString());}
+        if (!cal32.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal32.getText().toString());
+        }
 
-        if(!cal36.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal36.getText().toString());}
+        if (!cal36.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal36.getText().toString());
+        }
 
-        if(!cal40.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal40.getText().toString());}
+        if (!cal40.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal40.getText().toString());
+        }
 
-        if(!cal48.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal48.getText().toString());}
+        if (!cal48.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal48.getText().toString());
+        }
 
-        if(!cal60.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal60.getText().toString());}
+        if (!cal60.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal60.getText().toString());
+        }
 
-        if(!cal70.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal70.getText().toString());}
+        if (!cal70.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal70.getText().toString());
+        }
 
-        if(!cal84.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal84.getText().toString());}
+        if (!cal84.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal84.getText().toString());
+        }
 
-        if(!cal96.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(cal96.getText().toString());}
+        if (!cal96.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(cal96.getText().toString());
+        }
 
-        if(!calCAN.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(calCAN.getText().toString());}
+        if (!calCAN.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(calCAN.getText().toString());
+        }
 
-        if(!calLAC.getText().toString().isEmpty()){sumaCalibres += Integer.valueOf(calLAC.getText().toString());}
+        if (!calLAC.getText().toString().isEmpty()) {
+            sumaCalibres += Integer.valueOf(calLAC.getText().toString());
+        }
 
-        if(sumaCalibres != 100){
+        if (sumaCalibres != 100) {
             return false;
         }
         return true;
     }
 
-    public boolean isValidateDano(){
+    public boolean isValidateDano() {
         sumaDano = 0;
-        if(!danoRONA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoRONA.getText().toString());}
+        if (!danoRONA.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoRONA.getText().toString());
+        }
 
-        if(!danoROSADO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoROSADO.getText().toString());}
+        if (!danoROSADO.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoROSADO.getText().toString());
+        }
 
-        if(!danoBANO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoBANO.getText().toString());}
+        if (!danoBANO.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoBANO.getText().toString());
+        }
 
-        if(!danoTRIPS.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoTRIPS.getText().toString());}
+        if (!danoTRIPS.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoTRIPS.getText().toString());
+        }
 
-        if(!danoQUEMADO.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoQUEMADO.getText().toString());}
+        if (!danoQUEMADO.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoQUEMADO.getText().toString());
+        }
 
-        if(!danoCOMEDOR.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoCOMEDOR.getText().toString());}
+        if (!danoCOMEDOR.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoCOMEDOR.getText().toString());
+        }
 
-        if(!danoVIRUELA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoVIRUELA.getText().toString());}
+        if (!danoVIRUELA.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoVIRUELA.getText().toString());
+        }
 
-        if(!danoVARICELA.getText().toString().isEmpty()){sumaDano += Integer.valueOf(danoVARICELA.getText().toString());}
+        if (!danoVARICELA.getText().toString().isEmpty()) {
+            sumaDano += Integer.valueOf(danoVARICELA.getText().toString());
+        }
 
-        if(sumaDano != 100){
+        if (sumaDano != 100) {
             return false;
         }
         return true;
     }
 
-    public boolean isValidateCabecera(){
-        if(huerta.getText().toString().isEmpty()){
+    public boolean isValidateCabecera() {
+        if (huerta.getText().toString().isEmpty()) {
             huerta.setError("Es requerido");
-        }else{
-            if(productor.getText().toString().isEmpty()){
+        } else {
+            if (productor.getText().toString().isEmpty()) {
                 productor.setError("Es requerido");
-            }else{
-                if(telefono.getText().toString().isEmpty()){
+            } else {
+                if (telefono.getText().toString().isEmpty()) {
                     telefono.setError("Es requerido");
-                }
-                else{
-                    if(toneladas_aprox.getText().toString().isEmpty()){
+                } else {
+                    if (toneladas_aprox.getText().toString().isEmpty()) {
                         toneladas_aprox.setError("Es requerido");
-                    }else{
-                        if(spnMun.getSelectedItemPosition() < 1){
+                    } else {
+                        if (spnMun.getSelectedItemPosition() < 1) {
                             Toast.makeText(getApplicationContext(), "Selecciona un municipio por favor.", Toast.LENGTH_LONG).show();
-                        }else{
+                        } else {
                             return true;
                         }
                     }
@@ -342,14 +446,14 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         return false;
     }
 
-    public boolean isValidateCuadrillas(){
-        if(NoCuadrillas.getText().toString().isEmpty()){
+    public boolean isValidateCuadrillas() {
+        if (NoCuadrillas.getText().toString().isEmpty()) {
             NoCuadrillas.setError("Es requerido");
-        }else{
-            if(concepto.getText().toString().isEmpty()){
+        } else {
+            if (concepto.getText().toString().isEmpty()) {
                 concepto.setError("Es requerido");
-            }else{
-                if(spnCONCEPT.getSelectedItemPosition() < 1){
+            } else {
+                if (spnCONCEPT.getSelectedItemPosition() < 1) {
                     Toast.makeText(getApplicationContext(), "Selecciona un concepto por favor.", Toast.LENGTH_LONG).show();
                 }
             }
@@ -375,6 +479,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     private void dispatchTakePictureIntent() {
+        int leer4 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        if (leer4 == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(register.this, PERMISOS, REQUEST_CODE);
+        }
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -387,9 +495,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this,
-                        "dev.tci.registroactividades",
-                        photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this, "dev.tci.registroactividades", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }
@@ -408,7 +514,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
     }
 
-    public String getImageBase64(){
+    public String getImageBase64() {
         imgPhoto.setDrawingCacheEnabled(true);
         imgPhoto.buildDrawingCache();
         Bitmap bitmap = ((BitmapDrawable) imgPhoto.getDrawable()).getBitmap();
@@ -416,15 +522,20 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] data = baos.toByteArray();
 
-        String imagenCode64 = Base64.encodeToString(data,Base64.DEFAULT);
+        String imagenCode64 = Base64.encodeToString(data, Base64.URL_SAFE);
         lyPhoto.setVisibility(View.GONE);
-        return  imagenCode64;
+        return imagenCode64;
     }
 
-
-    public String getIMEI(){
+    public String getIMEI() {
+        int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(register.this, PERMISOS, REQUEST_CODE);
+        }
         mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        if (mTelephony.getDeviceId() != null){
+        if (mTelephony.getDeviceId() != null) {
             myIMEI = mTelephony.getDeviceId();
         }
         return myIMEI;
@@ -435,61 +546,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     }
 
-    public void viewImagen(View view){
+    public void viewImagen(View view) {
         imageFragment obj = new imageFragment();
-        obj.show(getSupportFragmentManager(),"register");
-    }
-
-    public void subirFotoFirebase(){
-        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
-        imgPhoto.setDrawingCacheEnabled(true);
-        imgPhoto.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imgPhoto.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
-
-        UploadTask uploadTask = path.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(register.this,"Error IMG: "+exception,Toast.LENGTH_SHORT).show();
-                dialog.hide();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                //Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
-                lyPhoto.setVisibility(View.GONE);
-                dialog.hide();
-                obtenerURLImg();
-            }
-        });
-    }
-
-    public void obtenerURLImg(){
-                p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                //Toast.makeText(register.this,"URL: "+uri,Toast.LENGTH_SHORT).show();
-                f.setUrl(uri.toString());
-                p.databaseReference
-                .child("Acopio")
-                .child("RV")
-                .child("UsuariosAcopio")
-                .child(imei)
-                .child("agendavisitas")
-                .child(UID)
-                .child("formatocalidad")
-                .child(identificador)
-                .setValue(f);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(register.this,"No se encontro IMG",Toast.LENGTH_SHORT).show();
-            }
-        });
+        obj.show(getSupportFragmentManager(), "register");
     }
 
     LocationListener locationListener = new LocationListener() {
@@ -515,6 +574,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     };
 
     private void Mi_hubicacion() {
+        int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
+        int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
+        int leer3 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION);
+        if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(register.this, PERMISOS, REQUEST_CODE);
+        }
         manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         actualizar(local);
@@ -529,34 +594,92 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
     }
 
-    public void limpiar(){
-        huerta.setText("");
-        productor.setText("");
-        telefono.setText("");
-        toneladas_aprox.setText("");
-        cal32.setText("");
-        cal36.setText("");
-        cal40.setText("");
-        cal48.setText("");
-        cal60.setText("");
-        cal70.setText("");
-        cal84.setText("");
-        cal96.setText("");
-        calCAN.setText("");
-        calLAC.setText("");
-        danoRONA.setText("");
-        danoROSADO.setText("");
-        danoBANO.setText("");
-        danoTRIPS.setText("");
-        danoQUEMADO.setText("");
-        danoCOMEDOR.setText("");
-        danoVIRUELA.setText("");
-        danoVARICELA.setText("");
-        spnMun.setSelection(0);
-        NoCuadrillas.setText("");
-        concepto.setText("");
-        spnCONCEPT.setSelection(0);
-        finish();
+    public void subirFirebase() {
+        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        BitmapFactory.decodeFile(mCurrentPhotoPath).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        uploadTask = path.putBytes(data);
+        uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                sessionUri = taskSnapshot.getUploadSessionUri();
+                if (sessionUri != null && !mSaved) {
+                    mSaved = true;
+                    //finish();
+                }
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
+                    {
+                        if (!task.isSuccessful())
+                        {
+                            throw task.getException();
+                        }
+                        downloadImageUrl = p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().toString();
+                        return p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task)
+                    {
+                        if (task.isSuccessful())
+                        {
+                            downloadImageUrl = task.getResult().toString();
+                            Toast.makeText(register.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
+
+                            f.setUrl(downloadImageUrl);
+                            p.databaseReference
+                            .child("Acopio")
+                            .child("RV")
+                            .child("UsuariosAcopio")
+                            .child(imei)
+                            .child("agendavisitas")
+                            .child(UID)
+                            .child("formatocalidad")
+                            .child(identificador)
+                            .setValue(f);
+                        }
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(register.this, "Error: " + e, Toast.LENGTH_SHORT).show();
+                Log.e("Error: ", e.toString());
+            }
+        });
+
+        uploadTask = p.storageRef.child("Imagenes/RV/"+namePhoto).putFile(Uri.parse(mCurrentPhotoPath),  new StorageMetadata.Builder().build(), sessionUri);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Find all UploadTasks under this StorageReference (in this example, there should be one)
+        Toast.makeText(register.this, "en onRestoreInstanceState", Toast.LENGTH_SHORT).show();
+        List<UploadTask> tasks = p.storageRef.getActiveUploadTasks();
+        if (tasks.size() > 0) {
+            // Get the task monitoring the upload
+            UploadTask task = tasks.get(0);
+
+            // Add new listeners to the task using an Activity scope
+            task.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot state) {
+                    Toast.makeText(register.this, "Correcto: " + state, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 }
 

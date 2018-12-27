@@ -184,6 +184,7 @@ public class actualizar_actividades extends AppCompatActivity {
         f.setLongitud(actividades.get(pos).getLongitud());
         f.setUrl(actividades.get(pos).getUrl());
         f.setConcepto(actividades.get(pos).getConcepto());
+        f.setCampoBitacora(actividades.get(pos).getCampoBitacora());
     }
 
     public boolean isValidateCabecera(){

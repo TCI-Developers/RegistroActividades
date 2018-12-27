@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 public class ParseXmlData {
 
-private  String text;
-    public String ParseXmlData(String xmlData){
+private static String text;
+    public static String ParseXmlData(String xmlData){
 
 
 
@@ -50,7 +50,7 @@ private  String text;
     }
 
 
-    private ArrayList<Response_QB> parseXml(XmlPullParser parser)throws XmlPullParserException,IOException {
+    private static ArrayList<Response_QB> parseXml(XmlPullParser parser)throws XmlPullParserException,IOException {
 
         ArrayList<Response_QB> arrayResponseQb = null;
         int eventType = parser.getEventType();
