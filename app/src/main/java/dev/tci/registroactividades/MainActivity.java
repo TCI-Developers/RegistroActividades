@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void subirQuick(View v){
+    public void subirQuick(){
         String  RegistroQ = "";
         for(int i = 0; i < datosF.size() ; i++){
             RegistroQ = "https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij" +
@@ -408,8 +408,9 @@ public class MainActivity extends AppCompatActivity {
                         {
                             Toast.makeText(MainActivity.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             throw task.getException();
+                        }else{
+                            downloadImageUrl = p.storageRef.child("Imagenes/RV/img.jpg").getDownloadUrl().toString();
                         }
-                        downloadImageUrl = p.storageRef.child("Imagenes/RV/img.jpg").getDownloadUrl().toString();
                         return p.storageRef.child("Imagenes/RV/img.jpg").getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -423,15 +424,17 @@ public class MainActivity extends AppCompatActivity {
 
                             f.setUrl(downloadImageUrl);
                             p.databaseReference
-                                    .child("Acopio")
-                                    .child("RV")
-                                    .child("UsuariosAcopio")
-                                    .child(getIMEI())
-                                    .child("agendavisitas")
-                                    .child(UID.get(0))
-                                    .child("formatocalidad")
-                                    .child(ref.get(0))
-                                    .setValue(f);
+                            .child("Acopio")
+                            .child("RV")
+                            .child("UsuariosAcopio")
+                            .child(getIMEI())
+                            .child("agendavisitas")
+                            .child(UID.get(0))
+                            .child("formatocalidad")
+                            .child(ref.get(0))
+                            .setValue(f);
+                            Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
+                            subirQuick();
                         }else{
                             Toast.makeText(MainActivity.this,"Error en obtener url2:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
                         }

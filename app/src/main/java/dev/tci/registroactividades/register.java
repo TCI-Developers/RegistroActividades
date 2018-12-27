@@ -633,7 +633,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                         if (task.isSuccessful())
                         {
                             downloadImageUrl = task.getResult().toString();
-                            Toast.makeText(register.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
 
                             f.setUrl(downloadImageUrl);
                             p.databaseReference
@@ -646,6 +645,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             .child("formatocalidad")
                             .child(identificador)
                             .setValue(f);
+
+                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_SHORT).show();
+                            finish();
                         }
                     }
                 });
@@ -657,8 +659,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                 Log.e("Error: ", e.toString());
             }
         });
-
-        uploadTask = p.storageRef.child("Imagenes/RV/"+namePhoto).putFile(Uri.parse(mCurrentPhotoPath),  new StorageMetadata.Builder().build(), sessionUri);
     }
 
     @Override
