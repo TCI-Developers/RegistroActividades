@@ -40,7 +40,6 @@ public class actualizar_actividades extends AppCompatActivity {
     private EditText huertaUP, productorUP, telefonoUP, toneladasUP;
     private Spinner municipioUP;
     FormatoCalidad f = new FormatoCalidad();
-    public static boolean connected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,8 +68,6 @@ public class actualizar_actividades extends AppCompatActivity {
 
             }
         });
-
-        validaInternet();
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -222,25 +219,5 @@ public class actualizar_actividades extends AppCompatActivity {
             }
         }
         return false;
-    }
-
-    public void validaInternet(){
-        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
-        connectedRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                connected = snapshot.getValue(Boolean.class);
-                if (connected) {
-                    //Toast.makeText(getApplicationContext(), "Con internet", Toast.LENGTH_LONG).show();
-                } else {
-                    //Toast.makeText(getApplicationContext(), "Sin internet", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
-            }
-        });
     }
 }

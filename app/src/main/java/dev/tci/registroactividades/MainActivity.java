@@ -1,7 +1,6 @@
 package dev.tci.registroactividades;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,9 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -25,53 +21,25 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.*;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
 import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.QuickBase.ParseXmlData;
 import dev.tci.registroactividades.QuickBase.Results;
-import dev.tci.registroactividades.SegundoPlano.subirFoto;
 import dev.tci.registroactividades.Singleton.Principal;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
     private ArrayList<String> listHuertas;
@@ -96,9 +64,9 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
     UploadTask uploadTask = null;
-    Uri sessionUri = null;
-    private boolean mSaved;
     boolean ban = false;
+    ProgressBar bar;
+    public static boolean connected;
 
     @Override
     protected void onStart() {
@@ -115,17 +83,20 @@ public class MainActivity extends AppCompatActivity {
 
         Init();
         ListarHuertas();
+        validaInternet();
 
         btnubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                for(int j=0; j<UID.size(); j++){
-                    for(int i = 0 ; i < imgRUTA.size(); i++){
-                        subirFotoFirebase(i, j);
+                if(connected){
+                    for(int j=0; j<UID.size(); j++){
+                        for(int i = 0 ; i < imgRUTA.size(); i++){
+                            subirFotoFirebase(i, j);
+                        }
                     }
+                }else{
+                    Toast.makeText(getApplicationContext(), "No tienes internet, verifica tu conexión", Toast.LENGTH_LONG).show();
                 }
-
             }
         });
     }
@@ -153,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                     listProductores.add(ag.getProductor());
                     record.add(ag.getRecord());
                 }
-                loaddatosQuick();
             }
 
             @Override
@@ -174,6 +144,7 @@ public class MainActivity extends AppCompatActivity {
         imgRUTA = new ArrayList<>();
         ref = new ArrayList<>();
         namePhoto = new ArrayList<>();
+        bar = findViewById(R.id.progSubida2);
     }
 
     public void CheckData(View v){
@@ -254,10 +225,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loaddatosQuick(){
-        datosF.clear();
-        imgRUTA.clear();
-        namePhoto.clear();
-        ref.clear();
         for(int i=0; i<UID.size(); i++){
                     p.databaseReference
                     .child("Acopio")
@@ -267,9 +234,14 @@ public class MainActivity extends AppCompatActivity {
                     .child("agendavisitas")
                     .child(UID.get(i))
                     .child("formatocalidad")
-                    .addValueEventListener(new ValueEventListener() {
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            datosF.clear();
+                            imgRUTA.clear();
+                            namePhoto.clear();
+                            ref.clear();
+                            f = new FormatoCalidad();
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                                 ref.add(objSnaptshot.getKey());
                                 f = objSnaptshot.getValue(FormatoCalidad.class);
@@ -278,8 +250,6 @@ public class MainActivity extends AppCompatActivity {
                                     imgRUTA.add(f.getBaseurl());
                                     namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
                                     btnubir.setVisibility(View.VISIBLE);
-                                }else{
-                                    btnubir.setVisibility(View.GONE);
                                 }
                             }
                         }
@@ -292,15 +262,6 @@ public class MainActivity extends AppCompatActivity {
     }
 ///////////////////////////carga de datos a quickbase
     class CargarDatos extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            dialog.setTitle("Cargando informacion");
-            dialog.setMessage("Subiendo toda la informacion, espere un momento por favor");
-            dialog.setCancelable(false);
-            //dialog.show();
-        }
 
         @Override
             protected String doInBackground(String... urls) {
@@ -348,8 +309,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void subirFotoFirebase(final int pos, final int posUID) {
-            StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
         Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
@@ -361,8 +322,7 @@ public class MainActivity extends AppCompatActivity {
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(MainActivity.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
-
+                    //Toast.makeText(MainActivity.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
                     Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                         @Override
                         public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
@@ -383,21 +343,26 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful())
                             {
                                 downloadImageUrl = task.getResult().toString();
-                                Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
+                               // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
 
-                                f.setUrl(downloadImageUrl);
-                                f.setStatus(1);
+                                datosF.get(pos).setUrl(downloadImageUrl);
+                                datosF.get(pos).setStatus(1);
                                 p.databaseReference
-                                        .child("Acopio")
-                                        .child("RV")
-                                        .child("UsuariosAcopio")
-                                        .child(getIMEI())
-                                        .child("agendavisitas")
-                                        .child(UID.get(posUID))
-                                        .child("formatocalidad")
-                                        .child(ref.get(pos))
-                                        .setValue(f);
+                                .child("Acopio")
+                                .child("RV")
+                                .child("UsuariosAcopio")
+                                .child(getIMEI())
+                                .child("agendavisitas")
+                                .child(UID.get(posUID))
+                                .child("formatocalidad")
+                                .child(ref.get(pos))
+                                .setValue(datosF.get(pos));
+
                                 Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
+
+                                bar.setVisibility(View.GONE);
+                                bar.setProgress(0);
+                                btnubir.setVisibility(View.GONE);
                                 //subirQuick();
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
@@ -411,6 +376,28 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_SHORT).show();
                     Log.e("Error: ", e.toString());
                 }
+            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                    double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                    bar.setVisibility(View.VISIBLE);
+                    bar.setProgress((int) progress);
+                }
             });
+    }
+
+    public void validaInternet(){
+        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                connected = snapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

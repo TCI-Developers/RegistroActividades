@@ -56,8 +56,9 @@ import java.util.UUID;
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Singleton.Principal;
+
+import static dev.tci.registroactividades.MainActivity.connected;
 import static dev.tci.registroactividades.MainActivity.imgRUTA;
-import static dev.tci.registroactividades.actualizar_actividades.connected;
 
 public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener {
 
