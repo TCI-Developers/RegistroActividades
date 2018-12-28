@@ -283,15 +283,15 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setRecord(record);
 
         p.databaseReference
-                .child("Acopio")
-                .child("RV")
-                .child("UsuariosAcopio")
-                .child(imei)
-                .child("agendavisitas")
-                .child(UID)
-                .child("formatocalidad")
-                .child(identificador)
-                .setValue(f);
+        .child("Acopio")
+        .child("RV")
+        .child("UsuariosAcopio")
+        .child(imei)
+        .child("agendavisitas")
+        .child(UID)
+        .child("formatocalidad")
+        .child(identificador)
+        .setValue(f);
         Toast.makeText(register.this,"Datos subidos",Toast.LENGTH_SHORT).show();
         subirFirebase();
     }

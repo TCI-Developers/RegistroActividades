@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> record;
     private ArrayList<String> UID;
     private ArrayList<String> ref;
-    String namePhoto;
+    private ArrayList<String> namePhoto;
     String myIMEI = "";
     private static final String[] PERMISOS = {
             Manifest.permission.READ_PHONE_STATE
@@ -116,11 +116,15 @@ public class MainActivity extends AppCompatActivity {
         btnubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    //subirQuick(v);
-                    subirFotoFirebase();
+
+                for(int j=0; j<UID.size(); j++){
+                    for(int i = 0 ; i < imgRUTA.size(); i++){
+                        subirFotoFirebase(i, j);
+                    }
+                }
+
             }
         });
-        loaddatosQuick();
     }
 
     private void ListarHuertas() {
@@ -162,9 +166,10 @@ public class MainActivity extends AppCompatActivity {
         UID = new ArrayList<String>();
         datosF = new ArrayList<>();
         btnubir = findViewById(R.id.button2);
-        dialog = new ProgressDialog(getApplicationContext());
+        dialog = new ProgressDialog(MainActivity.this);
         imgRUTA = new ArrayList<>();
-        ref= new ArrayList<>();
+        ref = new ArrayList<>();
+        namePhoto = new ArrayList<>();
     }
 
     public void CheckData(View v){
@@ -297,33 +302,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void loaddatosQuick(){
-        p.databaseReference
-        .child("Acopio")
-        .child("RV")
-        .child("UsuariosAcopio")
-        .child("869804030826353")
-        .child("agendavisitas")
-        .child("H01522BCER12031")
-        .child("formatocalidad")
-        .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                    ref.add(objSnaptshot.getKey());
-                    f = objSnaptshot.getValue(FormatoCalidad.class);
-                    datosF.add(f);
-                    imgRUTA.add(f.getBaseurl());
-                }
+        datosF.clear();
+        imgRUTA.clear();
+        namePhoto.clear();
+        ref.clear();
+        for(int i=0; i<UID.size(); i++){
+                    p.databaseReference
+                    .child("Acopio")
+                    .child("RV")
+                    .child("UsuariosAcopio")
+                    .child(getIMEI())
+                    .child("agendavisitas")
+                    .child(UID.get(i))
+                    .child("formatocalidad")
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                                ref.add(objSnaptshot.getKey());
+                                f = objSnaptshot.getValue(FormatoCalidad.class);
+                                datosF.add(f);
+                                imgRUTA.add(f.getBaseurl());
+                                namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
+                            }
+                        }
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
+                        }
+                    });
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
-            }
-        });
-        if(imgRUTA.size() > 0){
-            btnubir.setVisibility(View.VISIBLE);
-        }
     }
 ///////////////////////////carga de datos a quickbase
     class CargarDatos extends AsyncTask<String, Void, String> {
@@ -382,71 +390,65 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-    public void subirFotoFirebase() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        Date date = new Date();
-        String fecha = dateFormat.format(date);
-        String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
-        namePhoto = fecha + "-" + hora + "-RV.jpg";
+    public void subirFotoFirebase(final int pos, final int posUID) {
+            StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BitmapFactory.decodeFile(imgRUTA.get(pos)).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-        StorageReference path = p.storageRef.child("Imagenes/RV/img.jpg");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitmapFactory.decodeFile(imgRUTA.get(0)).compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+            uploadTask = path.putBytes(data);
+            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    Toast.makeText(MainActivity.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
 
-        uploadTask = path.putBytes(data);
-        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(MainActivity.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
-
-                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                    @Override
-                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
-                    {
-                        if (!task.isSuccessful())
+                    Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception
                         {
-                            Toast.makeText(MainActivity.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
-                            throw task.getException();
-                        }else{
-                            downloadImageUrl = p.storageRef.child("Imagenes/RV/img.jpg").getDownloadUrl().toString();
+                            if (!task.isSuccessful())
+                            {
+                                Toast.makeText(MainActivity.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                throw task.getException();
+                            }else{
+                                downloadImageUrl = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos)).getDownloadUrl().toString();
+                            }
+                            return p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos)).getDownloadUrl();
                         }
-                        return p.storageRef.child("Imagenes/RV/img.jpg").getDownloadUrl();
-                    }
-                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task)
-                    {
-                        if (task.isSuccessful())
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task)
                         {
-                            downloadImageUrl = task.getResult().toString();
-                            Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
+                            if (task.isSuccessful())
+                            {
+                                downloadImageUrl = task.getResult().toString();
+                                Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
 
-                            f.setUrl(downloadImageUrl);
-                            p.databaseReference
-                            .child("Acopio")
-                            .child("RV")
-                            .child("UsuariosAcopio")
-                            .child(getIMEI())
-                            .child("agendavisitas")
-                            .child(UID.get(0))
-                            .child("formatocalidad")
-                            .child(ref.get(0))
-                            .setValue(f);
-                            Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
-                            subirQuick();
-                        }else{
-                            Toast.makeText(MainActivity.this,"Error en obtener url2:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                f.setUrl(downloadImageUrl);
+                                p.databaseReference
+                                        .child("Acopio")
+                                        .child("RV")
+                                        .child("UsuariosAcopio")
+                                        .child(getIMEI())
+                                        .child("agendavisitas")
+                                        .child(UID.get(posUID))
+                                        .child("formatocalidad")
+                                        .child(ref.get(pos))
+                                        .setValue(f);
+                                Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
+                                //subirQuick();
+                            }else{
+                                Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                            }
                         }
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_SHORT).show();
-                Log.e("Error: ", e.toString());
-            }
-        });
+                    });
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_SHORT).show();
+                    Log.e("Error: ", e.toString());
+                }
+            });
     }
 }
