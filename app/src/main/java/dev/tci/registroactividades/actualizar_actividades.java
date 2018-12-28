@@ -182,6 +182,7 @@ public class actualizar_actividades extends AppCompatActivity {
         f.setFecha(actividades.get(pos).getFecha());
         f.setLatitud(actividades.get(pos).getLatitud());
         f.setLongitud(actividades.get(pos).getLongitud());
+        f.setBaseurl(actividades.get(pos).getBaseurl());
         f.setUrl(actividades.get(pos).getUrl());
         f.setConcepto(actividades.get(pos).getConcepto());
         f.setCampoBitacora(actividades.get(pos).getCampoBitacora());
