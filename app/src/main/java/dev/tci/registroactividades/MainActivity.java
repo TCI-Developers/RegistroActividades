@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -393,8 +394,12 @@ public class MainActivity extends AppCompatActivity {
     public void subirFotoFirebase(final int pos, final int posUID) {
             StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            BitmapFactory.decodeFile(imgRUTA.get(pos)).compress(Bitmap.CompressFormat.JPEG, 100, baos);
-            byte[] data = baos.toByteArray();
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90.0f);
+        Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
+        Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+        byte[] data = baos.toByteArray();
 
             uploadTask = path.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
