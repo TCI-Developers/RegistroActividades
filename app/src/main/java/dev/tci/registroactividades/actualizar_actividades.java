@@ -47,6 +47,9 @@ public class actualizar_actividades extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_actualizar_actividades);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Init();
 
         listarMuestreos(UID, IMEI);
@@ -87,6 +90,9 @@ public class actualizar_actividades extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id){
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.check:
                 if(isValidateCabecera()){
                     if(ban){
