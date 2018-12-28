@@ -38,6 +38,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCanceledListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -45,6 +46,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
@@ -281,6 +283,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
         f.setCampoBitacora(concepto.getText().toString());
         f.setRecord(record);
+        f.setStatus(0);
 
         p.databaseReference
         .child("Acopio")
@@ -294,6 +297,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         .setValue(f);
         Toast.makeText(register.this,"Datos subidos",Toast.LENGTH_SHORT).show();
         subirFirebase();
+        finish();
     }
 
     public void Init() {
@@ -514,19 +518,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
     }
 
-    public String getImageBase64() {
-        imgPhoto.setDrawingCacheEnabled(true);
-        imgPhoto.buildDrawingCache();
-        Bitmap bitmap = ((BitmapDrawable) imgPhoto.getDrawable()).getBitmap();
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        byte[] data = baos.toByteArray();
-
-        String imagenCode64 = Base64.encodeToString(data, Base64.URL_SAFE);
-        lyPhoto.setVisibility(View.GONE);
-        return imagenCode64;
-    }
-
     public String getIMEI() {
         int leer = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_PHONE_STATE);
         int leer2 = ActivityCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
@@ -604,11 +595,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                sessionUri = taskSnapshot.getUploadSessionUri();
-                if (sessionUri != null && !mSaved) {
-                    mSaved = true;
-                    //finish();
-                }
+                taskSnapshot.getBytesTransferred();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -646,7 +633,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             .child(identificador)
                             .setValue(f);
 
-                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_LONG).show();
                             finish();
                         }
                     }
@@ -655,31 +642,20 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(register.this, "Error: " + e, Toast.LENGTH_SHORT).show();
+                Toast.makeText(register.this, "Error: " + e, Toast.LENGTH_LONG).show();
                 Log.e("Error: ", e.toString());
             }
+        }).addOnCanceledListener(new OnCanceledListener() {
+            @Override
+            public void onCanceled() {
+                Toast.makeText(register.this, "En el cancelable", Toast.LENGTH_LONG).show();
+            }
+        }).addOnPausedListener(new OnPausedListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onPaused(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(register.this, "En el pausable", Toast.LENGTH_LONG).show();
+            }
         });
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        // Find all UploadTasks under this StorageReference (in this example, there should be one)
-        Toast.makeText(register.this, "en onRestoreInstanceState", Toast.LENGTH_SHORT).show();
-        List<UploadTask> tasks = p.storageRef.getActiveUploadTasks();
-        if (tasks.size() > 0) {
-            // Get the task monitoring the upload
-            UploadTask task = tasks.get(0);
-
-            // Add new listeners to the task using an Activity scope
-            task.addOnSuccessListener(this, new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot state) {
-                    Toast.makeText(register.this, "Correcto: " + state, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
     }
 }
 

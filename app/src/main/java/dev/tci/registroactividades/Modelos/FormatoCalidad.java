@@ -38,8 +38,17 @@ public class FormatoCalidad implements Serializable {
     private String campoBitacora;
     private int positionMun;
     private String record;
+    private int status;
 
     public FormatoCalidad() {
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getBaseurl() {

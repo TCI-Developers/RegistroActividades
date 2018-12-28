@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     UploadTask uploadTask = null;
     Uri sessionUri = null;
     private boolean mSaved;
+    boolean ban = false;
 
     @Override
     protected void onStart() {
@@ -113,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         Init();
         ListarHuertas();
+
         btnubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -150,6 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     listProductores.add(ag.getProductor());
                     record.add(ag.getRecord());
                 }
+                loaddatosQuick();
             }
 
             @Override
@@ -181,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
             intent.putExtra("IMEI", myIMEI );
+            intent.putExtra("internet", ban);
             startActivity(intent);
             //finish();
         }else{
@@ -199,59 +203,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return myIMEI;
-    }
-
-    public void seundoPlano(View v) throws IOException {
-        String soap_string =
-                "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>" +
-                        "<SOAP-ENV:Envelope xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\" " +
-                        "xmlns:ns1=\"http://schemas.xmlsoap.org/soap/http\" " +
-                        "xmlns:soap=\"http://schemas.xmlsoap.org/wsdl/soap/\" " +
-                        "xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\" " +
-                        "xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" " +
-                        "xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" >\n" +
-                        "<SOAP-ENV:Body>\n" +
-
-                        /** Open Body **/
-                        "<qdbapi>" +
-                        "<ticket>"+
-                        "9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
-                        "</ticket>"+
-                        "<apptoken>"+
-                        token+
-                        "</apptoken>"+
-                        "<field name=_fid_112>La longaniza</field>" +
-                        "</qdbapi>" +
-                        /** Close Body **/
-
-                        "</SOAP-ENV:Body></SOAP-ENV:Envelope>";
-        MediaType SOAP_MEDIA_TYPE = MediaType.parse("application/xml");
-        final OkHttpClient client = new OkHttpClient();
-        RequestBody body = RequestBody.create(SOAP_MEDIA_TYPE, soap_string);
-        URL url = new URL("https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewi?a=API_AddRecord");
-        final Request request = new Request.Builder()
-                .url(url)
-                .post(body)
-                .addHeader("Content-Type", "application/xml")
-                .addHeader("cache-control", "no-cache")
-                .build();
-
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                String mMessage = e.getMessage().toString();
-                Log.w("failure Response", mMessage);
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                String mMessage = response.body().string();
-
-                //code = response.code();
-            }
-        });
     }
 
     public void subirQuick(){
@@ -315,15 +266,20 @@ public class MainActivity extends AppCompatActivity {
                     .child("agendavisitas")
                     .child(UID.get(i))
                     .child("formatocalidad")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                    .addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                                 ref.add(objSnaptshot.getKey());
                                 f = objSnaptshot.getValue(FormatoCalidad.class);
-                                datosF.add(f);
-                                imgRUTA.add(f.getBaseurl());
-                                namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
+                                if(f.getStatus() < 1){
+                                    datosF.add(f);
+                                    imgRUTA.add(f.getBaseurl());
+                                    namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
+                                    btnubir.setVisibility(View.VISIBLE);
+                                }else{
+                                    btnubir.setVisibility(View.GONE);
+                                }
                             }
                         }
                         @Override
@@ -425,6 +381,7 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
 
                                 f.setUrl(downloadImageUrl);
+                                f.setStatus(1);
                                 p.databaseReference
                                         .child("Acopio")
                                         .child("RV")
