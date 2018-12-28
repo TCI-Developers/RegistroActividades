@@ -509,12 +509,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90.0f);
-            lyPhoto.setVisibility(View.VISIBLE);
-            imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-            imgPhoto.setImageBitmap(rotatedBitmap);
+            try {
+                lyPhoto.setVisibility(View.VISIBLE);
+                mostrarPhoto();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -588,7 +588,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     public void subirFirebase() {
         StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        BitmapFactory.decodeFile(mCurrentPhotoPath).compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90.0f);
+        Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
         byte[] data = baos.toByteArray();
 
         uploadTask = path.putBytes(data);
