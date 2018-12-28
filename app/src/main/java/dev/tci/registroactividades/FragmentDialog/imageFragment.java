@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import dev.tci.registroactividades.R;
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static dev.tci.registroactividades.register.mCurrentPhotoPath;
 
@@ -29,6 +30,7 @@ public class imageFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View dialogo = inflater.inflate(R.layout.image_fragment, null);
+        PhotoViewAttacher photoViewAttacher;
         ImageView imagen = dialogo.findViewById(R.id.imagePhoto);
         ImageButton btn_close = dialogo.findViewById(R.id.btn_close);
         btn_close.setOnClickListener(new View.OnClickListener() {
@@ -42,8 +44,8 @@ public class imageFragment extends DialogFragment {
         Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
         Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
         imagen.setImageBitmap(rotatedBitmap);
+        photoViewAttacher = new PhotoViewAttacher(imagen);
         builder.setView(dialogo);
-
         return builder.create();
     }
 
