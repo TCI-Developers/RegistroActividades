@@ -1,7 +1,6 @@
 package dev.tci.registroactividades;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -25,7 +23,6 @@ import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,9 +30,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCanceledListener;
@@ -43,12 +40,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.OnPausedListener;
 import com.google.firebase.storage.OnProgressListener;
-import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
@@ -58,15 +51,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
-
 import dev.tci.registroactividades.FragmentDialog.imageFragment;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Singleton.Principal;
-
 import static dev.tci.registroactividades.MainActivity.imgRUTA;
+import static dev.tci.registroactividades.actualizar_actividades.connected;
 
 public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener {
 
@@ -82,7 +73,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     TelephonyManager mTelephony;
     String myIMEI = "";
-    Bitmap imageBitmap;
     private Spinner spnMun, spnCONCEPT;
     Principal p;
     String imei;
@@ -103,10 +93,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
     private static final int REQUEST_CODE = 1;
-    private boolean mSaved;
     private String downloadImageUrl;
     UploadTask uploadTask = null;
-    Uri sessionUri = null;
+    ProgressBar bar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,9 +284,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         .child("formatocalidad")
         .child(identificador)
         .setValue(f);
-        Toast.makeText(register.this,"Datos subidos",Toast.LENGTH_SHORT).show();
-        subirFirebase();
-        finish();
+        if(connected){
+            subirFirebase();
+        }else{
+            Toast.makeText(register.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     public void Init() {
@@ -335,6 +327,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         imei = getIMEI();
         identificador = UUID.randomUUID().toString();
         imgRUTA = new ArrayList<>();
+        bar = findViewById(R.id.progSubida);
     }
 
     public boolean isValidateCalibres() {
@@ -599,7 +592,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         uploadTask.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                taskSnapshot.getBytesTransferred();
+                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
+                bar.setVisibility(View.VISIBLE);
+                bar.setProgress((int) progress);
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -626,6 +621,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             downloadImageUrl = task.getResult().toString();
 
                             f.setUrl(downloadImageUrl);
+                            f.setStatus(1);
                             p.databaseReference
                             .child("Acopio")
                             .child("RV")
@@ -661,5 +657,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             }
         });
     }
-}
 
+    private void mostrarPhoto() throws IOException {
+        Glide.with(register.this)
+                .load(mCurrentPhotoPath)
+                .into(imgPhoto);
+    }
+}

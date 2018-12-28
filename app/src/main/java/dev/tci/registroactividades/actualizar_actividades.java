@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ public class actualizar_actividades extends AppCompatActivity {
     private EditText huertaUP, productorUP, telefonoUP, toneladasUP;
     private Spinner municipioUP;
     FormatoCalidad f = new FormatoCalidad();
+    public static boolean connected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,8 @@ public class actualizar_actividades extends AppCompatActivity {
 
             }
         });
+
+        validaInternet();
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
@@ -159,6 +163,11 @@ public class actualizar_actividades extends AppCompatActivity {
     }
 
     private void llenadoClase(int pos){
+        if (actividades.get(pos).getUrl().isEmpty() ) {
+            f.setStatus(0);
+        }else{
+            f.setStatus(1);
+        }
         f.setBano(actividades.get(pos).getBano());
         f.setComedor(actividades.get(pos).getComedor());
         f.setNcuadrillas(actividades.get(pos).getNcuadrillas());
@@ -213,5 +222,25 @@ public class actualizar_actividades extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    public void validaInternet(){
+        DatabaseReference connectedRef = p.firebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                connected = snapshot.getValue(Boolean.class);
+                if (connected) {
+                    //Toast.makeText(getApplicationContext(), "Con internet", Toast.LENGTH_LONG).show();
+                } else {
+                    //Toast.makeText(getApplicationContext(), "Sin internet", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
