@@ -105,7 +105,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         Toolbar toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("Muestreo");
         setSupportActionBar(toolbar);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         Init();
 
         lyPhoto.setVisibility(View.GONE);
@@ -147,6 +148,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         int id = item.getItemId();
 
         switch (id) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
             case R.id.check:
                 dialog = new ProgressDialog(register.this);
                 dialog.setTitle("Espere!");

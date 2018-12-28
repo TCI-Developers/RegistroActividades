@@ -46,6 +46,16 @@ public class ListaActividades extends AppCompatActivity {
         Toolbar toolbar =  findViewById(R.id.toolbar);
         toolbar.setTitle("Actividades");
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        toolbar.setNavigationIcon(R.drawable.back);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         Init();
 
