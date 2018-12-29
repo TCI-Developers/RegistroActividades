@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#b0bec5"
+    android:background="@color/background"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".register"
     tools:showIn="@layout/activity_register">
@@ -153,10 +153,10 @@
                             android:autofillHints=""
                             android:background="@drawable/boxtext1"
                             android:ems="10"
-                            android:maxLength="3"
                             android:hint="@string/_32"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -167,11 +167,11 @@
                             android:layout_margin="3dp"
                             android:layout_weight="1"
                             android:background="@drawable/boxtext1"
-                            android:maxLength="3"
                             android:ems="10"
                             android:hint="@string/_36"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -181,12 +181,12 @@
                             android:layout_height="wrap_content"
                             android:layout_margin="3dp"
                             android:layout_weight="1"
-                            android:maxLength="3"
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/_40"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -203,11 +203,11 @@
                             android:layout_margin="3dp"
                             android:layout_weight="1"
                             android:background="@drawable/boxtext1"
-                            android:maxLength="3"
                             android:ems="10"
                             android:hint="@string/_48"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -220,9 +220,9 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/_60"
-                            android:maxLength="3"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -235,9 +235,9 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/_70"
-                            android:maxLength="3"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -256,9 +256,9 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/_84"
-                            android:maxLength="3"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -271,9 +271,9 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/_96"
-                            android:maxLength="3"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -286,9 +286,9 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/can"
-                            android:maxLength="3"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -306,8 +306,8 @@
                             android:background="@drawable/boxtext1"
                             android:ems="10"
                             android:hint="@string/lac"
-                            android:maxLength="3"
                             android:inputType="number"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -359,9 +359,9 @@
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
                                 android:hint="@string/ro_a"
-                                android:maxLength="3"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -374,9 +374,9 @@
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
                                 android:hint="@string/rosado"
-                                android:maxLength="3"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -389,9 +389,9 @@
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
                                 android:hint="@string/ba_o"
-                                android:maxLength="3"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -410,10 +410,10 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:maxLength="3"
                                 android:hint="@string/trips"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -425,10 +425,10 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:maxLength="3"
                                 android:hint="@string/quemado"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -440,10 +440,10 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:maxLength="3"
                                 android:hint="@string/comedor"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -462,9 +462,9 @@
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
                                 android:hint="@string/viruela"
-                                android:maxLength="3"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -477,9 +477,9 @@
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
                                 android:hint="@string/varicela"
-                                android:maxLength="3"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
                         </LinearLayout>

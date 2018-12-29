@@ -156,12 +156,21 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
             intent.putExtra("IMEI", myIMEI );
-            intent.putExtra("internet", ban);
             startActivity(intent);
             //finish();
         }else{
             Snackbar.make(v, "No tienes actividades.", Snackbar.LENGTH_LONG).show();
         }
+    }
+
+    public void CheckData2(View v){
+            Intent intent = new Intent(getApplicationContext(), register.class);
+            intent.putStringArrayListExtra("Huertas", listHuertas );
+            intent.putStringArrayListExtra("Productores", listProductores );
+            intent.putStringArrayListExtra("record", null );
+            intent.putExtra("UID", "no programada" );
+            intent.putExtra("IMEI", myIMEI );
+            startActivity(intent);
     }
 
     public String getIMEI(){
@@ -226,6 +235,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void loaddatosQuick(){
         for(int i=0; i<UID.size(); i++){
+            datosF.clear();
+            imgRUTA.clear();
+            namePhoto.clear();
+            ref.clear();
+            f = new FormatoCalidad();
                     p.databaseReference
                     .child("Acopio")
                     .child("RV")
@@ -237,11 +251,6 @@ public class MainActivity extends AppCompatActivity {
                     .addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            datosF.clear();
-                            imgRUTA.clear();
-                            namePhoto.clear();
-                            ref.clear();
-                            f = new FormatoCalidad();
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                                 ref.add(objSnaptshot.getKey());
                                 f = objSnaptshot.getValue(FormatoCalidad.class);

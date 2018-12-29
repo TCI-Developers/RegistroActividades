@@ -92,7 +92,7 @@ public class ListaActividades extends AppCompatActivity {
                 finish();
             }
         });
-
+        adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
