@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#90a4ae"
+    android:background="@color/background"
     tools:context=".actualizar_actividades">
 
     <LinearLayout

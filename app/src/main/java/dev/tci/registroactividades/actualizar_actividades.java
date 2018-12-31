@@ -226,4 +226,12 @@ public class actualizar_actividades extends AppCompatActivity {
         }
         return false;
     }
+
+    public void limpiarCampos(){
+        huertaUP.setText("");
+        productorUP.setText("");
+        telefonoUP.setText("");
+        toneladasUP.setText("");
+        municipioUP.setSelection(0);
+    }
 }

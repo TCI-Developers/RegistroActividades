@@ -252,9 +252,9 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                                ref.add(objSnaptshot.getKey());
                                 f = objSnaptshot.getValue(FormatoCalidad.class);
                                 if(f.getStatus() < 1){
+                                    ref.add(objSnaptshot.getKey());
                                     datosF.add(f);
                                     imgRUTA.add(f.getBaseurl());
                                     namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");

@@ -279,16 +279,18 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setRecord(record);
         f.setStatus(0);
 
-        p.databaseReference
-        .child("Acopio")
-        .child("RV")
-        .child("UsuariosAcopio")
-        .child(imei)
-        .child("agendavisitas")
-        .child(UID)
-        .child("formatocalidad")
-        .child(identificador)
-        .setValue(f);
+            p.databaseReference
+            .child("Acopio")
+            .child("RV")
+            .child("UsuariosAcopio")
+            .child(imei)
+            .child("agendavisitas")
+            .child(UID)
+            .child("formatocalidad")
+            .child(identificador)
+            .setValue(f);
+
+
         if(connected){
             subirFirebase();
         }else{
