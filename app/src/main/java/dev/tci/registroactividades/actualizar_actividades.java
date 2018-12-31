@@ -70,7 +70,7 @@ public class actualizar_actividades extends AppCompatActivity {
             public void onLongClick(View v, int position) {
 
             }
-        });
+        }, getApplicationContext());
 
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);

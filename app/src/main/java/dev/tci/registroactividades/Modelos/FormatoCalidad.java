@@ -39,8 +39,17 @@ public class FormatoCalidad implements Serializable {
     private int positionMun;
     private String record;
     private int status;
+    private int subido;
 
     public FormatoCalidad() {
+    }
+
+    public int getSubido() {
+        return subido;
+    }
+
+    public void setSubido(int subido) {
+        this.subido = subido;
     }
 
     public int getStatus() {

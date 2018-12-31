@@ -1,6 +1,7 @@
 package dev.tci.registroactividades;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,11 +28,13 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
@@ -47,6 +50,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,6 +101,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private String downloadImageUrl;
     UploadTask uploadTask = null;
     ProgressBar bar;
+    ObjectAnimator anim;
+    TextView progres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,6 +284,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setCampoBitacora(concepto.getText().toString());
         f.setRecord(record);
         f.setStatus(0);
+        f.setSubido(0);
 
             p.databaseReference
             .child("Acopio")
@@ -335,6 +342,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         identificador = UUID.randomUUID().toString();
         imgRUTA = new ArrayList<>();
         bar = findViewById(R.id.progSubida);
+        progres = findViewById(R.id.txtProgress);
     }
 
     public boolean isValidateCalibres() {
@@ -601,12 +609,17 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                 double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                 bar.setVisibility(View.VISIBLE);
+                progres.setVisibility(View.VISIBLE);
+
                 bar.setProgress((int) progress);
+
+                DecimalFormat format = new DecimalFormat("#.00");
+                progres.setText(format.format(progress)  + " %");
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
+//                Toast.makeText(register.this,"Img guardada en Storage",Toast.LENGTH_SHORT).show();
 
                 Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
@@ -640,7 +653,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             .child(identificador)
                             .setValue(f);
 
-                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_LONG).show();
+//                            Toast.makeText(register.this, "Datos subidos exitosamente", Toast.LENGTH_LONG).show();
                             finish();
                         }
                     }

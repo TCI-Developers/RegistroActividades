@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     };
     private static final int REQUEST_CODE = 1;
     TelephonyManager mTelephony;
-    String token = "bp9chqje532g5cz95empciw4qnu";
+    String token = "cwxu6exdambasvd2cp6wvbgwfuqy";
     Principal p = Principal.getInstance();
     FormatoCalidad f;
     private ArrayList<FormatoCalidad> datosF;
@@ -92,6 +92,9 @@ public class MainActivity extends AppCompatActivity {
                     for(int j=0; j<UID.size(); j++){
                         for(int i = 0 ; i < imgRUTA.size(); i++){
                             subirFotoFirebase(i, j);
+                        }
+                        if(j <= UID.size()){
+                            Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
                         }
                     }
                 }else{
@@ -186,42 +189,41 @@ public class MainActivity extends AppCompatActivity {
         return myIMEI;
     }
 
-    public void subirQuick(){
+    public void subirQuick(int pos){
         String  RegistroQ = "";
-        for(int i = 0; i < datosF.size() ; i++){
             RegistroQ = "https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij" +
             "?a=API_AddRecord"+
-            "&_fid_112="+"Bonanza"+ //Huerta Nombre
-            "&_fid_113="+datosF.get(i).getProductor() +//productor
-            "&_fid_114=" +datosF.get(i).getTelefono()+//telefono
-            "&_fid_115=" +datosF.get(i).getTon_prox()+//toneladas aprox
-            "&_fid_116=" +datosF.get(i).getMunicipio()+//municipio
-            "&_fid_18=" +datosF.get(i).getCal32()+//Calibre 32
-            "&_fid_19=" +datosF.get(i).getCal36()+//Calibre 36
-            "&_fid_20=" +datosF.get(i).getCal40()+//Calibre 40
-            "&_fid_21=" +datosF.get(i).getCal48()+//Calibre 48
-            "&_fid_22=" +datosF.get(i).getCal60()+//Calibre 60
-            "&_fid_105=" +datosF.get(i).getCal70()+//Calibre 70
-            "&_fid_106=" +datosF.get(i).getCal84()+//Calibre 84
-            "&_fid_107=" +datosF.get(i).getCal96()+//Calibre 96
-            "&_fid_24=" +datosF.get(i).getCanica()+//Canica (CAN)
-            "&_fid_23=" +datosF.get(i).getLacrado()+//lacrado(LAC)
-            "&_fid_117=" +datosF.get(i).getRona()+//Roña
-            "&_fid_118=" +datosF.get(i).getRosado()+//Rosado
-            "&_fid_119=" +datosF.get(i).getBano()+//Baño
-            "&_fid_120=" +datosF.get(i).getTrips()+//Trips
-            "&_fid_121=" +datosF.get(i).getQuemado()+//Quemado
-            "&_fid_122=" +datosF.get(i).getComedor()+//Comedor
-            "&_fid_123=" +datosF.get(i).getViruela()+//Viruela
-            "&_fid_124=" +datosF.get(i).getVaricela()+//Varicela
+            "&_fid_112="+datosF.get(pos).getHuerta()+ //Huerta Nombre
+            "&_fid_113="+datosF.get(pos).getProductor() +//productor
+            "&_fid_114=" +datosF.get(pos).getTelefono()+//telefono
+            "&_fid_115=" +datosF.get(pos).getTon_prox()+//toneladas aprox
+            "&_fid_116=" +datosF.get(pos).getMunicipio()+//municipio
+            "&_fid_18=" +datosF.get(pos).getCal32()+//Calibre 32
+            "&_fid_19=" +datosF.get(pos).getCal36()+//Calibre 36
+            "&_fid_20=" +datosF.get(pos).getCal40()+//Calibre 40
+            "&_fid_21=" +datosF.get(pos).getCal48()+//Calibre 48
+            "&_fid_22=" +datosF.get(pos).getCal60()+//Calibre 60
+            "&_fid_105=" +datosF.get(pos).getCal70()+//Calibre 70
+            "&_fid_106=" +datosF.get(pos).getCal84()+//Calibre 84
+            "&_fid_107=" +datosF.get(pos).getCal96()+//Calibre 96
+            "&_fid_24=" +datosF.get(pos).getCanica()+//Canica (CAN)
+            "&_fid_23=" +datosF.get(pos).getLacrado()+//lacrado(LAC)
+            "&_fid_117=" +datosF.get(pos).getRona()+//Roña
+            "&_fid_118=" +datosF.get(pos).getRosado()+//Rosado
+            "&_fid_119=" +datosF.get(pos).getBano()+//Baño
+            "&_fid_120=" +datosF.get(pos).getTrips()+//Trips
+            "&_fid_121=" +datosF.get(pos).getQuemado()+//Quemado
+            "&_fid_122=" +datosF.get(pos).getComedor()+//Comedor
+            "&_fid_123=" +datosF.get(pos).getViruela()+//Viruela
+            "&_fid_124=" +datosF.get(pos).getVaricela()+//Varicela
             "&_fid_108=" +getIMEI()+//imei
-            "&_fid_109=" +datosF.get(i).getProductor()+//record
-            "&_fid_110=" +datosF.get(i).getNcuadrillas()+//numero cuadrillas
-            "&_fid_111=" +datosF.get(i).getConcepto()+//concepto bitacora
-            "&_fid_7=" +datosF.get(i).getPositionMun()+//campobitacora*******************************************************************
-            "&_fid_87=" +datosF.get(i).getUrl()+//ruta de la imagen
-            "&_fid_81=" +datosF.get(i).getLatitud() +", "+ datosF.get(i).getLongitud() +//latitud,longitud
-            "&_fid_6=" +datosF.get(i).getFecha()+", "+datosF.get(i).getHora()+//fecha,hora
+            "&_fid_109=" +datosF.get(pos).getProductor()+//record
+            "&_fid_110=" +datosF.get(pos).getNcuadrillas()+//numero cuadrillas
+            "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
+            "&_fid_7=" +datosF.get(pos).getPositionMun()+//campobitacora*******************************************************************
+            "&_fid_87=" +datosF.get(pos).getUrl()+//ruta de la imagen
+            "&_fid_81=" +datosF.get(pos).getLatitud() +", "+ datosF.get(pos).getLongitud() +//latitud,longitud
+            "&_fid_6=" +datosF.get(pos).getFecha()+", "+datosF.get(pos).getHora()+//fecha,hora
             "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
             "&apptoken=" + token;
             try{
@@ -229,7 +231,6 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
             } catch (Exception e){
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
-            }
         }
     }
 
@@ -253,13 +254,13 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                                 f = objSnaptshot.getValue(FormatoCalidad.class);
-                                if(f.getStatus() < 1){
-                                    ref.add(objSnaptshot.getKey());
-                                    datosF.add(f);
-                                    imgRUTA.add(f.getBaseurl());
-                                    namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
-                                    btnubir.setVisibility(View.VISIBLE);
-                                }
+                                    if(f.getSubido() < 1){
+                                        ref.add(objSnaptshot.getKey());
+                                        datosF.add(f);
+                                        imgRUTA.add(f.getBaseurl());
+                                        namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
+                                        btnubir.setVisibility(View.VISIBLE);
+                                    }
                             }
                         }
                         @Override
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
                                // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
 
                                 datosF.get(pos).setUrl(downloadImageUrl);
-                                datosF.get(pos).setStatus(1);
+                                datosF.get(pos).setSubido(1);
                                 p.databaseReference
                                 .child("Acopio")
                                 .child("RV")
@@ -367,12 +368,10 @@ public class MainActivity extends AppCompatActivity {
                                 .child(ref.get(pos))
                                 .setValue(datosF.get(pos));
 
-                                Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
-
                                 bar.setVisibility(View.GONE);
                                 bar.setProgress(0);
                                 btnubir.setVisibility(View.GONE);
-                                //subirQuick();
+                                subirQuick(pos);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             }
