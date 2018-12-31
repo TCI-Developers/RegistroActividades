@@ -93,9 +93,6 @@ public class MainActivity extends AppCompatActivity {
                         for(int i = 0 ; i < imgRUTA.size(); i++){
                             subirFotoFirebase(i, j);
                         }
-                        if(j <= UID.size()){
-                            Toast.makeText(MainActivity.this, "Todos tus datos se subieron exitosamente.", Toast.LENGTH_SHORT).show();
-                        }
                     }
                 }else{
                     Toast.makeText(getApplicationContext(), "No tienes internet, verifica tu conexión", Toast.LENGTH_LONG).show();
@@ -221,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_110=" +datosF.get(pos).getNcuadrillas()+//numero cuadrillas
             "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
             "&_fid_7=" +datosF.get(pos).getPositionMun()+//campobitacora*******************************************************************
-            "&_fid_87=" +datosF.get(pos).getUrl()+//ruta de la imagen
+            "&_fid_87=" +datosF.get(pos).getUrl().replace("=", "%3D").replace("&", "%26")+//ruta de la imagen
             "&_fid_81=" +datosF.get(pos).getLatitud() +", "+ datosF.get(pos).getLongitud() +//latitud,longitud
             "&_fid_6=" +datosF.get(pos).getFecha()+", "+datosF.get(pos).getHora()+//fecha,hora
             "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
@@ -319,7 +316,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void subirFotoFirebase(final int pos, final int posUID) {
-        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos));
+        StorageReference path = p.storageRef.child("RV/"+namePhoto.get(pos));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
@@ -342,9 +339,9 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
                                 throw task.getException();
                             }else{
-                                downloadImageUrl = p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos)).getDownloadUrl().toString();
+                                downloadImageUrl = p.storageRef.child("RV/"+namePhoto.get(pos)).getDownloadUrl().toString();
                             }
-                            return p.storageRef.child("Imagenes/RV/"+namePhoto.get(pos)).getDownloadUrl();
+                            return p.storageRef.child("RV/"+namePhoto.get(pos)).getDownloadUrl();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override

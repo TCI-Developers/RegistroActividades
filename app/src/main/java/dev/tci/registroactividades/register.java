@@ -594,7 +594,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     public void subirFirebase() {
-        StorageReference path = p.storageRef.child("Imagenes/RV/"+namePhoto);
+        StorageReference path = p.storageRef.child("RV/"+namePhoto);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
@@ -629,8 +629,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                         {
                             throw task.getException();
                         }
-                        downloadImageUrl = p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl().toString();
-                        return p.storageRef.child("Imagenes/RV/"+namePhoto).getDownloadUrl();
+                        downloadImageUrl = p.storageRef.child("RV/"+namePhoto).getDownloadUrl().toString();
+                        return p.storageRef.child("RV/"+namePhoto).getDownloadUrl();
                     }
                 }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                     @Override
