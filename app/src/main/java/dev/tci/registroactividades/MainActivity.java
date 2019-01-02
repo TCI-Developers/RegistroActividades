@@ -126,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
                     listHuertas.add( ag.getHuerta() );
                     listProductores.add(ag.getProductor());
                     record.add(ag.getRecord());
+                    //Toast.makeText(MainActivity.this, "Hubo un cambio", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -151,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void CheckData(View v){
-        ListarHuertas();
+//        ListarHuertas();
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );
@@ -228,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
             "&apptoken=" + token;
             try{
                 new CargarDatos().execute(RegistroQ.replace(" ", "%20"));
-                //Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
             } catch (Exception e){
                 Toast.makeText(this, "Error de conexión", Toast.LENGTH_SHORT).show();
         }
@@ -320,14 +321,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void subirFotoFirebase(final int pos, final int posUID) {
-        StorageReference path = p.storageRef.child("RV/"+namePhoto.get(pos));
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90.0f);
-        Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
-        Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-        byte[] data = baos.toByteArray();
+        if(!imgRUTA.get(pos).isEmpty()){
+            StorageReference path = p.storageRef.child("RV/"+namePhoto.get(pos));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90.0f);
+
+            Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
+            Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+            byte[] data = baos.toByteArray();
 
             uploadTask = path.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -354,38 +357,36 @@ public class MainActivity extends AppCompatActivity {
                             if (task.isSuccessful())
                             {
                                 downloadImageUrl = task.getResult().toString();
-                               // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
+                                // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
                                 datosF.get(pos).setUrl(downloadImageUrl);
                                 final HashMap<String, Object> productMap = new HashMap<>();
                                 productMap.put("url", downloadImageUrl);
                                 productMap.put("subido", 2);
 
                                 p.databaseReference.
-                                child("Acopio")
-                                .child("RV")
-                                .child("UsuariosAcopio")
-                                .child(getIMEI())
-                                .child("agendavisitas")
-                                .child(UID.get(posUID))
-                                .child("formatocalidad")
-                                .child(ref.get(pos)).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        child("Acopio")
+                                        .child("RV")
+                                        .child("UsuariosAcopio")
+                                        .child(getIMEI())
+                                        .child("agendavisitas")
+                                        .child(UID.get(posUID))
+                                        .child("formatocalidad")
+                                        .child(ref.get(pos)).addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         if(dataSnapshot.getValue() != null ){
-                                            Toast.makeText(getApplicationContext(), "Existe awebo", Toast.LENGTH_LONG).show();
+                                            //Toast.makeText(getApplicationContext(), "Existe awebo", Toast.LENGTH_LONG).show();
                                             p.databaseReference
-                                            .child("Acopio")
-                                            .child("RV")
-                                            .child("UsuariosAcopio")
-                                            .child(getIMEI())
-                                            .child("agendavisitas")
-                                            .child(UID.get(posUID))
-                                            .child("formatocalidad")
-                                            .child(ref.get(pos))
-                                            .updateChildren(productMap);
+                                                    .child("Acopio")
+                                                    .child("RV")
+                                                    .child("UsuariosAcopio")
+                                                    .child(getIMEI())
+                                                    .child("agendavisitas")
+                                                    .child(UID.get(posUID))
+                                                    .child("formatocalidad")
+                                                    .child(ref.get(pos))
+                                                    .updateChildren(productMap);
                                             subirQuick(pos);
-                                        }else{
-                                            //Toast.makeText(getApplicationContext(), "No Existe awebo", Toast.LENGTH_LONG).show();
                                         }
                                     }
 
@@ -419,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
                     bar.setProgress((int) progress);
                 }
             });
+        }
     }
 
     public void validaInternet(){
