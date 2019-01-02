@@ -34,7 +34,10 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.QuickBase.ParseXmlData;
@@ -90,8 +93,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if(connected){
                     for(int j=0; j<UID.size(); j++){
-                        for(int i = 0 ; i < imgRUTA.size(); i++){
-                            subirFotoFirebase(i, j);
+                            for(int i = 0 ; i < ref.size(); i++){
+                                subirFotoFirebase(i, j);
                         }
                     }
                 }else{
@@ -218,9 +221,9 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_110=" +datosF.get(pos).getNcuadrillas()+//numero cuadrillas
             "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
             "&_fid_7=" +datosF.get(pos).getPositionMun()+//campobitacora*******************************************************************
-            "&_fid_87=" +datosF.get(pos).getUrl().replace("=", "%3D").replace("&", "%26")+//ruta de la imagen
+            "&_fid_87=" +URLEncoder.encode(datosF.get(pos).getUrl()) +//ruta de la imagen
             "&_fid_81=" +datosF.get(pos).getLatitud() +", "+ datosF.get(pos).getLongitud() +//latitud,longitud
-            "&_fid_6=" +datosF.get(pos).getFecha()+", "+datosF.get(pos).getHora()+//fecha,hora
+            "&_fid_6=" +datosF.get(pos).getFecha()+" "+datosF.get(pos).getHora()+//fecha,hora
             "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
             "&apptoken=" + token;
             try{
@@ -237,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
             imgRUTA.clear();
             namePhoto.clear();
             ref.clear();
+
             f = new FormatoCalidad();
                     p.databaseReference
                     .child("Acopio")
@@ -351,24 +355,50 @@ public class MainActivity extends AppCompatActivity {
                             {
                                 downloadImageUrl = task.getResult().toString();
                                // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
-
                                 datosF.get(pos).setUrl(downloadImageUrl);
-                                datosF.get(pos).setSubido(1);
-                                p.databaseReference
-                                .child("Acopio")
+                                final HashMap<String, Object> productMap = new HashMap<>();
+                                productMap.put("url", downloadImageUrl);
+                                productMap.put("subido", 2);
+
+                                p.databaseReference.
+                                child("Acopio")
                                 .child("RV")
                                 .child("UsuariosAcopio")
                                 .child(getIMEI())
                                 .child("agendavisitas")
                                 .child(UID.get(posUID))
                                 .child("formatocalidad")
-                                .child(ref.get(pos))
-                                .setValue(datosF.get(pos));
+                                .child(ref.get(pos)).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        if(dataSnapshot.getValue() != null ){
+                                            Toast.makeText(getApplicationContext(), "Existe awebo", Toast.LENGTH_LONG).show();
+                                            p.databaseReference
+                                            .child("Acopio")
+                                            .child("RV")
+                                            .child("UsuariosAcopio")
+                                            .child(getIMEI())
+                                            .child("agendavisitas")
+                                            .child(UID.get(posUID))
+                                            .child("formatocalidad")
+                                            .child(ref.get(pos))
+                                            .updateChildren(productMap);
+                                            subirQuick(pos);
+                                        }else{
+                                            //Toast.makeText(getApplicationContext(), "No Existe awebo", Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
 
                                 bar.setVisibility(View.GONE);
                                 bar.setProgress(0);
                                 btnubir.setVisibility(View.GONE);
-                                subirQuick(pos);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             }
