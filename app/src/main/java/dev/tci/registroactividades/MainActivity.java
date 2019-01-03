@@ -11,9 +11,11 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -81,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar bar;
     public static boolean connected;
     private TextView progres, pendientes;
+    private SwipeRefreshLayout refreshLayout;
 
     @Override
     protected void onStart() {
@@ -98,7 +101,20 @@ public class MainActivity extends AppCompatActivity {
         Init();
         ListarHuertas();
         validaInternet();
-        loaddatosQuick();
+
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loaddatosQuick();
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshLayout.setRefreshing(false);
+                    }
+                }, 1000);
+            }
+        });
 
         btnubir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -179,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
         date = new Date();
         date2 = new Date();
         dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        refreshLayout = findViewById(R.id.swipeLoad);
     }
 
     public void CheckData(View v){
