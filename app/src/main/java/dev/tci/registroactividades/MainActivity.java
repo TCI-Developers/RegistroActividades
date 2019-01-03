@@ -24,6 +24,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -66,13 +68,12 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<FormatoCalidad> datosF;
     ImageButton btnubir;
     ProgressDialog dialog;
-    private ImageView imgPhoto;
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
     UploadTask uploadTask = null;
-    boolean ban = false;
     ProgressBar bar;
     public static boolean connected;
+    TextView progres, pendientes;
 
     @Override
     protected void onStart() {
@@ -90,6 +91,7 @@ public class MainActivity extends AppCompatActivity {
         Init();
         ListarHuertas();
         validaInternet();
+        loaddatosQuick();
 
         btnubir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +155,8 @@ public class MainActivity extends AppCompatActivity {
         namePhoto = new ArrayList<>();
         bar = findViewById(R.id.progSubida2);
         cardView = findViewById(R.id.cardSubir);
+        progres = findViewById(R.id.txtProgress2);
+        pendientes = findViewById(R.id.txtPendiente);
     }
 
     public void CheckData(View v){
@@ -268,6 +272,7 @@ public class MainActivity extends AppCompatActivity {
                                         cardView.setVisibility(View.VISIBLE);
                                     }
                             }
+                            pendientes.setText(imgRUTA.size()+"");
                         }
                         @Override
                         public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -325,16 +330,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
     public void subirFotoFirebase(final int pos, final int posUID) {
-        if(!imgRUTA.get(pos).isEmpty()){
             StorageReference path = p.storageRef.child("RV/"+namePhoto.get(pos));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             Matrix matrix = new Matrix();
             matrix.postRotate(90.0f);
+            byte[] data = new byte[0];
+            try{
+                Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
+                Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
+                rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                data = baos.toByteArray();
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+            }
 
-            Bitmap imageBitmap = BitmapFactory.decodeFile(imgRUTA.get(pos));
-            Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-            rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-            byte[] data = baos.toByteArray();
 
             uploadTask = path.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -404,6 +413,7 @@ public class MainActivity extends AppCompatActivity {
                                 bar.setVisibility(View.GONE);
                                 bar.setProgress(0);
                                 cardView.setVisibility(View.GONE);
+                                progres.setVisibility(View.GONE);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             }
@@ -422,9 +432,12 @@ public class MainActivity extends AppCompatActivity {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
                     bar.setVisibility(View.VISIBLE);
                     bar.setProgress((int) progress);
+                    progres.setVisibility(View.VISIBLE);
+
+                    DecimalFormat format = new DecimalFormat("#.00");
+                    progres.setText(format.format(progress)  + " %");
                 }
             });
-        }
     }
 
     public void validaInternet(){
