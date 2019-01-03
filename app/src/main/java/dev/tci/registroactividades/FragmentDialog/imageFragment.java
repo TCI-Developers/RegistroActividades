@@ -13,7 +13,10 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+
 import dev.tci.registroactividades.R;
+import dev.tci.registroactividades.register;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static dev.tci.registroactividades.register.mCurrentPhotoPath;
@@ -39,12 +42,13 @@ public class imageFragment extends DialogFragment {
                 dismiss();
             }
         });
-        Matrix matrix = new Matrix();
-        matrix.postRotate(90.0f);
-        Bitmap imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-        Bitmap rotatedBitmap = Bitmap.createBitmap(imageBitmap, 0, 0, imageBitmap.getWidth(), imageBitmap.getHeight(), matrix, true);
-        imagen.setImageBitmap(rotatedBitmap);
+
+        Glide.with(dialogo.getContext())
+                .load(mCurrentPhotoPath)
+                .into(imagen);
+
         photoViewAttacher = new PhotoViewAttacher(imagen);
+        builder.setCancelable(false);
         builder.setView(dialogo);
         return builder.create();
     }

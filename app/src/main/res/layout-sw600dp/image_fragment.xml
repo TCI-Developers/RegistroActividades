@@ -16,8 +16,8 @@
 
     <ImageButton
         android:id="@+id/btn_close"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
