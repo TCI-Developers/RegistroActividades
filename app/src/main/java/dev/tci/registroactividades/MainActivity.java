@@ -15,11 +15,13 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -51,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> UID;
     private ArrayList<String> ref;
     private ArrayList<String> namePhoto;
+    private CardView cardView;
     String myIMEI = "";
     private static final String[] PERMISOS = {
             Manifest.permission.READ_PHONE_STATE
@@ -61,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
     Principal p = Principal.getInstance();
     FormatoCalidad f;
     private ArrayList<FormatoCalidad> datosF;
-    Button btnubir;
+    ImageButton btnubir;
     ProgressDialog dialog;
     private ImageView imgPhoto;
     public static ArrayList<String> imgRUTA;
@@ -143,12 +146,13 @@ public class MainActivity extends AppCompatActivity {
         record = new ArrayList<String>();
         UID = new ArrayList<String>();
         datosF = new ArrayList<>();
-        btnubir = findViewById(R.id.button2);
+        btnubir = findViewById(R.id.imageButton);
         dialog = new ProgressDialog(MainActivity.this);
         imgRUTA = new ArrayList<>();
         ref = new ArrayList<>();
         namePhoto = new ArrayList<>();
         bar = findViewById(R.id.progSubida2);
+        cardView = findViewById(R.id.cardSubir);
     }
 
     public void CheckData(View v){
@@ -261,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
                                         datosF.add(f);
                                         imgRUTA.add(f.getBaseurl());
                                         namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
-                                        btnubir.setVisibility(View.VISIBLE);
+                                        cardView.setVisibility(View.VISIBLE);
                                     }
                             }
                         }
@@ -399,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 bar.setVisibility(View.GONE);
                                 bar.setProgress(0);
-                                btnubir.setVisibility(View.GONE);
+                                cardView.setVisibility(View.GONE);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                             }

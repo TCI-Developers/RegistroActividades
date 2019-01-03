@@ -298,12 +298,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         .setValue(f).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-                Toast.makeText(getApplicationContext(), "Succes: Respaldo correcto", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), "Succes: Respaldo correcto", Toast.LENGTH_LONG).show();
             }
         }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                Toast.makeText(getApplicationContext(), "Complete: Respaldo correcto", Toast.LENGTH_LONG).show();
+               // Toast.makeText(getApplicationContext(), "Complete: Respaldo correcto", Toast.LENGTH_LONG).show();
             }
         });
 
