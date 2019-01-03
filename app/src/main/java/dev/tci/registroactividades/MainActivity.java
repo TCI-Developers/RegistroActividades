@@ -39,8 +39,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 
 import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
@@ -55,25 +59,28 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> UID;
     private ArrayList<String> ref;
     private ArrayList<String> namePhoto;
+    private ArrayList<String> fechaArray;
     private CardView cardView;
-    String myIMEI = "";
+    private String myIMEI = "";
+    private String fecha;
+    private Date date, date2;
+    private SimpleDateFormat dateFormat;
     private static final String[] PERMISOS = {
             Manifest.permission.READ_PHONE_STATE
     };
     private static final int REQUEST_CODE = 1;
-    TelephonyManager mTelephony;
-    String token = "cwxu6exdambasvd2cp6wvbgwfuqy";
+    private TelephonyManager mTelephony;
+    private String token = "cwxu6exdambasvd2cp6wvbgwfuqy";
     Principal p = Principal.getInstance();
-    FormatoCalidad f;
+    private FormatoCalidad f;
     private ArrayList<FormatoCalidad> datosF;
     ImageButton btnubir;
-    ProgressDialog dialog;
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
-    UploadTask uploadTask = null;
-    ProgressBar bar;
+    private UploadTask uploadTask = null;
+    private ProgressBar bar;
     public static boolean connected;
-    TextView progres, pendientes;
+    private TextView progres, pendientes;
 
     @Override
     protected void onStart() {
@@ -123,14 +130,25 @@ public class MainActivity extends AppCompatActivity {
                 listProductores.clear();
                 record.clear();
                 UID.clear();
-
+                try {
+                    date = dateFormat.parse(fecha);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                     AgendaVisitas ag = objSnaptshot.getValue(AgendaVisitas.class);
-
-                    UID.add(objSnaptshot.getKey());
-                    listHuertas.add( ag.getHuerta() );
-                    listProductores.add(ag.getProductor());
-                    record.add(ag.getRecord());
+                    try {
+                        date2 = dateFormat.parse(ag.getFecha());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    if(date.equals(date2) || date.before(date2) ){
+                        UID.add(objSnaptshot.getKey());
+                        listHuertas.add( ag.getHuerta() );
+                        listProductores.add(ag.getProductor());
+                        record.add(ag.getRecord());
+                        fechaArray.add(ag.getFecha());
+                    }
                     //Toast.makeText(MainActivity.this, "Hubo un cambio", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -149,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
         UID = new ArrayList<String>();
         datosF = new ArrayList<>();
         btnubir = findViewById(R.id.imageButton);
-        dialog = new ProgressDialog(MainActivity.this);
         imgRUTA = new ArrayList<>();
         ref = new ArrayList<>();
         namePhoto = new ArrayList<>();
@@ -157,6 +174,11 @@ public class MainActivity extends AppCompatActivity {
         cardView = findViewById(R.id.cardSubir);
         progres = findViewById(R.id.txtProgress2);
         pendientes = findViewById(R.id.txtPendiente);
+        fechaArray = new ArrayList<String>();
+        fecha = getIntent().getExtras().getString("FECHA");
+        date = new Date();
+        date2 = new Date();
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
     }
 
     public void CheckData(View v){
@@ -167,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("Productores", listProductores );
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
+            intent.putStringArrayListExtra("FECHA", fechaArray );
             intent.putExtra("IMEI", myIMEI );
             startActivity(intent);
             //finish();
@@ -309,7 +332,6 @@ public class MainActivity extends AppCompatActivity {
                     //Si hay error en la carga de datos en quickBase, los datos los mandamos a Hostinger
                     if (resultado.equals("No error")) {
                         Log.d("Mensaje del Servidor", resultado);
-                        dialog.hide();
                         try {
 
                         } catch (Exception e) {
@@ -324,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
                     /**En caso que respuesta sea null es por que fue error de http como los son;
                      * 404,500,403 etc*/
                     Log.d("Error del Servidor ", result);
-                    dialog.hide();
                 }
             }
         }

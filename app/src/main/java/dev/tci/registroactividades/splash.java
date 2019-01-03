@@ -13,10 +13,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class splash extends AppCompatActivity {
+    String fecha;
+    SimpleDateFormat dateFormat;
     Principal p = Principal.getInstance();
+    Date date;
     private static final String[] PERMISOS = {
             Manifest.permission.READ_PHONE_STATE,
             Manifest.permission.ACCESS_FINE_LOCATION,
@@ -34,7 +41,12 @@ public class splash extends AppCompatActivity {
             ActivityCompat.requestPermissions(splash.this, PERMISOS, REQUEST_CODE);
         }
         super.onCreate(savedInstanceState);
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        date = new Date();
+        fecha = dateFormat.format(date);
+
         setContentView(R.layout.content_splash);
+
         start();
         fullscreen();
         p.InicializarFirebase();
@@ -44,7 +56,9 @@ public class splash extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    startActivity(new Intent(splash.this, MainActivity.class));
+                    Intent intent = new Intent(splash.this, MainActivity.class);
+                    intent.putExtra("FECHA", fecha );
+                    startActivity(intent);
                     finish();
                 }catch (Exception e){
                     Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
