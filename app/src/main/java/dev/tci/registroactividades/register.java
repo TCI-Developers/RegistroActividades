@@ -506,7 +506,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-                Uri photoURI = FileProvider.getUriForFile(this, "dev.tci.registroactividades", photoFile);
+                Uri photoURI = FileProvider.getUriForFile(this, "com.tci.consultoria.registroactividades", photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                 startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
             }

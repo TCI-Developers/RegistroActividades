@@ -28,7 +28,7 @@
         android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="dev.tci.registroactividades"
+            android:authorities="com.tci.consultoria.registroactividades"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

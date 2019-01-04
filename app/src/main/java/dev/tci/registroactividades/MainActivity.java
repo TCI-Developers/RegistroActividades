@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "La fotografia ya no se encuentra en el celular", Toast.LENGTH_LONG).show();
             }
 
-
+        cardView.setEnabled(false);
             uploadTask = path.putBytes(data);
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -431,6 +431,7 @@ public class MainActivity extends AppCompatActivity {
                             if (!task.isSuccessful())
                             {
                                 Toast.makeText(MainActivity.this,"Error en obtener ur1:"+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                cardView.setEnabled(true);
                                 throw task.getException();
                             }else{
                                 downloadImageUrl = p.storageRef.child("RV/"+namePhoto.get(pos)).getDownloadUrl().toString();
@@ -491,6 +492,7 @@ public class MainActivity extends AppCompatActivity {
                                 progres.setVisibility(View.GONE);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
+                                cardView.setEnabled(true);
                             }
                         }
                     });
@@ -500,6 +502,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onFailure(@NonNull Exception e) {
                     Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_SHORT).show();
                     Log.e("Error: ", e.toString());
+                    cardView.setEnabled(true);
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
