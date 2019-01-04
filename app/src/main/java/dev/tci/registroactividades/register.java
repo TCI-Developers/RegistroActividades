@@ -286,26 +286,16 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setStatus(0);
         f.setSubido(0);
 
-        p.databaseReference
-        .child("Acopio")
-        .child("RV")
-        .child("UsuariosAcopio")
-        .child(imei)
-        .child("agendavisitas")
-        .child(UID)
-        .child("formatocalidad")
-        .child(identificador)
-        .setValue(f).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-               // Toast.makeText(getApplicationContext(), "Succes: Respaldo correcto", Toast.LENGTH_LONG).show();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-               // Toast.makeText(getApplicationContext(), "Complete: Respaldo correcto", Toast.LENGTH_LONG).show();
-            }
-        });
+            p.databaseReference
+            .child("Acopio")
+            .child("RV")
+            .child("UsuariosAcopio")
+            .child(imei)
+            .child("agendavisitas")
+            .child(UID)
+            .child("formatocalidad")
+            .child(identificador)
+            .setValue(f);
 
         if(connected){
             subirFirebase();
@@ -650,7 +640,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             downloadImageUrl = task.getResult().toString();
 
                             f.setUrl(downloadImageUrl);
-                            f.setStatus(1);
+                            f.setStatus(0);
                             p.databaseReference
                             .child("Acopio")
                             .child("RV")

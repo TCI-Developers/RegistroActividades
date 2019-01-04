@@ -8,8 +8,17 @@ public class AgendaVisitas {
     private String productor;
     private String record;
     private long telefono;
+    private int status;
 
     public AgendaVisitas() {
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public String getFecha() {

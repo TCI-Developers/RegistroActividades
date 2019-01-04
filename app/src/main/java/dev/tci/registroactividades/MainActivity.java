@@ -157,10 +157,33 @@ public class MainActivity extends AppCompatActivity {
                      ag = objSnaptshot.getValue(AgendaVisitas.class);
                     if(objSnaptshot.getKey().equals("no programada")){
                         UID.add(objSnaptshot.getKey());
-                        record.add("0");
-                        listHuertas.add( "No programada" );
-                        listProductores.add("No programada");
-                        fechaArray.add(ag.getFecha());
+                        p.databaseReference
+                                .child("Acopio")
+                                .child("RV")
+                                .child("UsuariosAcopio")
+                                .child(getIMEI())
+                                .child("agendavisitas")
+                                .child("no programada")
+                                .child("formatocalidad")
+                                .addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                                            f = objSnaptshot.getValue(FormatoCalidad.class);
+                                            if(f.getSubido() < 1){
+                                                record.add("0");
+                                                listHuertas.add( "No programada" );
+                                                listProductores.add("");
+                                                fechaArray.add(ag.getFecha());
+                                            }
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
                     }else{
                         try {
                             date2 = dateFormat.parse(ag.getFecha());
@@ -392,7 +415,7 @@ public class MainActivity extends AppCompatActivity {
                 rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 50, baos);
                 data = baos.toByteArray();
             }catch (Exception e){
-                Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "La fotografia ya no se encuentra en el celular", Toast.LENGTH_LONG).show();
             }
 
 
