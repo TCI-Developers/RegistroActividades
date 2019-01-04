@@ -277,10 +277,10 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_123=" +datosF.get(pos).getViruela()+//Viruela
             "&_fid_124=" +datosF.get(pos).getVaricela()+//Varicela
             "&_fid_108=" +getIMEI()+//imei
-            "&_fid_109=" +datosF.get(pos).getProductor()+//record
+            "&_fid_109=" +datosF.get(pos).getRecord()+//record
             "&_fid_110=" +datosF.get(pos).getNcuadrillas()+//numero cuadrillas
             "&_fid_111=" +datosF.get(pos).getConcepto()+//concepto bitacora
-            "&_fid_7=" +datosF.get(pos).getPositionMun()+//campobitacora*******************************************************************
+            "&_fid_7=" +datosF.get(pos).getCampoBitacora()+//campobitacora*******************************************************************
             "&_fid_87=" +URLEncoder.encode(datosF.get(pos).getUrl()) +//ruta de la imagen
             "&_fid_81=" +datosF.get(pos).getLatitud() +", "+ datosF.get(pos).getLongitud() +//latitud,longitud
             "&_fid_6=" +datosF.get(pos).getFecha()+" "+datosF.get(pos).getHora()+//fecha,hora
@@ -424,6 +424,7 @@ public class MainActivity extends AppCompatActivity {
                                 // Toast.makeText(MainActivity.this, "obtenimos la url de firebase correctamente", Toast.LENGTH_SHORT).show();
                                 datosF.get(pos).setUrl(downloadImageUrl);
                                 final HashMap<String, Object> productMap = new HashMap<>();
+
                                 productMap.put("url", downloadImageUrl);
                                 productMap.put("subido", 2);
 
