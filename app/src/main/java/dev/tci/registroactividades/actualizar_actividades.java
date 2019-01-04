@@ -131,8 +131,8 @@ public class actualizar_actividades extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                            UIDActividades.add(objSnaptshot.getKey());
-                            actividades.add(ag = objSnaptshot.getValue(FormatoCalidad.class));
+                                UIDActividades.add(objSnaptshot.getKey());
+                                actividades.add(ag = objSnaptshot.getValue(FormatoCalidad.class));
                         }
                     }
 

@@ -33,7 +33,7 @@ public class ListaActividades extends AppCompatActivity {
     private Recycler adapter;
     private RecyclerView recyclerView;
     private Huertas h;
-    private ArrayList<String> UID;
+    private ArrayList<String> UID, ref;
     private ArrayList<FormatoCalidad> prueba;
     private String IMEI;
     Principal p = Principal.getInstance();
@@ -64,13 +64,15 @@ public class ListaActividades extends AppCompatActivity {
         final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
         ArrayList<String> fechas = getIntent().getExtras().getStringArrayList("FECHA");
         UID = getIntent().getExtras().getStringArrayList("UID");
+//        ref = getIntent().getExtras().getStringArrayList("ref");
         IMEI = getIntent().getExtras().getString("IMEI");
 
         for(int i=0; i < huertas.size(); i++ ){
             h = new Huertas();
             h.setNombreHuerta(huertas.get(i));
             h.setNombreProductor(productores.get(i));
-            h.setFecha(fechas.get(i));
+            if(fechas.get(i) == null){h.setFecha("");}
+            else{h.setFecha(fechas.get(i));}
             listadoHuertas.add(h);
         }
 
@@ -80,7 +82,6 @@ public class ListaActividades extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), register.class);
                 intent.putExtra("record", recordID.get(position));
                 intent.putExtra("UID", UID.get(position));
-                //Toast.makeText(getApplicationContext(),"UID: "+UID.get(position) + "\nIMEI: " + IMEI, Toast.LENGTH_LONG).show();
                 startActivity(intent);
                 finish();
             }
@@ -90,11 +91,12 @@ public class ListaActividades extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), actualizar_actividades.class);
                 intent.putExtra("UID", UID.get(position));
                 intent.putExtra("IME", IMEI);
+//                intent.putExtra("ref", ref.get(position));
                 startActivity(intent);
                 finish();
             }
         });
-        adapter.notifyDataSetChanged();
+
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -103,6 +105,7 @@ public class ListaActividades extends AppCompatActivity {
     public void Init(){
         listadoHuertas = new ArrayList<>();
         UID = new ArrayList<String>();
+        ref = new ArrayList<String>();
         prueba = new ArrayList<>();
         recyclerView = findViewById(R.id.recylcer_actividades);
     }

@@ -19,11 +19,29 @@
             android:orientation="vertical"
             android:padding="10dp">
 
+            <ProgressBar
+                android:id="@+id/progSubida"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtProgress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:visibility="gone" />
+
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                app:cardCornerRadius="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
                 <LinearLayout
@@ -59,7 +77,7 @@
                             android:layout_marginTop="5dp"
                             android:background="@drawable/boxtext1"
                             android:hint="@string/productor"
-                            android:inputType="textCapCharacters"
+                            android:inputType="textCapSentences"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </android.support.design.widget.TextInputLayout>
@@ -74,7 +92,7 @@
                             android:layout_height="wrap_content"
                             android:background="@drawable/boxtext1"
                             android:hint="@string/tel_fono"
-                            android:inputType="phone"
+                            android:inputType="number"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </android.support.design.widget.TextInputLayout>
@@ -123,7 +141,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#fff"
-                app:cardCornerRadius="4dp"
+                android:focusable="true"
+                android:foreground="?attr/selectableItemBackground"
+                app:cardElevation="4dp"
                 app:cardUseCompatPadding="true">
 
                 <LinearLayout
@@ -149,6 +169,7 @@
                             android:hint="@string/_32"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -163,6 +184,7 @@
                             android:hint="@string/_36"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -177,6 +199,7 @@
                             android:hint="@string/_40"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -197,6 +220,7 @@
                             android:hint="@string/_48"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -211,6 +235,7 @@
                             android:hint="@string/_60"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -225,6 +250,7 @@
                             android:hint="@string/_70"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -245,6 +271,7 @@
                             android:hint="@string/_84"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -259,6 +286,7 @@
                             android:hint="@string/_96"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
 
@@ -273,6 +301,7 @@
                             android:hint="@string/can"
                             android:inputType="number"
                             android:maxWidth="110dp"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -291,6 +320,7 @@
                             android:ems="10"
                             android:hint="@string/lac"
                             android:inputType="number"
+                            android:maxLength="3"
                             android:paddingLeft="8dp"
                             android:textSize="12sp" />
                     </LinearLayout>
@@ -319,7 +349,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#fff"
-                    app:cardCornerRadius="4dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardElevation="4dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -334,16 +366,17 @@
                             android:orientation="horizontal">
 
                             <EditText
-                                android:id="@+id/txtDanoBano"
+                                android:id="@+id/txtDanoRona"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:hint="@string/ba_o"
+                                android:hint="@string/ro_a"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -358,22 +391,25 @@
                                 android:hint="@string/rosado"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
                             <EditText
-                                android:id="@+id/txtDanoRona"
+                                android:id="@+id/txtDanoBano"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_margin="3dp"
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:hint="@string/ro_a"
+                                android:hint="@string/ba_o"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
+
                         </LinearLayout>
 
                         <LinearLayout
@@ -392,6 +428,7 @@
                                 android:hint="@string/trips"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -406,6 +443,7 @@
                                 android:hint="@string/quemado"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -420,6 +458,7 @@
                                 android:hint="@string/comedor"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -440,6 +479,7 @@
                                 android:hint="@string/viruela"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -454,6 +494,7 @@
                                 android:hint="@string/varicela"
                                 android:inputType="number"
                                 android:maxWidth="110dp"
+                                android:maxLength="3"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
                         </LinearLayout>
@@ -470,7 +511,9 @@
                 <android.support.v7.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:cardCornerRadius="4dp"
+                    android:focusable="true"
+                    android:foreground="?attr/selectableItemBackground"
+                    app:cardElevation="4dp"
                     app:cardUseCompatPadding="true">
 
                     <LinearLayout
@@ -509,7 +552,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:inputType="textPersonName"
+                                android:inputType="number"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />
 
@@ -521,7 +564,7 @@
                             android:orientation="horizontal">
 
                             <Spinner
-                                android:id="@+id/spinner"
+                                android:id="@+id/spnPLAG"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="8dp"
@@ -531,12 +574,11 @@
                                 android:layout_marginRight="8dp"
                                 android:layout_marginBottom="8dp"
                                 android:layout_weight="1"
-                                android:alpha="0.5"
                                 android:entries="@array/bitacora"
                                 android:popupBackground="@color/colorPrimary" />
 
                             <EditText
-                                android:id="@+id/editText"
+                                android:id="@+id/txtConcepto"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:layout_marginStart="8dp"
@@ -548,7 +590,7 @@
                                 android:layout_weight="1"
                                 android:background="@drawable/boxtext1"
                                 android:ems="10"
-                                android:inputType="textPersonName"
+                                android:inputType="number"
                                 android:paddingLeft="8dp" />
                         </LinearLayout>
 
@@ -559,7 +601,7 @@
             <LinearLayout
                 android:id="@+id/lyPhoto"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="228dp"
                 android:layout_marginTop="8dp"
                 android:orientation="vertical">
 
@@ -567,8 +609,7 @@
                     android:id="@+id/imgPhoto"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:onClick="viewImagen"
-                    app:srcCompat="@mipmap/ic_launcher_round" />
+                    android:onClick="viewImagen" />
             </LinearLayout>
 
 

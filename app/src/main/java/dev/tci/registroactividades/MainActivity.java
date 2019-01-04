@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> record;
     private ArrayList<String> UID;
     private ArrayList<String> ref;
+    private ArrayList<String> ref2;
     private ArrayList<String> namePhoto;
     private ArrayList<String> fechaArray;
     private CardView cardView;
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public static boolean connected;
     private TextView progres, pendientes;
     private SwipeRefreshLayout refreshLayout;
+    private AgendaVisitas ag;
 
     @Override
     protected void onStart() {
@@ -152,20 +154,27 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
                 for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                    AgendaVisitas ag = objSnaptshot.getValue(AgendaVisitas.class);
-                    try {
-                        date2 = dateFormat.parse(ag.getFecha());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    if(date.equals(date2) || date.before(date2) ){
+                     ag = objSnaptshot.getValue(AgendaVisitas.class);
+                    if(objSnaptshot.getKey().equals("no programada")){
                         UID.add(objSnaptshot.getKey());
-                        listHuertas.add( ag.getHuerta() );
-                        listProductores.add(ag.getProductor());
-                        record.add(ag.getRecord());
+                        record.add("0");
+                        listHuertas.add( "No programada" );
+                        listProductores.add("No programada");
                         fechaArray.add(ag.getFecha());
+                    }else{
+                        try {
+                            date2 = dateFormat.parse(ag.getFecha());
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if(date.equals(date2) || date.before(date2) ){
+                            UID.add(objSnaptshot.getKey());
+                            listHuertas.add( ag.getHuerta() );
+                            listProductores.add(ag.getProductor());
+                            record.add(ag.getRecord());
+                            fechaArray.add(ag.getFecha());
+                        }
                     }
-                    //Toast.makeText(MainActivity.this, "Hubo un cambio", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -185,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         btnubir = findViewById(R.id.imageButton);
         imgRUTA = new ArrayList<>();
         ref = new ArrayList<>();
+        ref2 = new ArrayList<>();
         namePhoto = new ArrayList<>();
         bar = findViewById(R.id.progSubida2);
         cardView = findViewById(R.id.cardSubir);
@@ -206,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("Productores", listProductores );
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
+//            intent.putStringArrayListExtra("ref", ref2 );
             intent.putStringArrayListExtra("FECHA", fechaArray );
             intent.putExtra("IMEI", myIMEI );
             startActivity(intent);
@@ -289,6 +300,7 @@ public class MainActivity extends AppCompatActivity {
             imgRUTA.clear();
             namePhoto.clear();
             ref.clear();
+            ref2.clear();
 
             f = new FormatoCalidad();
                     p.databaseReference
@@ -304,6 +316,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
                                 f = objSnaptshot.getValue(FormatoCalidad.class);
+                                ref2.add(objSnaptshot.getKey());
                                     if(f.getSubido() < 1){
                                         ref.add(objSnaptshot.getKey());
                                         datosF.add(f);
@@ -321,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                     });
             }
     }
-///////////////////////////carga de datos a quickbase
+
     class CargarDatos extends AsyncTask<String, Void, String> {
 
         @Override
