@@ -31,7 +31,7 @@
         <item>SELEC. MUNICIPIO</item>
         <item>ACUITZIO</item>
         <item>APATZINGAN</item>
-        <item>ARIO</item>
+        <item>ARIO DE ROSALES</item>
         <item>CHARAPAN</item>
         <item>COTIJA DE LA PAZ</item>
         <item>ERONGARICUARO</item>
@@ -70,7 +70,7 @@
     <string-array name="bitacora">
         <item>SELEC. OPCIÓN</item>
         <item>BITACIRA PLAGUICIDAS</item>
-        <item>ANÁLISIS PLAGUICIDAS</item>
+        <item>ANALISIS PLAGUICIDAS</item>
         <item>CERTIFICACIONES</item>
     </string-array>
 
