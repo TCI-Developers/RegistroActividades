@@ -187,8 +187,8 @@ public class MainActivity extends AppCompatActivity {
                     }else{
                         try {
                             date2 = dateFormat.parse(ag.getFecha());
-                        } catch (ParseException e) {
-                            e.printStackTrace();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "No se ecuentra la fecha o no tiene el formato correcto en alguna actividad", Toast.LENGTH_LONG).show();
                         }
                         if(date.equals(date2) || date.before(date2) ){
                             UID.add(objSnaptshot.getKey());
@@ -227,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
         fecha = getIntent().getExtras().getString("FECHA");
         date = new Date();
         date2 = new Date();
-        dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
         refreshLayout = findViewById(R.id.swipeLoad);
     }
 
@@ -531,5 +531,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

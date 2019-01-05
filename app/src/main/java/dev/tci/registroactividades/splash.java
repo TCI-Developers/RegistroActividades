@@ -49,7 +49,11 @@ public class splash extends AppCompatActivity {
 
         start();
         fullscreen();
-        p.InicializarFirebase();
+        try{
+            p.InicializarFirebase();
+        }catch (Exception e){
+
+        }
     }
     public void start(){
         new Handler().postDelayed(new Runnable() {

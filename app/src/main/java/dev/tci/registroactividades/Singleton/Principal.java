@@ -34,6 +34,7 @@ public class Principal extends AppCompatActivity {
             FirebaseApp.initializeApp(getInstance());
             firebaseDatabase = FirebaseDatabase.getInstance();
             firebaseDatabase.setPersistenceEnabled(true);
+
             databaseReference = firebaseDatabase.getReference();
             storageRef = FirebaseStorage.getInstance().getReference();
 

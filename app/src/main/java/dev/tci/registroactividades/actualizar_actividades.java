@@ -51,7 +51,7 @@ public class actualizar_actividades extends AppCompatActivity {
 
         Init();
 
-        listarMuestreos(UID, IMEI);
+        listarMuestreos();
 
         adapter = new RecyclerUp(actividades, new RecyclerViewClick() {
             @Override
@@ -118,7 +118,7 @@ public class actualizar_actividades extends AppCompatActivity {
         UIDActividades = new ArrayList<>();
     }
 
-    public void listarMuestreos(String uid, String imei){
+    public void listarMuestreos(){
                 p.databaseReference
                 .child("Acopio")
                 .child("RV")
