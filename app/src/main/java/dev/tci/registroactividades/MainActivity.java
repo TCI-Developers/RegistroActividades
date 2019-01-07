@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
     Principal p = Principal.getInstance();
     private FormatoCalidad f;
     private ArrayList<FormatoCalidad> datosF;
-    ImageButton btnubir;
+    private ImageButton btnubir;
     public static ArrayList<String> imgRUTA;
     private String downloadImageUrl;
     private UploadTask uploadTask = null;
@@ -241,6 +241,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("UID", UID );
 //            intent.putStringArrayListExtra("ref", ref2 );
             intent.putStringArrayListExtra("FECHA", fechaArray );
+            intent.putExtra("FECHA1", fecha );
             intent.putExtra("IMEI", myIMEI );
             startActivity(intent);
             //finish();
@@ -376,7 +377,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected void onPostExecute(String result) {
 
-                String resultado = ParseXmlData.ParseXmlData(result);
+            String resultado = ParseXmlData.ParseXmlData(result);
 
             /*Si la variable resultado es distinto a null entonces es por que quickBase
             nos envio una respuesta que xml con mensaje de exito o de algun error generado en la consulta*/

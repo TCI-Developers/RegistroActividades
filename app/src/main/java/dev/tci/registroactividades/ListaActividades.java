@@ -35,7 +35,7 @@ public class ListaActividades extends AppCompatActivity {
     private Huertas h;
     private ArrayList<String> UID, ref;
     private ArrayList<FormatoCalidad> prueba;
-    private String IMEI;
+    private String IMEI, fecha1;
     Principal p = Principal.getInstance();
     FormatoCalidad ag = null;
 
@@ -91,6 +91,7 @@ public class ListaActividades extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), actualizar_actividades.class);
                 intent.putExtra("UID", UID.get(position));
                 intent.putExtra("IME", IMEI);
+                intent.putExtra("FECHA", fecha1);
 //                intent.putExtra("ref", ref.get(position));
                 startActivity(intent);
                 finish();
@@ -108,5 +109,6 @@ public class ListaActividades extends AppCompatActivity {
         ref = new ArrayList<String>();
         prueba = new ArrayList<>();
         recyclerView = findViewById(R.id.recylcer_actividades);
+        fecha1 = getIntent().getExtras().getString("FECHA1");
     }
 }

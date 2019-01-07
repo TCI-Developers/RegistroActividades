@@ -18,10 +18,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 import dev.tci.registroactividades.Adapter.Recycler;
 import dev.tci.registroactividades.Adapter.RecyclerUp;
+import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Singleton.Principal;
 
@@ -40,6 +45,9 @@ public class actualizar_actividades extends AppCompatActivity {
     private EditText huertaUP, productorUP, telefonoUP, toneladasUP;
     private Spinner municipioUP;
     FormatoCalidad f = new FormatoCalidad();
+    private Date date, date2;
+    private SimpleDateFormat dateFormat;
+    private String fecha = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +114,7 @@ public class actualizar_actividades extends AppCompatActivity {
     private void Init() {
         IMEI = getIntent().getExtras().getString("IME");
         UID = getIntent().getExtras().getString("UID");
+        fecha = getIntent().getExtras().getString("FECHA");
 
         huertaUP = findViewById(R.id.txtHuertaUp);
         productorUP = findViewById(R.id.txtProductorUp);
@@ -116,6 +125,10 @@ public class actualizar_actividades extends AppCompatActivity {
         recyclerView = findViewById(R.id.recycler_update);
         actividades = new ArrayList<>();
         UIDActividades = new ArrayList<>();
+
+        date = new Date();
+        date2 = new Date();
+        dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
     }
 
     public void listarMuestreos(){
@@ -130,9 +143,22 @@ public class actualizar_actividades extends AppCompatActivity {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        try {
+                            date = dateFormat.parse(fecha);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
                         for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                            f = objSnaptshot.getValue(FormatoCalidad.class);
+                            try {
+                                date2 = dateFormat.parse(f.getFecha());
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(), "No se ecuentra la fecha o no tiene el formato correcto en alguna actividad", Toast.LENGTH_LONG).show();
+                            }
+                            if(date.equals(date2) || date.before(date2) ){
                                 UIDActividades.add(objSnaptshot.getKey());
-                                actividades.add(ag = objSnaptshot.getValue(FormatoCalidad.class));
+                                actividades.add(f = objSnaptshot.getValue(FormatoCalidad.class));
+                            }
                         }
                     }
 
