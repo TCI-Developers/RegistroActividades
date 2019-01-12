@@ -16,6 +16,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
@@ -29,6 +30,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -103,6 +106,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     ProgressBar bar;
     ObjectAnimator anim;
     TextView progres;
+    private CheckBox chekBanio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +121,19 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         lyPhoto.setVisibility(View.GONE);
         record = getIntent().getExtras().getString("record");
+
+        chekBanio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    danoBANO.setVisibility(View.VISIBLE);
+                    danoBANO.setHint("Baño");
+                }else{
+                    danoBANO.setVisibility(View.INVISIBLE);
+                    danoBANO.setHint("");
+                }
+            }
+        });
 
         //Toast.makeText(getApplicationContext(), UID, Toast.LENGTH_LONG).show();
         calLAC.addTextChangedListener(new TextWatcher() {
@@ -342,6 +359,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         imgRUTA = new ArrayList<>();
         bar = findViewById(R.id.progSubida);
         progres = findViewById(R.id.txtProgress);
+        chekBanio = findViewById(R.id.checkBox);
     }
 
     public boolean isValidateCalibres() {

@@ -69,13 +69,11 @@
 
     <string-array name="bitacora">
         <item>SELEC. OPCIÓN</item>
-        <item>BITACIRA PLAGUICIDAS</item>
-        <item>ANALISIS PLAGUICIDAS</item>
-        <item>CERTIFICACIONES</item>
+        <item>FOTOGRAFIA</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actividad_no_programada">actividad \n no programada</string>
-    <string name="version">V 1.0.4</string>
+    <string name="version">V 1.0.5</string>
 </resources>

@@ -193,9 +193,9 @@ public class actualizar_actividades extends AppCompatActivity {
 
     private void llenadoClase(int pos){
         if (actividades.get(pos).getUrl().isEmpty() ) {
-            f.setStatus(0);
+            f.setSubido(0);
         }else{
-            f.setStatus(1);
+            f.setSubido(1);
         }
         f.setBano(actividades.get(pos).getBano());
         f.setComedor(actividades.get(pos).getComedor());
