@@ -40,8 +40,44 @@ public class FormatoCalidad implements Serializable {
     private String record;
     private int status;
     private int subido;
+    private String contacto;
+    private long contacTele;
+    private int noComedor;
+    private boolean checkBanio;
 
     public FormatoCalidad() {
+    }
+
+    public boolean isCheckBanio() {
+        return checkBanio;
+    }
+
+    public void setCheckBanio(boolean checkBanio) {
+        this.checkBanio = checkBanio;
+    }
+
+    public int getNoComedor() {
+        return noComedor;
+    }
+
+    public void setNoComedor(int noComedor) {
+        this.noComedor = noComedor;
+    }
+
+    public String getContacto() {
+        return contacto;
+    }
+
+    public void setContacto(String contacto) {
+        this.contacto = contacto;
+    }
+
+    public long getContacTele() {
+        return contacTele;
+    }
+
+    public void setContacTele(long contacTele) {
+        this.contacTele = contacTele;
     }
 
     public int getSubido() {

@@ -70,7 +70,7 @@ import static dev.tci.registroactividades.MainActivity.imgRUTA;
 public class register extends AppCompatActivity implements imageFragment.OnImageFragmentListener {
 
     private LinearLayout danoLaytou, lyPhoto;
-    private EditText huerta, productor, telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
+    private EditText huerta, productor, contacto, contacTele ,telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
             danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto;
     private ImageView imgPhoto;
     private int sumaCalibres = 0;
@@ -81,7 +81,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     TelephonyManager mTelephony;
     String myIMEI = "";
-    private Spinner spnMun, spnCONCEPT;
+    private Spinner spnMun, spnCONCEPT, spnComedo;
     Principal p;
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -225,9 +225,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if (!danoBANO.getText().toString().isEmpty()) {
             f.setBano(Integer.valueOf(danoBANO.getText().toString()));
         }
-        if (!danoCOMEDOR.getText().toString().isEmpty()) {
-            f.setComedor(danoCOMEDOR.getText().toString());
-        }
+
         if (!NoCuadrillas.getText().toString().isEmpty()) {
             f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));
         }
@@ -235,6 +233,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setHuerta(huerta.getText().toString());
         f.setProductor(productor.getText().toString());
         f.setTelefono(Long.valueOf(telefono.getText().toString()));
+        f.setContacto(contacto.getText().toString());
+        f.setContacTele(Long.valueOf(contacTele.getText().toString()));
         f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
         f.setMunicipio(spnMun.getSelectedItem().toString());
 
@@ -296,7 +296,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setUrl("");
         f.setBaseurl(mCurrentPhotoPath);
         f.setPositionMun(spnMun.getSelectedItemPosition());
+        f.setNoComedor(spnComedo.getSelectedItemPosition());
+        f.setCheckBanio(chekBanio.isChecked());
 
+        f.setComedor(spnComedo.getSelectedItem().toString());
         f.setConcepto(spnCONCEPT.getSelectedItem().toString());
         f.setCampoBitacora(concepto.getText().toString());
         f.setRecord(record);
@@ -325,6 +328,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     public void Init() {
         huerta = findViewById(R.id.txtHuerta);
         productor = findViewById(R.id.txtProductor);
+        contacto = findViewById(R.id.txtContacto);
+        contacTele = findViewById(R.id.txtTelefonoContacto);
         telefono = findViewById(R.id.txtTelefono);
         toneladas_aprox = findViewById(R.id.txtToneladas);
         cal32 = findViewById(R.id.txtCal32);
@@ -360,6 +365,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         bar = findViewById(R.id.progSubida);
         progres = findViewById(R.id.txtProgress);
         chekBanio = findViewById(R.id.checkBox);
+        spnComedo = findViewById(R.id.spnComedor);
     }
 
     public boolean isValidateCalibres() {
@@ -420,20 +426,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             sumaDano += Integer.valueOf(danoROSADO.getText().toString());
         }
 
-        if (!danoBANO.getText().toString().isEmpty()) {
-            sumaDano += Integer.valueOf(danoBANO.getText().toString());
-        }
-
         if (!danoTRIPS.getText().toString().isEmpty()) {
             sumaDano += Integer.valueOf(danoTRIPS.getText().toString());
         }
 
         if (!danoQUEMADO.getText().toString().isEmpty()) {
             sumaDano += Integer.valueOf(danoQUEMADO.getText().toString());
-        }
-
-        if (!danoCOMEDOR.getText().toString().isEmpty()) {
-            sumaDano += Integer.valueOf(danoCOMEDOR.getText().toString());
         }
 
         if (!danoVIRUELA.getText().toString().isEmpty()) {
@@ -466,7 +464,17 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                         if (spnMun.getSelectedItemPosition() < 1) {
                             Toast.makeText(getApplicationContext(), "Selecciona un municipio por favor.", Toast.LENGTH_LONG).show();
                         } else {
-                            return true;
+                            if (spnComedo.getSelectedItemPosition() < 1) {
+                                Toast.makeText(getApplicationContext(), "Selecciona una opción de comedor por favor.", Toast.LENGTH_LONG).show();
+                            }else{
+                                if (chekBanio.isChecked()) {
+                                    if(danoBANO.getText().toString().isEmpty()){danoBANO.setError("Es requerido");}else{
+                                        return true;
+                                    }
+                                }else{
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }

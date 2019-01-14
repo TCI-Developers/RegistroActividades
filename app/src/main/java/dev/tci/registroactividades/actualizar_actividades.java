@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,12 +44,13 @@ public class actualizar_actividades extends AppCompatActivity {
     int posT = 0;
     boolean ban = false;
     private ArrayList<String> UIDActividades;
-    private EditText huertaUP, productorUP, telefonoUP, toneladasUP;
-    private Spinner municipioUP;
+    private EditText huertaUP, productorUP, telefonoUP, toneladasUP, contactoUP, contacTelUP, danoBANO;
+    private Spinner municipioUP, comedorUP;
     FormatoCalidad f = new FormatoCalidad();
     private Date date, date2;
     private SimpleDateFormat dateFormat;
     private String fecha = "";
+    private CheckBox chekBanio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,19 @@ public class actualizar_actividades extends AppCompatActivity {
 
         Init();
 
+        chekBanio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(isChecked){
+                    danoBANO.setVisibility(View.VISIBLE);
+                    danoBANO.setHint("Baño");
+                }else{
+                    danoBANO.setVisibility(View.INVISIBLE);
+                    danoBANO.setHint("");
+                }
+            }
+        });
+
         listarMuestreos();
 
         adapter = new RecyclerUp(actividades, new RecyclerViewClick() {
@@ -69,6 +85,12 @@ public class actualizar_actividades extends AppCompatActivity {
                 telefonoUP.setText(String.valueOf(actividades.get(position).getTelefono()));
                 toneladasUP.setText(String.valueOf(actividades.get(position).getTon_prox()));
                 municipioUP.setSelection(actividades.get(position).getPositionMun());
+                comedorUP.setSelection(actividades.get(position).getNoComedor());
+                contactoUP.setText(actividades.get(position).getContacto());
+                contacTelUP.setText(String.valueOf(actividades.get(position).getContacTele()));
+                chekBanio.setChecked(actividades.get(position).isCheckBanio());
+                danoBANO.setText(String.valueOf(actividades.get(position).getBano()));
+
                 llenadoClase(position);
                 posT = position;
                 ban = true;
@@ -121,6 +143,11 @@ public class actualizar_actividades extends AppCompatActivity {
         telefonoUP = findViewById(R.id.txtTelefonoUp);
         toneladasUP = findViewById(R.id.txtToneladasUp);
         municipioUP = findViewById(R.id.spnMunicipioUp);
+        comedorUP = findViewById(R.id.spnComedor);
+        contactoUP = findViewById(R.id.txtContactoUp);
+        contacTelUP = findViewById(R.id.txtTelefonoContactoUp);
+        danoBANO = findViewById(R.id.txtDanoBanoUP);
+        chekBanio = findViewById(R.id.checkBoxUP);
 
         recyclerView = findViewById(R.id.recycler_update);
         actividades = new ArrayList<>();
@@ -175,7 +202,12 @@ public class actualizar_actividades extends AppCompatActivity {
         f.setTelefono(Long.valueOf(telefonoUP.getText().toString()));
         f.setTon_prox(Long.valueOf(toneladasUP.getText().toString()));
         f.setMunicipio(municipioUP.getSelectedItem().toString());
+        f.setNoComedor(comedorUP.getSelectedItemPosition());
         f.setPositionMun(municipioUP.getSelectedItemPosition());
+        f.setCheckBanio(chekBanio.isChecked());
+        if (!danoBANO.getText().toString().isEmpty()) {
+            f.setBano(Integer.valueOf(danoBANO.getText().toString()));
+        }
 
         p.databaseReference
         .child("Acopio")
@@ -192,11 +224,7 @@ public class actualizar_actividades extends AppCompatActivity {
     }
 
     private void llenadoClase(int pos){
-        if (actividades.get(pos).getUrl().isEmpty() ) {
-            f.setSubido(0);
-        }else{
-            f.setSubido(1);
-        }
+        f.setSubido(0);
         f.setBano(actividades.get(pos).getBano());
         f.setComedor(actividades.get(pos).getComedor());
         f.setNcuadrillas(actividades.get(pos).getNcuadrillas());

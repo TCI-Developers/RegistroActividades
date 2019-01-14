@@ -3,7 +3,7 @@
     <string name="action_settings">Settings</string>
     <string name="huerta">Huerta</string>
     <string name="productor">Productor</string>
-    <string name="tel_fono">Teléfono</string>
+    <string name="tel_fono">Teléfono productor</string>
     <string name="toneladas_aprox">Toneladas aprox.</string>
     <string name="calibres">CALIBRES</string>
     <string name="_32">32</string>
@@ -72,8 +72,16 @@
         <item>FOTOGRAFIA</item>
     </string-array>
 
+    <string-array name="comedor">
+        <item>SELEC. OPCIÓN</item>
+        <item>SI</item>
+        <item>NO</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actividad_no_programada">actividad \n no programada</string>
     <string name="version">V 1.0.5</string>
+    <string name="contacto">Contacto</string>
+    <string name="telefono_contacto">Teléfono contacto</string>
 </resources>
