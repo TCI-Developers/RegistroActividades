@@ -347,7 +347,6 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         danoBANO = findViewById(R.id.txtDanoBano);
         danoTRIPS = findViewById(R.id.txtDanoTrips);
         danoQUEMADO = findViewById(R.id.txtDanoQuemado);
-        danoCOMEDOR = findViewById(R.id.txtDanoComedor);
         danoVIRUELA = findViewById(R.id.txtDanoViruela);
         danoVARICELA = findViewById(R.id.txtDanoVaricela);
         danoLaytou = findViewById(R.id.layout_danos);

@@ -26,6 +26,8 @@
     <string name="viruela">VIRUELA</string>
     <string name="varicela">VARICELA</string>
     <string name="guardar">Guardar</string>
+    <string name="help">Para agregar un nuevo registro a una actividad solo da un toque a la actividad. \n\n
+        Si quieres modificar un registro de alguna actividad deja presionado la actividad y se abriran en forma de lista las actividades guardadas.</string>
 
     <string-array name="municipios">
         <item>SELEC. MUNICIPIO</item>
@@ -81,7 +83,8 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actividad_no_programada">actividad \n no programada</string>
-    <string name="version">V 1.0.5</string>
+    <string name="version">V 1.0.7</string>
     <string name="contacto">Contacto</string>
     <string name="telefono_contacto">Teléfono contacto</string>
+    <string name="ayuda">ayuda</string>
 </resources>

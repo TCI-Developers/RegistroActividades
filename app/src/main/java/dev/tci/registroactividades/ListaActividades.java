@@ -8,6 +8,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -23,6 +25,7 @@ import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
 import dev.tci.registroactividades.Adapter.Recycler;
+import dev.tci.registroactividades.FragmentDialog.ayudaFragment;
 import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.FormatoCalidad;
 import dev.tci.registroactividades.Modelos.Huertas;
@@ -110,5 +113,24 @@ public class ListaActividades extends AppCompatActivity {
         prueba = new ArrayList<>();
         recyclerView = findViewById(R.id.recylcer_actividades);
         fecha1 = getIntent().getExtras().getString("FECHA1");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_tutorial, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        switch (id){
+            case R.id.ayuda:
+                ayudaFragment obj = new ayudaFragment();
+                obj.setCancelable(false);
+                obj.show(getSupportFragmentManager(), "ayuda");
+            break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
