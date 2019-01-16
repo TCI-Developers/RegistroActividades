@@ -233,8 +233,19 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setHuerta(huerta.getText().toString());
         f.setProductor(productor.getText().toString());
         f.setTelefono(Long.valueOf(telefono.getText().toString()));
-        f.setContacto(contacto.getText().toString());
-        f.setContacTele(Long.valueOf(contacTele.getText().toString()));
+
+        if(!contacto.getText().toString().isEmpty()){
+            f.setContacto(contacto.getText().toString());
+        }else{
+            f.setContacto("N/A");
+        }
+
+        if(!contacTele.getText().toString().isEmpty()){
+            f.setContacTele(Long.valueOf(contacTele.getText().toString()));
+        }else{
+            f.setContacTele(0);
+        }
+
         f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
         f.setMunicipio(spnMun.getSelectedItem().toString());
 

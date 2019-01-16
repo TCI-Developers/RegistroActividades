@@ -278,8 +278,8 @@ public class MainActivity extends AppCompatActivity {
             RegistroQ = "https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij" +
             "?a=API_AddRecord"+
             "&_fid_112="+datosF.get(pos).getHuerta()+ //Huerta Nombre
-            "&_fid_113="+datosF.get(pos).getProductor() +//productor
-            "&_fid_114=" +datosF.get(pos).getTelefono()+//telefono
+            "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +//productor
+            "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+//telefono
             "&_fid_115=" +datosF.get(pos).getTon_prox()+//toneladas aprox
             "&_fid_116=" +datosF.get(pos).getMunicipio()+//municipio
             "&_fid_18=" +datosF.get(pos).getCal32()+//Calibre 32
