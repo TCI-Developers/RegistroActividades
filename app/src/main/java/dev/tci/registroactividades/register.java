@@ -81,7 +81,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     String hora = java.text.DateFormat.getTimeInstance().format(Calendar.getInstance().getTime());
     TelephonyManager mTelephony;
     String myIMEI = "";
-    private Spinner spnMun, spnCONCEPT, spnComedo;
+    private Spinner spnMun, spnCONCEPT, spnComedo, spnFloracion, spnTipo;
     Principal p;
     String imei;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -189,7 +189,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                         if (calLAC.getText().toString().isEmpty()) calLAC.setText("0");
                         if (Integer.valueOf(calLAC.getText().toString()) > 0) {
                             if (!isValidateDano()) {
-                                Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser 100 \nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser "+calLAC.getText().toString()+"\nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
                             } else {
                                 if (!isValidateCuadrillas()) {
                                     if (lyPhoto.getVisibility() == View.GONE) {
@@ -376,6 +376,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         progres = findViewById(R.id.txtProgress);
         chekBanio = findViewById(R.id.checkBox);
         spnComedo = findViewById(R.id.spnComedor);
+        spnFloracion = findViewById(R.id.spnFloracion);
+        spnTipo = findViewById(R.id.spnTipo);
     }
 
     public boolean isValidateCalibres() {
@@ -452,7 +454,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             sumaDano += Integer.valueOf(danoVARICELA.getText().toString());
         }
 
-        if (sumaDano != 100) {
+        if (sumaDano != Integer.valueOf(calLAC.getText().toString())) {
             return false;
         }
         return true;
@@ -477,12 +479,20 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             if (spnComedo.getSelectedItemPosition() < 1) {
                                 Toast.makeText(getApplicationContext(), "Selecciona una opción de comedor por favor.", Toast.LENGTH_LONG).show();
                             }else{
-                                if (chekBanio.isChecked()) {
-                                    if(danoBANO.getText().toString().isEmpty()){danoBANO.setError("Es requerido");}else{
-                                        return true;
-                                    }
+                                if (spnTipo.getSelectedItemPosition() < 1) {
+                                    Toast.makeText(getApplicationContext(), "Selecciona si es Exportación, Nacional u Organico por favor.", Toast.LENGTH_LONG).show();
                                 }else{
-                                    return true;
+                                    if (spnFloracion.getSelectedItemPosition() < 1) {
+                                        Toast.makeText(getApplicationContext(), "Selecciona la Floración por favor.", Toast.LENGTH_LONG).show();
+                                    }else{
+                                        if (chekBanio.isChecked()) {
+                                            if(danoBANO.getText().toString().isEmpty()){
+                                                danoBANO.setError("Es requerido");
+                                            }
+                                        }else{
+                                            return true;
+                                        }
+                                    }
                                 }
                             }
                         }

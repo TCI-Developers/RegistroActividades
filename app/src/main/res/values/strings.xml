@@ -74,6 +74,20 @@
         <item>FOTOGRAFIA</item>
     </string-array>
 
+    <string-array name="tipoBanda">
+        <item>SELEC. OPCIÓN</item>
+        <item>EXPORTACION</item>
+        <item>NACIONAL</item>
+        <item>ORGANICO</item>
+    </string-array>
+
+    <string-array name="floracion">
+        <item>SELEC. OPCIÓN</item>
+        <item>LOCA</item>
+        <item>MENDEZ</item>
+        <item>TEMPORAL</item>
+    </string-array>
+
     <string-array name="comedor">
         <item>SELEC. OPCIÓN</item>
         <item>SI</item>
@@ -83,7 +97,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="actividad_no_programada">actividad \n no programada</string>
-    <string name="version">V 1.0.7</string>
+    <string name="version">V 1.0.8</string>
     <string name="contacto">Contacto</string>
     <string name="telefono_contacto">Teléfono contacto</string>
     <string name="ayuda">ayuda</string>
