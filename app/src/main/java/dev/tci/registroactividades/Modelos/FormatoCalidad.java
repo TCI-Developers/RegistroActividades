@@ -44,8 +44,26 @@ public class FormatoCalidad implements Serializable {
     private long contacTele;
     private int noComedor;
     private boolean checkBanio;
+    private String floracion;
+    private String tipoHuerta;
 
     public FormatoCalidad() {
+    }
+
+    public String getFloracion() {
+        return floracion;
+    }
+
+    public void setFloracion(String floracion) {
+        this.floracion = floracion;
+    }
+
+    public String getTipoHuerta() {
+        return tipoHuerta;
+    }
+
+    public void setTipoHuerta(String tipoHuerta) {
+        this.tipoHuerta = tipoHuerta;
     }
 
     public boolean isCheckBanio() {

@@ -308,6 +308,8 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_87=" +URLEncoder.encode(datosF.get(pos).getUrl()) +//ruta de la imagen
             "&_fid_81=" +datosF.get(pos).getLatitud() +", "+ datosF.get(pos).getLongitud() +//latitud,longitud
             "&_fid_6=" +datosF.get(pos).getFecha()+" "+datosF.get(pos).getHora()+//fecha,hora
+            "&_fid_152=" +datosF.get(pos).getFloracion()+//floracion
+            "&_fid_151=" +datosF.get(pos).getTipoHuerta()+//nacional, organico, exportacion
             "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
             "&apptoken=" + token;
             try{

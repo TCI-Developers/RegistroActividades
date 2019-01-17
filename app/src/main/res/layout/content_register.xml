@@ -222,13 +222,22 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:id="@+id/textView11"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Tipo Huerta" />
+
                         <Spinner
                             android:id="@+id/spnTipo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_weight="1"
-                            android:entries="@array/tipoBanda" />
+                            android:entries="@array/tipoBanda"
+                            android:popupBackground="@color/colorPrimary" />
 
                         <TextView
                             android:id="@+id/textView10"
@@ -244,7 +253,8 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_weight="1"
-                            android:entries="@array/floracion" />
+                            android:entries="@array/floracion"
+                            android:popupBackground="@color/colorPrimary" />
 
                     </LinearLayout>
 

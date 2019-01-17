@@ -4,11 +4,14 @@ import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -16,10 +19,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.telephony.TelephonyManager;
@@ -87,8 +92,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     static final int REQUEST_TAKE_PHOTO = 1;
     String namePhoto = fecha + "-" + hora + "-RV.jpg";
     LocationManager manager;
-    private double lati;
-    private double longi;
+    private double lati = 0;
+    private double longi  = 0;
     FormatoCalidad f = new FormatoCalidad();
     ProgressDialog dialog;
     private String identificador;
@@ -107,6 +112,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     ObjectAnimator anim;
     TextView progres;
     private CheckBox chekBanio;
+    AlertDialog alert = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +123,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Init();
 
         lyPhoto.setVisibility(View.GONE);
@@ -316,6 +323,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setRecord(record);
         f.setStatus(0);
         f.setSubido(0);
+
+        f.setFloracion(spnFloracion.getSelectedItem().toString());
+        f.setTipoHuerta(spnTipo.getSelectedItem().toString());
 
             p.databaseReference
             .child("Acopio")
@@ -624,10 +634,35 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         if (leer == PackageManager.PERMISSION_DENIED || leer2 == PackageManager.PERMISSION_DENIED || leer3 == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(register.this, PERMISOS, REQUEST_CODE);
         }
-        manager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
-        Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        actualizar(local);
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 1, locationListener);
+        try{
+            manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                AlertNoGps();
+            }else{
+                Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                actualizar(local);
+                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20 * 1000, 10, locationListener);
+            }
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void AlertNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder .setTitle("GPS")
+                .setMessage("El sistema GPS esta desactivado, para registrar tus actividades es necesario activarlo." +
+                        " Por favor pulsa el botón rojo (Activar) para activarlo.")
+                .setCancelable(false)
+                .setPositiveButton("Activar", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+
+                    }
+                });
+        alert = builder.create();
+        alert.show();
+        alert.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.RED);
     }
 
     private void actualizar(Location local) {
@@ -727,5 +762,11 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         Glide.with(register.this)
                 .load(mCurrentPhotoPath)
                 .into(imgPhoto);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Mi_hubicacion();
     }
 }
