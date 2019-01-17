@@ -204,6 +204,40 @@
 
                         </LinearLayout>
 
+                        <TextView
+                            android:id="@+id/textView12"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Tipo Huerta" />
+
+                        <Spinner
+                            android:id="@+id/spnTipoUP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:entries="@array/tipoBanda"
+                            android:popupBackground="@color/colorPrimary" />
+
+                        <TextView
+                            android:id="@+id/textView13"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:text="Floración" />
+
+                        <Spinner
+                            android:id="@+id/spnFloracionUP"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:entries="@array/floracion"
+                            android:popupBackground="@color/colorPrimary" />
+
                     </LinearLayout>
 
                 </LinearLayout>

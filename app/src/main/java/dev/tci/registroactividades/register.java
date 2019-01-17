@@ -198,7 +198,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                             if (!isValidateDano()) {
                                 Toast.makeText(getApplicationContext(), "La suma de los daños debe de ser "+calLAC.getText().toString()+"\nTu total es de: " + sumaDano, Toast.LENGTH_LONG).show();
                             } else {
-                                if (!isValidateCuadrillas()) {
+                                if (isValidateCuadrillas()) {
                                     if (lyPhoto.getVisibility() == View.GONE) {
                                         Toast.makeText(register.this, "Foto requerida!", Toast.LENGTH_SHORT).show();
                                     } else {
@@ -207,7 +207,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                 }
                             }
                         } else {
-                            if (!isValidateCuadrillas()) {
+                            if (isValidateCuadrillas()) {
                                 if (lyPhoto.getVisibility() == View.GONE) {
                                     Toast.makeText(register.this, "Foto requerida!", Toast.LENGTH_SHORT).show();
                                 } else {
@@ -315,10 +315,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         f.setBaseurl(mCurrentPhotoPath);
         f.setPositionMun(spnMun.getSelectedItemPosition());
         f.setNoComedor(spnComedo.getSelectedItemPosition());
+        f.setNotipoHuerta(spnTipo.getSelectedItemPosition());
+        f.setNofloracion(spnFloracion.getSelectedItemPosition());
         f.setCheckBanio(chekBanio.isChecked());
 
         f.setComedor(spnComedo.getSelectedItem().toString());
-        f.setConcepto(spnCONCEPT.getSelectedItem().toString());
+        f.setConcepto("");
         f.setCampoBitacora(concepto.getText().toString());
         f.setRecord(record);
         f.setStatus(0);
@@ -514,16 +516,14 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     }
 
     public boolean isValidateCuadrillas() {
-        if (NoCuadrillas.getText().toString().isEmpty()) {
-            NoCuadrillas.setError("Es requerido");
-        } else {
-            if (concepto.getText().toString().isEmpty()) {
+        if (!NoCuadrillas.getText().toString().isEmpty()) {
+            if (!concepto.getText().toString().isEmpty()) {
+                return true;
+            }else{
                 concepto.setError("Es requerido");
-            } else {
-                if (spnCONCEPT.getSelectedItemPosition() < 1) {
-                    Toast.makeText(getApplicationContext(), "Selecciona un concepto por favor.", Toast.LENGTH_LONG).show();
-                }
             }
+        } else {
+            NoCuadrillas.setError("Es requerido");
         }
         return false;
     }

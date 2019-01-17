@@ -45,7 +45,7 @@ public class actualizar_actividades extends AppCompatActivity {
     boolean ban = false;
     private ArrayList<String> UIDActividades;
     private EditText huertaUP, productorUP, telefonoUP, toneladasUP, contactoUP, contacTelUP, danoBANO;
-    private Spinner municipioUP, comedorUP;
+    private Spinner municipioUP, comedorUP, spnFloracionUP, spnTipoUP;
     FormatoCalidad f = new FormatoCalidad();
     private Date date, date2;
     private SimpleDateFormat dateFormat;
@@ -90,6 +90,8 @@ public class actualizar_actividades extends AppCompatActivity {
                 contacTelUP.setText(String.valueOf(actividades.get(position).getContacTele()));
                 chekBanio.setChecked(actividades.get(position).isCheckBanio());
                 danoBANO.setText(String.valueOf(actividades.get(position).getBano()));
+                spnFloracionUP.setSelection(actividades.get(position).getNofloracion());
+                spnTipoUP.setSelection(actividades.get(position).getNotipoHuerta());
 
                 llenadoClase(position);
                 posT = position;
@@ -156,6 +158,9 @@ public class actualizar_actividades extends AppCompatActivity {
         date = new Date();
         date2 = new Date();
         dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
+
+        spnFloracionUP = findViewById(R.id.spnFloracionUP);
+        spnTipoUP = findViewById(R.id.spnTipoUP);
     }
 
     public void listarMuestreos(){
@@ -204,10 +209,14 @@ public class actualizar_actividades extends AppCompatActivity {
         f.setMunicipio(municipioUP.getSelectedItem().toString());
         f.setNoComedor(comedorUP.getSelectedItemPosition());
         f.setPositionMun(municipioUP.getSelectedItemPosition());
+        f.setNotipoHuerta(spnTipoUP.getSelectedItemPosition());
+        f.setNofloracion(spnFloracionUP.getSelectedItemPosition());
         f.setCheckBanio(chekBanio.isChecked());
         if (!danoBANO.getText().toString().isEmpty()) {
             f.setBano(Integer.valueOf(danoBANO.getText().toString()));
         }
+        f.setTipoHuerta(spnTipoUP.getSelectedItem().toString());
+        f.setFloracion(spnFloracionUP.getSelectedItem().toString());
 
         p.databaseReference
         .child("Acopio")
