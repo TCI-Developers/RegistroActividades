@@ -500,6 +500,8 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                         if (chekBanio.isChecked()) {
                                             if(danoBANO.getText().toString().isEmpty()){
                                                 danoBANO.setError("Es requerido");
+                                            }else{
+                                                return true;
                                             }
                                         }else{
                                             return true;
