@@ -9,8 +9,17 @@ public class AgendaVisitas {
     private String record;
     private long telefono;
     private int status;
+    private String Contacto;
 
     public AgendaVisitas() {
+    }
+
+    public String getContacto() {
+        return Contacto;
+    }
+
+    public void setContacto(String contacto) {
+        Contacto = contacto;
     }
 
     public int getStatus() {

@@ -30,8 +30,8 @@ public class Recycler extends RecyclerView.Adapter<Recycler.HuertasViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull HuertasViewHolder huertasViewHolder, int i) {
-        huertasViewHolder.nombreHuerta.setText(listRegistro.get(i).getNombreHuerta());
-        huertasViewHolder.nombreProductor.setText(listRegistro.get(i).getNombreProductor() + "  " + listRegistro.get(i).getFecha());
+        huertasViewHolder.nombreHuerta.setText("Huerta: "+listRegistro.get(i).getNombreHuerta());
+        huertasViewHolder.nombreProductor.setText("Productor: "+listRegistro.get(i).getNombreProductor()+"\nContacto: "+ listRegistro.get(i).getContacto() + "\nFecha: " + listRegistro.get(i).getFecha());
     }
 
     @Override

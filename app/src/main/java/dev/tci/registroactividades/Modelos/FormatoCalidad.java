@@ -48,8 +48,17 @@ public class FormatoCalidad implements Serializable {
     private String tipoHuerta;
     private int Nofloracion;
     private int NotipoHuerta;
+    private int Superficie;
 
     public FormatoCalidad() {
+    }
+
+    public int getSuperficie() {
+        return Superficie;
+    }
+
+    public void setSuperficie(int superficie) {
+        Superficie = superficie;
     }
 
     public int getNofloracion() {

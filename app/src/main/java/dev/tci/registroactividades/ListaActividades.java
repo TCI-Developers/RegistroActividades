@@ -66,6 +66,7 @@ public class ListaActividades extends AppCompatActivity {
         ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
         final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
         ArrayList<String> fechas = getIntent().getExtras().getStringArrayList("FECHA");
+        ArrayList<String> contactos = getIntent().getExtras().getStringArrayList("Contactos");
         UID = getIntent().getExtras().getStringArrayList("UID");
 //        ref = getIntent().getExtras().getStringArrayList("ref");
         IMEI = getIntent().getExtras().getString("IMEI");
@@ -74,6 +75,7 @@ public class ListaActividades extends AppCompatActivity {
             h = new Huertas();
             h.setNombreHuerta(huertas.get(i));
             h.setNombreProductor(productores.get(i));
+            h.setContacto(contactos.get(i));
             if(fechas.get(i) == null){h.setFecha("");}
             else{h.setFecha(fechas.get(i));}
             listadoHuertas.add(h);

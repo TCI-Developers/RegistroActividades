@@ -4,8 +4,17 @@ public class Huertas {
     private String nombreHuerta;
     private String nombreProductor;
     private String Fecha;
+    private String Contacto;
 
     public Huertas() {
+    }
+
+    public String getContacto() {
+        return Contacto;
+    }
+
+    public void setContacto(String contacto) {
+        Contacto = contacto;
     }
 
     public String getFecha() {

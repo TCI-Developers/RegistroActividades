@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> ref2;
     private ArrayList<String> namePhoto;
     private ArrayList<String> fechaArray;
+    private ArrayList<String> contactos;
     private CardView cardView;
     private String myIMEI = "";
     private String fecha;
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView progres, pendientes;
     private SwipeRefreshLayout refreshLayout;
     private AgendaVisitas ag;
-
+    private ProgressDialog dialog;
     @Override
     protected void onStart() {
         super.onStart();
@@ -122,6 +123,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(connected){
+                    dialog = new ProgressDialog(v.getContext());
+                    dialog.setTitle("Subiendo datos");
+                    dialog.setMessage("Espere unos segundos por favor");
+                    dialog.setCancelable(false);
+                    dialog.show();
                     for(int j=0; j<UID.size(); j++){
                             for(int i = 0 ; i < ref.size(); i++){
                                 subirFotoFirebase(i, j);
@@ -148,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
                 listProductores.clear();
                 record.clear();
                 UID.clear();
+                contactos.clear();
                 try {
                     date = dateFormat.parse(fecha);
                 } catch (ParseException e) {
@@ -174,6 +181,7 @@ public class MainActivity extends AppCompatActivity {
                                                 record.add("0");
                                                 listHuertas.add( "No programada" );
                                                 listProductores.add("");
+                                                contactos.add("");
                                                 fechaArray.add(ag.getFecha());
                                             }
                                         }
@@ -196,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
                             listProductores.add(ag.getProductor());
                             record.add(ag.getRecord());
                             fechaArray.add(ag.getFecha());
+                            contactos.add(ag.getContacto());
                         }
                     }
                 }
@@ -229,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         date2 = new Date();
         dateFormat = new SimpleDateFormat("yy-MM-dd", Locale.getDefault());
         refreshLayout = findViewById(R.id.swipeLoad);
+        contactos = new ArrayList<>();
     }
 
     public void CheckData(View v){
@@ -239,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("Productores", listProductores );
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
+            intent.putStringArrayListExtra("Contactos", contactos );
 //            intent.putStringArrayListExtra("ref", ref2 );
             intent.putStringArrayListExtra("FECHA", fechaArray );
             intent.putExtra("FECHA1", fecha );
@@ -257,6 +268,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("record", null );
             intent.putExtra("UID", "no programada" );
             intent.putExtra("IMEI", myIMEI );
+            intent.putStringArrayListExtra("Contactos", contactos );
             startActivity(intent);
     }
 
@@ -310,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_6=" +datosF.get(pos).getFecha()+" "+datosF.get(pos).getHora()+//fecha,hora
             "&_fid_152=" +datosF.get(pos).getFloracion()+//floracion
             "&_fid_151=" +datosF.get(pos).getTipoHuerta()+//nacional, organico, exportacion
+            "&_fid_157=" +datosF.get(pos).getSuperficie()+//superficie
             "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
             "&apptoken=" + token;
             try{
@@ -389,19 +402,23 @@ public class MainActivity extends AppCompatActivity {
                     if (resultado.equals("No error")) {
                         Log.d("Mensaje del Servidor", resultado);
                         try {
-
+                            dialog.dismiss();
+                            cardView.setVisibility(View.GONE);
                         } catch (Exception e) {
 //                            Toast.makeText(MainActivity.this, "Error al subir", Toast.LENGTH_SHORT).show();
                             System.out.println("error al subir: " + e.getMessage());
                         }
                     } else {
                         Log.d("Error de consulta", resultado);
-
+                        dialog.dismiss();
+                        cardView.setVisibility(View.GONE);
                     }
                 } else {
                     /**En caso que respuesta sea null es por que fue error de http como los son;
                      * 404,500,403 etc*/
                     Log.d("Error del Servidor ", result);
+                    dialog.dismiss();
+                    cardView.setVisibility(View.GONE);
                 }
             }
         }
@@ -421,8 +438,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "La fotografia ya no se encuentra en el celular", Toast.LENGTH_LONG).show();
             }
 
-        cardView.setEnabled(false);
             uploadTask = path.putBytes(data);
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -484,15 +501,15 @@ public class MainActivity extends AppCompatActivity {
 
                                     @Override
                                     public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                                        dialog.dismiss();
+                                        Toast.makeText(getApplicationContext(),"Error al leer firebase:\n" + databaseError, Toast.LENGTH_LONG).show();
                                     }
                                 });
 
 
-                                bar.setVisibility(View.GONE);
-                                bar.setProgress(0);
-                                cardView.setVisibility(View.GONE);
-                                progres.setVisibility(View.GONE);
+//                                bar.setVisibility(View.GONE);
+//                                bar.setProgress(0);
+//                                progres.setVisibility(View.GONE);
                             }else{
                                 Toast.makeText(MainActivity.this,"Error en obtener url2: "+task.getException().toString(),Toast.LENGTH_SHORT).show();
                                 cardView.setEnabled(true);
@@ -506,17 +523,21 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Error: " + e, Toast.LENGTH_SHORT).show();
                     Log.e("Error: ", e.toString());
                     cardView.setEnabled(true);
+                    dialog.dismiss();
                 }
             }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
                     double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                    bar.setVisibility(View.VISIBLE);
-                    bar.setProgress((int) progress);
-                    progres.setVisibility(View.VISIBLE);
-
-                    DecimalFormat format = new DecimalFormat("#.00");
-                    progres.setText(format.format(progress)  + " %");
+//                    bar.setVisibility(View.VISIBLE);
+//                    bar.setProgress((int) progress);
+//                    progres.setVisibility(View.VISIBLE);
+//
+//                    DecimalFormat format = new DecimalFormat("#.00");
+////                    progres.setText(format.format(progress)  + " %");
+//                    if(progress != 0){
+//                        dialog.setProgress(Integer.valueOf(format.format(progress)  + " %"));
+//                    }
                 }
             });
     }
@@ -534,15 +555,5 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error internet:" + error, Toast.LENGTH_LONG).show();
             }
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 }

@@ -76,7 +76,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     private LinearLayout danoLaytou, lyPhoto;
     private EditText huerta, productor, contacto, contacTele ,telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
-            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto;
+            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto, superficie;
     private ImageView imgPhoto;
     private int sumaCalibres = 0;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -228,123 +228,128 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     private void guardarDatos() {
 //*********************************************************************************************************************************************************************************************************************************************************
-        //Formato calidad
-        if (!danoBANO.getText().toString().isEmpty()) {
-            f.setBano(Integer.valueOf(danoBANO.getText().toString()));
-        }
+        try{
+            //Formato calidad
+            if (!danoBANO.getText().toString().isEmpty()) {
+                f.setBano(Integer.valueOf(danoBANO.getText().toString()));
+            }
 
-        if (!NoCuadrillas.getText().toString().isEmpty()) {
-            f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));
-        }
+            if (!NoCuadrillas.getText().toString().isEmpty()) {
+                f.setNcuadrillas(Integer.valueOf(NoCuadrillas.getText().toString()));
+            }
 
-        f.setHuerta(huerta.getText().toString());
-        f.setProductor(productor.getText().toString());
-        f.setTelefono(Long.valueOf(telefono.getText().toString()));
+            f.setHuerta(huerta.getText().toString());
+            f.setProductor(productor.getText().toString());
+            f.setTelefono(Long.valueOf(telefono.getText().toString()));
 
-        if(!contacto.getText().toString().isEmpty()){
-            f.setContacto(contacto.getText().toString());
-        }else{
-            f.setContacto("N/A");
-        }
+            if(!contacto.getText().toString().isEmpty()){
+                f.setContacto(contacto.getText().toString());
+            }else{
+                f.setContacto("N/A");
+            }
 
-        if(!contacTele.getText().toString().isEmpty()){
-            f.setContacTele(Long.valueOf(contacTele.getText().toString()));
-        }else{
-            f.setContacTele(0);
-        }
+            if(!contacTele.getText().toString().isEmpty()){
+                f.setContacTele(Long.valueOf(contacTele.getText().toString()));
+            }else{
+                f.setContacTele(0);
+            }
 
-        f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
-        f.setMunicipio(spnMun.getSelectedItem().toString());
+            f.setTon_prox(Long.valueOf(toneladas_aprox.getText().toString()));
+            f.setMunicipio(spnMun.getSelectedItem().toString());
 
-        if (!cal32.getText().toString().isEmpty()) {
-            f.setCal32(Integer.valueOf(cal32.getText().toString()));
-        }
-        if (!cal36.getText().toString().isEmpty()) {
-            f.setCal36(Integer.valueOf(cal36.getText().toString()));
-        }
-        if (!cal40.getText().toString().isEmpty()) {
-            f.setCal40(Integer.valueOf(cal40.getText().toString()));
-        }
-        if (!cal48.getText().toString().isEmpty()) {
-            f.setCal48(Integer.valueOf(cal48.getText().toString()));
-        }
-        if (!cal60.getText().toString().isEmpty()) {
-            f.setCal60(Integer.valueOf(cal60.getText().toString()));
-        }
-        if (!cal70.getText().toString().isEmpty()) {
-            f.setCal70(Integer.valueOf(cal70.getText().toString()));
-        }
-        if (!cal84.getText().toString().isEmpty()) {
-            f.setCal84(Integer.valueOf(cal84.getText().toString()));
-        }
-        if (!cal96.getText().toString().isEmpty()) {
-            f.setCal96(Integer.valueOf(cal96.getText().toString()));
-        }
-        if (!calCAN.getText().toString().isEmpty()) {
-            f.setCanica(Integer.valueOf(calCAN.getText().toString()));
-        }
-        if (!calLAC.getText().toString().isEmpty()) {
-            f.setLacrado(Integer.valueOf(calLAC.getText().toString()));
-        }
+            if (!cal32.getText().toString().isEmpty()) {
+                f.setCal32(Integer.valueOf(cal32.getText().toString()));
+            }
+            if (!cal36.getText().toString().isEmpty()) {
+                f.setCal36(Integer.valueOf(cal36.getText().toString()));
+            }
+            if (!cal40.getText().toString().isEmpty()) {
+                f.setCal40(Integer.valueOf(cal40.getText().toString()));
+            }
+            if (!cal48.getText().toString().isEmpty()) {
+                f.setCal48(Integer.valueOf(cal48.getText().toString()));
+            }
+            if (!cal60.getText().toString().isEmpty()) {
+                f.setCal60(Integer.valueOf(cal60.getText().toString()));
+            }
+            if (!cal70.getText().toString().isEmpty()) {
+                f.setCal70(Integer.valueOf(cal70.getText().toString()));
+            }
+            if (!cal84.getText().toString().isEmpty()) {
+                f.setCal84(Integer.valueOf(cal84.getText().toString()));
+            }
+            if (!cal96.getText().toString().isEmpty()) {
+                f.setCal96(Integer.valueOf(cal96.getText().toString()));
+            }
+            if (!calCAN.getText().toString().isEmpty()) {
+                f.setCanica(Integer.valueOf(calCAN.getText().toString()));
+            }
+            if (!calLAC.getText().toString().isEmpty()) {
+                f.setLacrado(Integer.valueOf(calLAC.getText().toString()));
+            }
 
-        if (!danoRONA.getText().toString().isEmpty()) {
-            f.setRona(Integer.valueOf(danoRONA.getText().toString()));
-        }
-        if (!danoROSADO.getText().toString().isEmpty()) {
-            f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));
-        }
-        if (!danoTRIPS.getText().toString().isEmpty()) {
-            f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));
-        }
-        if (!danoQUEMADO.getText().toString().isEmpty()) {
-            f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));
-        }
-        if (!danoVIRUELA.getText().toString().isEmpty()) {
-            f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));
-        }
-        if (!danoVARICELA.getText().toString().isEmpty()) {
-            f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));
-        }
+            if (!danoRONA.getText().toString().isEmpty()) {
+                f.setRona(Integer.valueOf(danoRONA.getText().toString()));
+            }
+            if (!danoROSADO.getText().toString().isEmpty()) {
+                f.setRosado(Integer.valueOf(danoROSADO.getText().toString()));
+            }
+            if (!danoTRIPS.getText().toString().isEmpty()) {
+                f.setTrips(Integer.valueOf(danoTRIPS.getText().toString()));
+            }
+            if (!danoQUEMADO.getText().toString().isEmpty()) {
+                f.setQuemado(Integer.valueOf(danoQUEMADO.getText().toString()));
+            }
+            if (!danoVIRUELA.getText().toString().isEmpty()) {
+                f.setViruela(Integer.valueOf(danoVIRUELA.getText().toString()));
+            }
+            if (!danoVARICELA.getText().toString().isEmpty()) {
+                f.setVaricela(Integer.valueOf(danoVARICELA.getText().toString()));
+            }
 
-        f.setHora(hora);
-        f.setFecha(fecha);
+            f.setHora(hora);
+            f.setFecha(fecha);
 
-        f.setLatitud(lati);
-        f.setLongitud(longi);
-        f.setUrl("");
-        f.setBaseurl(mCurrentPhotoPath);
-        f.setPositionMun(spnMun.getSelectedItemPosition());
-        f.setNoComedor(spnComedo.getSelectedItemPosition());
-        f.setNotipoHuerta(spnTipo.getSelectedItemPosition());
-        f.setNofloracion(spnFloracion.getSelectedItemPosition());
-        f.setCheckBanio(chekBanio.isChecked());
+            f.setLatitud(lati);
+            f.setLongitud(longi);
+            f.setUrl("");
+            f.setBaseurl(mCurrentPhotoPath);
+            f.setPositionMun(spnMun.getSelectedItemPosition());
+            f.setNoComedor(spnComedo.getSelectedItemPosition());
+            f.setNotipoHuerta(spnTipo.getSelectedItemPosition());
+            f.setNofloracion(spnFloracion.getSelectedItemPosition());
+            f.setCheckBanio(chekBanio.isChecked());
 
-        f.setComedor(spnComedo.getSelectedItem().toString());
-        f.setConcepto("");
-        f.setCampoBitacora(concepto.getText().toString());
-        f.setRecord(record);
-        f.setStatus(0);
-        f.setSubido(0);
+            f.setComedor(spnComedo.getSelectedItem().toString());
+            f.setConcepto("");
+            f.setCampoBitacora(concepto.getText().toString());
+            f.setRecord(record);
+            f.setStatus(0);
+            f.setSubido(0);
 
-        f.setFloracion(spnFloracion.getSelectedItem().toString());
-        f.setTipoHuerta(spnTipo.getSelectedItem().toString());
+            f.setFloracion(spnFloracion.getSelectedItem().toString());
+            f.setTipoHuerta(spnTipo.getSelectedItem().toString());
+            f.setSuperficie(Integer.valueOf(superficie.getText().toString()));
 
             p.databaseReference
-            .child("Acopio")
-            .child("RV")
-            .child("UsuariosAcopio")
-            .child(imei)
-            .child("agendavisitas")
-            .child(UID)
-            .child("formatocalidad")
-            .child(identificador)
-            .setValue(f);
+                    .child("Acopio")
+                    .child("RV")
+                    .child("UsuariosAcopio")
+                    .child(imei)
+                    .child("agendavisitas")
+                    .child(UID)
+                    .child("formatocalidad")
+                    .child(identificador)
+                    .setValue(f);
 
-        if(connected){
-            subirFirebase();
-        }else{
-            Toast.makeText(register.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
-            finish();
+            if(connected){
+                subirFirebase();
+            }else{
+                Toast.makeText(register.this,"No tienes internet, pero tus datos se han guardado localmente",Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }catch (Exception e){
+            Toast.makeText(getApplicationContext(), "Error al guardar la visita:\n"+e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -390,6 +395,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         spnComedo = findViewById(R.id.spnComedor);
         spnFloracion = findViewById(R.id.spnFloracion);
         spnTipo = findViewById(R.id.spnTipo);
+        superficie = findViewById(R.id.txtSuperficie);
     }
 
     public boolean isValidateCalibres() {
@@ -485,26 +491,30 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                     if (toneladas_aprox.getText().toString().isEmpty()) {
                         toneladas_aprox.setError("Es requerido");
                     } else {
-                        if (spnMun.getSelectedItemPosition() < 1) {
-                            Toast.makeText(getApplicationContext(), "Selecciona un municipio por favor.", Toast.LENGTH_LONG).show();
+                        if (superficie.getText().toString().isEmpty()) {
+                            superficie.setError("Es requerido");
                         } else {
-                            if (spnComedo.getSelectedItemPosition() < 1) {
-                                Toast.makeText(getApplicationContext(), "Selecciona una opción de comedor por favor.", Toast.LENGTH_LONG).show();
-                            }else{
-                                if (spnTipo.getSelectedItemPosition() < 1) {
-                                    Toast.makeText(getApplicationContext(), "Selecciona si es Exportación, Nacional u Organico por favor.", Toast.LENGTH_LONG).show();
+                            if (spnMun.getSelectedItemPosition() < 1) {
+                                Toast.makeText(getApplicationContext(), "Selecciona un municipio por favor.", Toast.LENGTH_LONG).show();
+                            } else {
+                                if (spnComedo.getSelectedItemPosition() < 1) {
+                                    Toast.makeText(getApplicationContext(), "Selecciona una opción de comedor por favor.", Toast.LENGTH_LONG).show();
                                 }else{
-                                    if (spnFloracion.getSelectedItemPosition() < 1) {
-                                        Toast.makeText(getApplicationContext(), "Selecciona la Floración por favor.", Toast.LENGTH_LONG).show();
+                                    if (spnTipo.getSelectedItemPosition() < 1) {
+                                        Toast.makeText(getApplicationContext(), "Selecciona si es Exportación, Nacional u Organico por favor.", Toast.LENGTH_LONG).show();
                                     }else{
-                                        if (chekBanio.isChecked()) {
-                                            if(danoBANO.getText().toString().isEmpty()){
-                                                danoBANO.setError("Es requerido");
+                                        if (spnFloracion.getSelectedItemPosition() < 1) {
+                                            Toast.makeText(getApplicationContext(), "Selecciona la Floración por favor.", Toast.LENGTH_LONG).show();
+                                        }else{
+                                            if (chekBanio.isChecked()) {
+                                                if(danoBANO.getText().toString().isEmpty()){
+                                                    danoBANO.setError("Es requerido");
+                                                }else{
+                                                    return true;
+                                                }
                                             }else{
                                                 return true;
                                             }
-                                        }else{
-                                            return true;
                                         }
                                     }
                                 }
@@ -646,7 +656,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                 manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20 * 1000, 10, locationListener);
             }
         }catch (Exception e){
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(),"Error en el GPS:\n"+ e.toString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -744,7 +754,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(register.this, "Error: " + e, Toast.LENGTH_LONG).show();
+                Toast.makeText(register.this, "Error en subir a firebase: " + e, Toast.LENGTH_LONG).show();
                 Log.e("Error: ", e.toString());
             }
         }).addOnCanceledListener(new OnCanceledListener() {

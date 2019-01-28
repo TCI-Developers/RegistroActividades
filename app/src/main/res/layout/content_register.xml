@@ -78,6 +78,40 @@
                             android:layout_weight="1">
 
                             <android.support.design.widget.TextInputEditText
+                                android:id="@+id/txtProductor"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/boxtext1"
+                                android:hint="@string/productor"
+                                android:inputType="textCapSentences"
+                                android:paddingLeft="8dp"
+                                android:textSize="12sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <android.support.design.widget.TextInputEditText
+                                android:id="@+id/txtToneladas"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:background="@drawable/boxtext1"
+                                android:hint="@string/toneladas_aprox"
+                                android:inputType="numberDecimal"
+                                android:paddingLeft="8dp"
+                                android:textSize="12sp" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1">
+
+                            <android.support.design.widget.TextInputEditText
                                 android:id="@+id/txtContacto"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -112,23 +146,6 @@
                             android:layout_weight="1">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/txtProductor"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="5dp"
-                                android:background="@drawable/boxtext1"
-                                android:hint="@string/productor"
-                                android:inputType="textCapSentences"
-                                android:paddingLeft="8dp"
-                                android:textSize="12sp" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1">
-
-                            <android.support.design.widget.TextInputEditText
                                 android:id="@+id/txtTelefono"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -146,12 +163,12 @@
                             android:layout_weight="1">
 
                             <android.support.design.widget.TextInputEditText
-                                android:id="@+id/txtToneladas"
+                                android:id="@+id/txtSuperficie"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
                                 android:background="@drawable/boxtext1"
-                                android:hint="@string/toneladas_aprox"
+                                android:hint="@string/superficie"
                                 android:inputType="numberDecimal"
                                 android:paddingLeft="8dp"
                                 android:textSize="12sp" />

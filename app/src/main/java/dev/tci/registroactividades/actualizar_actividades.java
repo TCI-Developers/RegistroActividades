@@ -44,7 +44,7 @@ public class actualizar_actividades extends AppCompatActivity {
     int posT = 0;
     boolean ban = false;
     private ArrayList<String> UIDActividades;
-    private EditText huertaUP, productorUP, telefonoUP, toneladasUP, contactoUP, contacTelUP, danoBANO;
+    private EditText huertaUP, productorUP, telefonoUP, toneladasUP, contactoUP, contacTelUP, danoBANO, superficieUP;
     private Spinner municipioUP, comedorUP, spnFloracionUP, spnTipoUP;
     FormatoCalidad f = new FormatoCalidad();
     private Date date, date2;
@@ -90,6 +90,7 @@ public class actualizar_actividades extends AppCompatActivity {
                 contacTelUP.setText(String.valueOf(actividades.get(position).getContacTele()));
                 chekBanio.setChecked(actividades.get(position).isCheckBanio());
                 danoBANO.setText(String.valueOf(actividades.get(position).getBano()));
+                superficieUP.setText(String.valueOf(actividades.get(position).getSuperficie()));
                 spnFloracionUP.setSelection(actividades.get(position).getNofloracion());
                 spnTipoUP.setSelection(actividades.get(position).getNotipoHuerta());
 
@@ -150,6 +151,7 @@ public class actualizar_actividades extends AppCompatActivity {
         contacTelUP = findViewById(R.id.txtTelefonoContactoUp);
         danoBANO = findViewById(R.id.txtDanoBanoUP);
         chekBanio = findViewById(R.id.checkBoxUP);
+        superficieUP = findViewById(R.id.txtSuperficieUP);
 
         recyclerView = findViewById(R.id.recycler_update);
         actividades = new ArrayList<>();
@@ -217,6 +219,7 @@ public class actualizar_actividades extends AppCompatActivity {
         }
         f.setTipoHuerta(spnTipoUP.getSelectedItem().toString());
         f.setFloracion(spnFloracionUP.getSelectedItem().toString());
+        f.setSuperficie(Integer.valueOf(superficieUP.getText().toString()));
 
         p.databaseReference
         .child("Acopio")
