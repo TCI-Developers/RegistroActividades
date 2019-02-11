@@ -60,7 +60,7 @@ public class splash extends AppCompatActivity {
             @Override
             public void run() {
                 try {
-                    Intent intent = new Intent(splash.this, auditoria_corte.class);
+                    Intent intent = new Intent(splash.this, MainActivity.class);
                     intent.putExtra("FECHA", fecha );
                     startActivity(intent);
                     finish();

@@ -332,15 +332,15 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             f.setSuperficie(Integer.valueOf(superficie.getText().toString()));
 
             p.databaseReference
-                    .child("Acopio")
-                    .child("RV")
-                    .child("UsuariosAcopio")
-                    .child(imei)
-                    .child("agendavisitas")
-                    .child(UID)
-                    .child("formatocalidad")
-                    .child(identificador)
-                    .setValue(f);
+            .child("Acopio")
+            .child("RV")
+            .child("UsuariosAcopio")
+            .child(imei)
+            .child("agendavisitas")
+            .child(UID)
+            .child("formatocalidad")
+            .child(identificador)
+            .setValue(f);
 
             if(connected){
                 subirFirebase();
