@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 import dev.tci.registroactividades.Modelos.AgendaVisitas;
 import dev.tci.registroactividades.Modelos.VerificacionCorte;
@@ -57,10 +58,25 @@ public class auditoria_corte extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         try {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                                vc = objSnaptshot.getValue(VerificacionCorte.class);
-                                listPreguntas.add(vc.getPregunta());
+//                                vc = objSnaptshot.getValue(VerificacionCorte.class);
+                                Map<String, Object> map = (Map<String, Object>) objSnaptshot.getValue();
+                                Log.d("Firebase-Datos", "Value is: " + map);
+
+                                for (String key :  map.keySet()) {
+                                    Object value = map.get(key);
+                                    if (value instanceof String) {
+                                        Log.d("Data", "Valor: " + value);
+                                    } else if (value instanceof Class) {
+                                        Log.d("Class-Data", "Class: " + ((Class)value).getName());
+                                    }
+                                }
+
+                                //listPreguntas.add(map.containsValue(vc.getPregunta()));
+
+                                //Log.d("Firebase-Datos-List", "Value is: " + listPreguntas);
                                 for (DataSnapshot obj2 : objSnaptshot.getChildren()){
-                                    vc = obj2.getValue(VerificacionCorte.class);
+                                    Map<String, Object> map2 = (Map<String, Object>) obj2.getValue();
+//                                    vc = obj2.getValue(VerificacionCorte.class);
                                     listRespuestas.add(vc.getRespuestas() );
                                 }
                             }
