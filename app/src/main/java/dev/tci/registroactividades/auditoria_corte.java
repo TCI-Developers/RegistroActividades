@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,10 +29,13 @@ public class auditoria_corte extends AppCompatActivity {
     RadioButton rdbtn = null;
     RadioButton rdbtn2 = null;
     RadioGroup ll = null;
-    private ArrayList<String> listPreguntas;
-    private ArrayList<String> listRespuestas;
+    RadioGroup grupo = null;
+    private ArrayList<Object> listPreguntas;
+    private ArrayList<Object> listRespuestas;
+    private ArrayList<Object> listRespuestas2;
     VerificacionCorte vc;
     Principal p = Principal.getInstance();
+    LinearLayout layout ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +46,12 @@ public class auditoria_corte extends AppCompatActivity {
         ll.setOrientation(LinearLayout.VERTICAL);
         listPreguntas = new ArrayList<>();
         listRespuestas = new ArrayList<>();
-        vc = new VerificacionCorte();
+        listRespuestas2 = new ArrayList<>();
 
-        addRadioButtons(5);
+        layout = findViewById(R.id.content);
+
+        grupo = findViewById(R.id.radiogroup);
+        //addRadioButtons(5);
         listarPreguntas();
     }
 
@@ -58,39 +65,57 @@ public class auditoria_corte extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         try {
                             for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-//                                vc = objSnaptshot.getValue(VerificacionCorte.class);
+
                                 Map<String, Object> map = (Map<String, Object>) objSnaptshot.getValue();
-                                Log.d("Firebase-Datos", "Value is: " + map);
 
-                                for (String key :  map.keySet()) {
-                                    Object value = map.get(key);
-                                    if (value instanceof String) {
-                                        Log.d("Data", "Valor: " + value);
-                                    } else if (value instanceof Class) {
-                                        Log.d("Class-Data", "Class: " + ((Class)value).getName());
-                                    }
+                                Object value_1 = map.get("respuesta1");
+                                Object value_2 = map.get("respuesta2");
+                                Object value_3 = map.get("respuesta3");
+                                Object value_4 = map.get("respuesta4");
+                                Object value_5 = map.get("respuesta5");
+                                Object value_6 = map.get("respuesta6");
+                                Object value = map.get("pregunta");
+
+                                listPreguntas.add(value);
+
+                                if(value_1 != null){
+                                    listPreguntas.add(value_1);
                                 }
-
-                                //listPreguntas.add(map.containsValue(vc.getPregunta()));
-
-                                //Log.d("Firebase-Datos-List", "Value is: " + listPreguntas);
-                                for (DataSnapshot obj2 : objSnaptshot.getChildren()){
-                                    Map<String, Object> map2 = (Map<String, Object>) obj2.getValue();
-//                                    vc = obj2.getValue(VerificacionCorte.class);
-                                    listRespuestas.add(vc.getRespuestas() );
+                                if(value_2 != null){
+                                    listPreguntas.add(value_2);
+                                }
+                                if(value_3 != null){
+                                    listPreguntas.add(value_3);
+                                }else{
+                                    listPreguntas.add("");
+                                }
+                                if(value_4 != null){
+                                    listPreguntas.add(value_4);
+                                }else{
+                                    listPreguntas.add("");
+                                }
+                                if(value_5 != null){
+                                    listPreguntas.add(value_5);
+                                }else{
+                                    listPreguntas.add("");
+                                }
+                                if(value_6 != null){
+                                    listPreguntas.add(value_6);
+                                    listPreguntas.add("");
+                                }else{
+                                    listPreguntas.add("");
                                 }
                             }
                         }catch (Exception e){
                             Toast.makeText(getApplicationContext(), ""+e, Toast.LENGTH_LONG).show();
                         }
+                        creadLabel();
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
+                    public void onCancelled(@NonNull DatabaseError databaseError) { }
                 });
-    }
+}
 
     public void addRadioButtons(int number) {
             for (int i = 0; i < number; i++) {
@@ -117,5 +142,29 @@ public class auditoria_corte extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), String.valueOf(selectedId), Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void creadLabel(){
+        for(int  i = 0 ; i < listPreguntas.size(); i++){
+            TextView textView = new TextView(this);
+            textView.setText((String) listPreguntas.get(i));
+
+            rdbtn = new RadioButton(this);
+            rdbtn2 = new RadioButton(this);
+
+            rdbtn.setId(View.generateViewId());
+            rdbtn.setText("SI");
+
+            rdbtn2.setId(View.generateViewId());
+            rdbtn2.setText("NO");
+
+            ll.addView(rdbtn);
+            ll.addView(rdbtn2);
+
+            if(i < 1){
+                ((ViewGroup) findViewById(R.id.radiogroup)).addView(ll);
+            }
+            layout.addView(textView);
+        }
     }
 }
