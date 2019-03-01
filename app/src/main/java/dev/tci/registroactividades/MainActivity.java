@@ -55,15 +55,7 @@ import dev.tci.registroactividades.QuickBase.Results;
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<String> listHuertas;
-    private ArrayList<String> listProductores;
-    private ArrayList<String> record;
-    private ArrayList<String> UID;
-    private ArrayList<String> ref;
-    private ArrayList<String> ref2;
-    private ArrayList<String> namePhoto;
-    private ArrayList<String> fechaArray;
-    private ArrayList<String> contactos;
+    private ArrayList<String> listHuertas, listProductores,record, UID, ref, ref2, namePhoto,  fechaArray, contactos, HUE;
     private CardView cardView;
     private String myIMEI = "";
     private String fecha;
@@ -155,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
                 record.clear();
                 UID.clear();
                 contactos.clear();
+                HUE.clear();
                 try {
                     date = dateFormat.parse(fecha);
                 } catch (ParseException e) {
@@ -205,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                             record.add(ag.getRecord());
                             fechaArray.add(ag.getFecha());
                             contactos.add(ag.getContacto());
+                            HUE.add(ag.getHUE());
                         }
                     }
                 }
@@ -222,6 +216,7 @@ public class MainActivity extends AppCompatActivity {
         listProductores= new ArrayList<String>();
         record = new ArrayList<String>();
         UID = new ArrayList<String>();
+        HUE = new ArrayList<String>();
         datosF = new ArrayList<>();
         btnubir = findViewById(R.id.imageButton);
         imgRUTA = new ArrayList<>();
@@ -250,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
             intent.putStringArrayListExtra("Contactos", contactos );
+            intent.putStringArrayListExtra("HUE", HUE );
 //            intent.putStringArrayListExtra("ref", ref2 );
             intent.putStringArrayListExtra("FECHA", fechaArray );
             intent.putExtra("FECHA1", fecha );
@@ -290,6 +286,7 @@ public class MainActivity extends AppCompatActivity {
             RegistroQ = "https://aortizdemontellanoarevalo.quickbase.com/db/bnhn2ewij" +
             "?a=API_AddRecord"+
             "&_fid_112="+datosF.get(pos).getHuerta()+ //Huerta Nombre
+            "&_fid_169="+datosF.get(pos).getHUE()+ //HUE
             "&_fid_113="+datosF.get(pos).getProductor() + "|" + datosF.get(pos).getContacto() +//productor
             "&_fid_114=" +datosF.get(pos).getTelefono() + "|" + datosF.get(pos).getContacTele()+//telefono
             "&_fid_115=" +datosF.get(pos).getTon_prox()+//toneladas aprox

@@ -10,6 +10,15 @@ public class AgendaVisitas {
     private long telefono;
     private int status;
     private String Contacto;
+    private String HUE;
+
+    public String getHUE() {
+        return HUE;
+    }
+
+    public void setHUE(String HUE) {
+        this.HUE = HUE;
+    }
 
     public AgendaVisitas() {
     }

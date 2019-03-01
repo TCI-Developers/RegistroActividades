@@ -76,7 +76,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     private LinearLayout danoLaytou, lyPhoto;
     private EditText huerta, productor, contacto, contacTele ,telefono, toneladas_aprox, cal32, cal36, cal40, cal48, cal60, cal70, cal84, cal96, calCAN, calLAC,
-            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto, superficie;
+            danoRONA, danoROSADO, danoBANO, danoTRIPS, danoQUEMADO, danoCOMEDOR, danoVIRUELA, danoVARICELA, NoCuadrillas, concepto, superficie, HUE;
     private ImageView imgPhoto;
     private int sumaCalibres = 0;
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -113,6 +113,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     TextView progres;
     private CheckBox chekBanio;
     AlertDialog alert = null;
+    private String _HUE = null;
+    private String nombreHuerta = null;
+    private String nombreProductor = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +131,21 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         lyPhoto.setVisibility(View.GONE);
         record = getIntent().getExtras().getString("record");
+        _HUE = getIntent().getExtras().getString("HUE");
+        nombreHuerta = getIntent().getExtras().getString("huerta");
+        nombreProductor = getIntent().getExtras().getString("productor");
+
+        if(_HUE != null){
+            HUE.setText(_HUE);
+        }
+
+        if(nombreHuerta != null){
+            huerta.setText(nombreHuerta);
+        }
+
+        if(nombreProductor != null){
+            productor.setText(nombreProductor);
+        }
 
         chekBanio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -239,6 +257,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
             }
 
             f.setHuerta(huerta.getText().toString());
+            f.setHUE(HUE.getText().toString());
             f.setProductor(productor.getText().toString());
             f.setTelefono(Long.valueOf(telefono.getText().toString()));
 
@@ -329,7 +348,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
             f.setFloracion(spnFloracion.getSelectedItem().toString());
             f.setTipoHuerta(spnTipo.getSelectedItem().toString());
-            f.setSuperficie(Integer.valueOf(superficie.getText().toString()));
+            f.setSuperficie(Double.valueOf(superficie.getText().toString()));
 
             p.databaseReference
             .child("Acopio")
@@ -355,6 +374,7 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
     public void Init() {
         huerta = findViewById(R.id.txtHuerta);
+        HUE = findViewById(R.id.txtHUE);
         productor = findViewById(R.id.txtProductor);
         contacto = findViewById(R.id.txtContacto);
         contacTele = findViewById(R.id.txtTelefonoContacto);
@@ -510,10 +530,28 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
                                                 if(danoBANO.getText().toString().isEmpty()){
                                                     danoBANO.setError("Es requerido");
                                                 }else{
-                                                    return true;
+                                                    if (!HUE.getText().toString().isEmpty()) {
+                                                        if(HUE.getText().toString().length() != 14){
+                                                            HUE.setError("Verifica el HUE");
+                                                        }
+                                                        else {
+                                                            return true;
+                                                        }
+                                                    } else {
+                                                        return true;
+                                                    }
                                                 }
                                             }else{
-                                                return true;
+                                                if (!HUE.getText().toString().isEmpty()) {
+                                                    if(HUE.getText().toString().length() != 14){
+                                                        HUE.setError("Verifica el HUE");
+                                                    }
+                                                    else {
+                                                        return true;
+                                                    }
+                                                } else {
+                                                    return true;
+                                                }
                                             }
                                         }
                                     }
@@ -648,12 +686,12 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         }
         try{
             manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-            if ( !manager.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            if ( !manager.isProviderEnabled( LocationManager.NETWORK_PROVIDER ) ) {
                 AlertNoGps();
             }else{
-                Location local = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Location local = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 actualizar(local);
-                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 20 * 1000, 10, locationListener);
+                manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         }catch (Exception e){
             Toast.makeText(getApplicationContext(),"Error en el GPS:\n"+ e.toString(), Toast.LENGTH_LONG).show();

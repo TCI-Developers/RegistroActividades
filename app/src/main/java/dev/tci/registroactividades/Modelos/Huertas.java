@@ -5,6 +5,15 @@ public class Huertas {
     private String nombreProductor;
     private String Fecha;
     private String Contacto;
+    private String HUE;
+
+    public String getHUE() {
+        return HUE;
+    }
+
+    public void setHUE(String HUE) {
+        this.HUE = HUE;
+    }
 
     public Huertas() {
     }
