@@ -55,7 +55,7 @@ import dev.tci.registroactividades.QuickBase.Results;
 import dev.tci.registroactividades.Singleton.Principal;
 
 public class MainActivity extends AppCompatActivity {
-    private ArrayList<String> listHuertas, listProductores,record, UID, ref, ref2, namePhoto,  fechaArray, contactos, HUE;
+    private ArrayList<String> listHuertas, listProductores,record, UID, ref, ref2, namePhoto,  fechaArray, contactos, telContacto, telProductor, HUE;
     private CardView cardView;
     private String myIMEI = "";
     private String fecha;
@@ -148,13 +148,19 @@ public class MainActivity extends AppCompatActivity {
                 UID.clear();
                 contactos.clear();
                 HUE.clear();
+                telContacto.clear();
+                telProductor.clear();
                 try {
                     date = dateFormat.parse(fecha);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                     ag = objSnaptshot.getValue(AgendaVisitas.class);
+                    try{
+                        ag = objSnaptshot.getValue(AgendaVisitas.class);
+                    }catch (Exception e){
+                        Toast.makeText(getApplicationContext(), "Error en la lectura de huertas: " + e.toString(), Toast.LENGTH_LONG).show();
+                    }
                     if(objSnaptshot.getKey().equals("no programada")){
                         UID.add(objSnaptshot.getKey());
                         p.databaseReference
@@ -194,10 +200,14 @@ public class MainActivity extends AppCompatActivity {
                         if(date.equals(date2) || date.before(date2) ){
                             UID.add(objSnaptshot.getKey());
                             listHuertas.add( ag.getHuerta() );
-                            listProductores.add(ag.getProductor());
                             record.add(ag.getRecord());
                             fechaArray.add(ag.getFecha());
+
                             contactos.add(ag.getContacto());
+                            telContacto.add(ag.getTelContacto());
+                            listProductores.add(ag.getProductor());
+                            telProductor.add(ag.getTelProductor());
+
                             HUE.add(ag.getHUE());
                         }
                     }
@@ -217,6 +227,8 @@ public class MainActivity extends AppCompatActivity {
         record = new ArrayList<String>();
         UID = new ArrayList<String>();
         HUE = new ArrayList<String>();
+        telContacto = new ArrayList<String>();
+        telProductor = new ArrayList<String>();
         datosF = new ArrayList<>();
         btnubir = findViewById(R.id.imageButton);
         imgRUTA = new ArrayList<>();
@@ -241,10 +253,12 @@ public class MainActivity extends AppCompatActivity {
         if(listHuertas.size() > 0){
             Intent intent = new Intent(getApplicationContext(), ListaActividades.class);
             intent.putStringArrayListExtra("Huertas", listHuertas );
-            intent.putStringArrayListExtra("Productores", listProductores );
             intent.putStringArrayListExtra("record", record );
             intent.putStringArrayListExtra("UID", UID );
             intent.putStringArrayListExtra("Contactos", contactos );
+            intent.putStringArrayListExtra("TelContactos", telContacto );
+            intent.putStringArrayListExtra("Productores", listProductores );
+            intent.putStringArrayListExtra("TelProductores", telProductor );
             intent.putStringArrayListExtra("HUE", HUE );
 //            intent.putStringArrayListExtra("ref", ref2 );
             intent.putStringArrayListExtra("FECHA", fechaArray );
@@ -338,21 +352,22 @@ public class MainActivity extends AppCompatActivity {
             ref.clear();
             ref2.clear();
 
-            f = new FormatoCalidad();
-                    p.databaseReference
-                    .child("Acopio")
-                    .child("RV")
-                    .child("UsuariosAcopio")
-                    .child(getIMEI())
-                    .child("agendavisitas")
-                    .child(UID.get(i))
-                    .child("formatocalidad")
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
-                                f = objSnaptshot.getValue(FormatoCalidad.class);
-                                ref2.add(objSnaptshot.getKey());
+            try{
+                f = new FormatoCalidad();
+                p.databaseReference
+                        .child("Acopio")
+                        .child("RV")
+                        .child("UsuariosAcopio")
+                        .child(getIMEI())
+                        .child("agendavisitas")
+                        .child(UID.get(i))
+                        .child("formatocalidad")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (DataSnapshot objSnaptshot : dataSnapshot.getChildren()){
+                                    f = objSnaptshot.getValue(FormatoCalidad.class);
+                                    ref2.add(objSnaptshot.getKey());
                                     if(f.getSubido() < 1){
                                         ref.add(objSnaptshot.getKey());
                                         datosF.add(f);
@@ -360,15 +375,18 @@ public class MainActivity extends AppCompatActivity {
                                         namePhoto.add(f.getFecha() + "-" + f.getHora() + "-RV.jpg");
                                         cardView.setVisibility(View.VISIBLE);
                                     }
+                                }
+                                pendientes.setText(imgRUTA.size()+"");
                             }
-                            pendientes.setText(imgRUTA.size()+"");
-                        }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                Toast.makeText(getApplicationContext(), databaseError.getDetails(), Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }catch (Exception e){
+                Toast.makeText(getApplicationContext(), "Error cargar datos quick: " + e.toString(), Toast.LENGTH_LONG).show();
             }
+        }
     }
 
     class CargarDatos extends AsyncTask<String, Void, String> {

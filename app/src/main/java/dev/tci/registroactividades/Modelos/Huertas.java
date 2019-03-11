@@ -3,9 +3,27 @@ package dev.tci.registroactividades.Modelos;
 public class Huertas {
     private String nombreHuerta;
     private String nombreProductor;
+    private String TelProductor;
     private String Fecha;
     private String Contacto;
+    private String TelContacto;
     private String HUE;
+
+    public String getTelProductor() {
+        return TelProductor;
+    }
+
+    public void setTelProductor(String telProductor) {
+        TelProductor = telProductor;
+    }
+
+    public String getTelContacto() {
+        return TelContacto;
+    }
+
+    public void setTelContacto(String telContacto) {
+        TelContacto = telContacto;
+    }
 
     public String getHUE() {
         return HUE;

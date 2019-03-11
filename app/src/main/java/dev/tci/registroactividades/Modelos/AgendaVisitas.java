@@ -5,12 +5,32 @@ public class AgendaVisitas {
     private String huerta;
     private String latitud;
     private String longitud;
-    private String productor;
     private String record;
     private long telefono;
     private int status;
+
     private String Contacto;
+    private String telContacto;
+    private String productor;
+    private String telProductor;
     private String HUE;
+
+
+    public String getTelContacto() {
+        return telContacto;
+    }
+
+    public void setTelContacto(String telContacto) {
+        this.telContacto = telContacto;
+    }
+
+    public String getTelProductor() {
+        return telProductor;
+    }
+
+    public void setTelProductor(String telProductor) {
+        this.telProductor = telProductor;
+    }
 
     public String getHUE() {
         return HUE;

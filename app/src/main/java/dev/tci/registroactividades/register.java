@@ -116,6 +116,10 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
     private String _HUE = null;
     private String nombreHuerta = null;
     private String nombreProductor = null;
+    private String telProductor = null;
+
+    private String nombreContacto = null;
+    private String telContacto = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,6 +138,9 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
         _HUE = getIntent().getExtras().getString("HUE");
         nombreHuerta = getIntent().getExtras().getString("huerta");
         nombreProductor = getIntent().getExtras().getString("productor");
+        telProductor = getIntent().getExtras().getString("telproductor");
+        nombreContacto = getIntent().getExtras().getString("contacto");
+        telContacto = getIntent().getExtras().getString("telcontacto");
 
         if(_HUE != null){
             HUE.setText(_HUE);
@@ -145,6 +152,18 @@ public class register extends AppCompatActivity implements imageFragment.OnImage
 
         if(nombreProductor != null){
             productor.setText(nombreProductor);
+        }
+
+        if(telProductor != null){
+            telefono.setText(telProductor);
+        }
+
+        if(nombreContacto != null){
+            contacto.setText(nombreContacto);
+        }
+
+        if(telContacto != null){
+            contacTele.setText(telContacto);
         }
 
         chekBanio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

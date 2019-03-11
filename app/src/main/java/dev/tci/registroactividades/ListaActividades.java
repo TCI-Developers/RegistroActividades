@@ -63,10 +63,12 @@ public class ListaActividades extends AppCompatActivity {
         Init();
 
         ArrayList<String> huertas = getIntent().getExtras().getStringArrayList("Huertas");
-        ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
         final ArrayList<Integer> recordID = getIntent().getExtras().getIntegerArrayList("record");
         ArrayList<String> fechas = getIntent().getExtras().getStringArrayList("FECHA");
         ArrayList<String> contactos = getIntent().getExtras().getStringArrayList("Contactos");
+        ArrayList<String> telcontactos = getIntent().getExtras().getStringArrayList("TelContactos");
+        ArrayList<String> productores = getIntent().getExtras().getStringArrayList("Productores");
+        ArrayList<String> telproductores = getIntent().getExtras().getStringArrayList("TelProductores");
         ArrayList<String> HUE = getIntent().getExtras().getStringArrayList("HUE");
         UID = getIntent().getExtras().getStringArrayList("UID");
 //        ref = getIntent().getExtras().getStringArrayList("ref");
@@ -78,6 +80,8 @@ public class ListaActividades extends AppCompatActivity {
             h.setNombreProductor(productores.get(i));
             h.setContacto(contactos.get(i));
             h.setHUE(HUE.get(i));
+            h.setTelContacto(telcontactos.get(i));
+            h.setTelProductor(telproductores.get(i));
             if(fechas.get(i) == null){h.setFecha("");}
             else{h.setFecha(fechas.get(i));}
             listadoHuertas.add(h);
@@ -92,6 +96,10 @@ public class ListaActividades extends AppCompatActivity {
                 intent.putExtra("HUE", listadoHuertas.get(position).getHUE());
                 intent.putExtra("huerta", listadoHuertas.get(position).getNombreHuerta());
                 intent.putExtra("productor", listadoHuertas.get(position).getNombreProductor());
+                intent.putExtra("telproductor", listadoHuertas.get(position).getTelProductor());
+
+                intent.putExtra("contacto", listadoHuertas.get(position).getContacto());
+                intent.putExtra("telcontacto", listadoHuertas.get(position).getTelContacto());
                 startActivity(intent);
                 finish();
             }
