@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private AgendaVisitas ag;
     private ProgressDialog dialog;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -316,7 +317,7 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_24=" +datosF.get(pos).getCanica()+//Canica (CAN)
             "&_fid_23=" +datosF.get(pos).getLacrado()+//lacrado(LAC)
             "&_fid_117=" +datosF.get(pos).getRona()+//Roña
-            "&_fid_118=" +datosF.get(pos).getRosado()+//Rosado
+            "&_fid_118=" +datosF.get(pos).getRosado()+//Rosadocom.tci.consultoria.registroactividades
             "&_fid_119=" +datosF.get(pos).getBano()+//Baño
             "&_fid_120=" +datosF.get(pos).getTrips()+//Trips
             "&_fid_121=" +datosF.get(pos).getQuemado()+//Quemado
@@ -334,7 +335,7 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_152=" +datosF.get(pos).getFloracion()+//floracion
             "&_fid_151=" +datosF.get(pos).getTipoHuerta()+//nacional, organico, exportacion
             "&_fid_157=" +datosF.get(pos).getSuperficie()+//superficie
-            "&ticket="  +"9_bpqnx8hh8_b2c6pu_fwjc_a_-b_di9hv2qb4t5jbp9jhvu3thpdfdt49mr8dugqz499kgcecg5vb3m_bwg8928"+
+            "&ticket="  +"9_bp7ek3c35_b2c6pu_fwjc_a_-b_crr5v6tbpynmefbr3ygsr9gy7qfbht97icdccgvky785ku6d7xhac_cmhd7si"+
             "&apptoken=" + token;
             try{
                 new CargarDatos().execute(RegistroQ.replace(" ", "%20"));
