@@ -335,8 +335,9 @@ public class MainActivity extends AppCompatActivity {
             "&_fid_152=" +datosF.get(pos).getFloracion()+//floracion
             "&_fid_151=" +datosF.get(pos).getTipoHuerta()+//nacional, organico, exportacion
             "&_fid_157=" +datosF.get(pos).getSuperficie()+//superficie
-            "&ticket="  +"9_bqm6nmf84_b2c6pu_fwjc_a_-b_q9b76fd4tdzzdwuh72bbj34bfacry5x8rezw8z3diqzkwhcqhjk8z_c8asn26"+
-            "&apptoken=" + token;
+            "&usertoken=b2c6pu_fwjc_cbciv3q3szxj8k8ycyfx4rkk6";
+            //"&ticket="  +"9_bqm6nmf84_b2c6pu_fwjc_a_-b_q9b76fd4tdzzdwuh72bbj34bfacry5x8rezw8z3diqzkwhcqhjk8z_c8asn26"+
+            //"&apptoken=" + token;
             try{
                 new CargarDatos().execute(RegistroQ.replace(" ", "%20"));
                 Toast.makeText(getApplicationContext(), "Se subio la informacion correctamente", Toast.LENGTH_LONG).show();
@@ -413,8 +414,7 @@ public class MainActivity extends AppCompatActivity {
             /*Si la variable resultado es distinto a null entonces es por que quickBase
             nos envio una respuesta que xml con mensaje de exito o de algun error generado en la consulta*/
                 if (resultado != null) {
-
-                    //Si hay error en la carga de datos en quickBase, los datos los mandamos a Hostinger
+                    //Si hay error en la carga de datos en quickBase, los datos los mandamos a Hostinge
                     if (resultado.equals("No error")) {
                         Log.d("Mensaje del Servidor", resultado);
                         try {
